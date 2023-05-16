@@ -1,8 +1,8 @@
+#include "test.h"
 #include <string>
-#include "nlp.h"
 #include "ocr.h"
 
-int main() {
+void test() {
     std::string ak = "7b5055c0ecfc4d19b8def6869898fc8b";
     std::string sk = "33df542ec17d417a80d0a56fdcb1118c";
     cmssai::Ocr client(ak, sk);
