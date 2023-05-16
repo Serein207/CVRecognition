@@ -31,7 +31,7 @@ endif()
 add_definitions(-DBUILDING_LIBCURL)
 add_definitions(-DHTTP_ONLY)
 
-add_executable (CVRecognition "test_ocr.cpp")
+add_executable (CVRecognition "src/test_ocr.cpp")
 
 target_link_libraries(CVRecognition OpenSSL::Crypto OpenSSL::SSL)
 target_link_libraries(CVRecognition ${CURL_LIBRARIES})
