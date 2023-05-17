@@ -1,13 +1,12 @@
-#include "test.h"
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QDialog>
+#include "test.h"
+#include "mainui.h"
 
 int main(int argc, char* argv[])
 {
     QApplication a(argc, argv);
     test();
-    auto dialog = new QDialog();
-    dialog->show();
-    delete dialog;
+    new MainUI;
     return a.exec();
 }

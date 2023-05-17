@@ -1,2 +1,4 @@
 #pragma once
-void test();
+#include <string>
+
+std::string test();

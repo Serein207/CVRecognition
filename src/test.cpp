@@ -1,8 +1,7 @@
 #include "test.h"
-#include <string>
 #include "ocr.h"
 
-void test() {
+std::string test() {
     std::string ak = "7b5055c0ecfc4d19b8def6869898fc8b";
     std::string sk = "33df542ec17d417a80d0a56fdcb1118c";
     cmssai::Ocr client(ak, sk);
@@ -15,5 +14,5 @@ void test() {
     std::string result = client.custom_url("R(D:/softbei/pdf/1.pdf)",
         "1", 
         cmssai::null);
-    std::cout << result << std::endl;
+    return result;
 }
