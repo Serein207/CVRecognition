@@ -1,5 +1,7 @@
 #include "test.h"
 #include "ocr.h"
+#include <QAxWidget>
+#include <QPdfDocument>
 
 std::string test() {
     std::string ak = "7b5055c0ecfc4d19b8def6869898fc8b";
