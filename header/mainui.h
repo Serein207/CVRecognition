@@ -2,6 +2,8 @@
 #define MAINUI_H
 
 #include <QMainWindow>
+#include "cventry.h"
+#include "postentry.h"
 
 namespace Ui {
 class MainUI;
@@ -17,6 +19,13 @@ public:
 
 private:
     Ui::MainUI *ui;
+    CvEntry* cvEntryDialog;
+    PostEntry* postEntryDialog;
+
+public slots:
+    void showMe();
+    void showCvEntryDialog();
+    void showPostEntryDialog();
 };
 
 #endif // MAINUI_H
