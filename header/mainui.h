@@ -12,7 +12,7 @@ class MainUI : public QMainWindow
     Q_OBJECT
 
 public:
-    explicit MainUI(QWidget *parent = nullptr);
+    MainUI(QWidget *parent = nullptr);
     ~MainUI();
 
 private:
