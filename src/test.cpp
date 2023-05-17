@@ -12,7 +12,7 @@ void test() {
     options.emplace(std::make_pair("enable_pdf_recognize", "true"));
     //options.emplace("item_names", "errorcode|errormsg|session_id|recognize_list");
 
-    std::string result = client.custom_url("R(D:\softbei\pdf\1.pdf)",
+    std::string result = client.custom_url("R(D:/softbei/pdf/1.pdf)",
         "1", 
         cmssai::null);
     std::cout << result << std::endl;

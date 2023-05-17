@@ -46,7 +46,7 @@ if(Qt6_FOUND)
   message(STATUS ${QT_PATH})
 endif()
 
-set(CMAKE_PREFIX_PATH ${QT_PATH}/lib/cmake)
+# set(CMAKE_PREFIX_PATH ${QT_PATH}/lib/cmake)
 set(CMAKE_AUTOUIC ON)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
