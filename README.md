@@ -28,9 +28,15 @@
 
 **修改环境变量后请重启IDE！**
 
-clone地址 `https://github.com/Serein207/CVRecognition.git`
+下载需要的模块
+
+1. 打开 `xxxx\Qt\MaintenanceTool.exe` 安装程序 
+2. 添加或移除组件>Qt>Qt6.5.0>Addtional Libraries
+3. 下载 `Qt PDF` 和 `Active Qt` 模块
 
 ## 5. 开发
+
+clone地址 `https://github.com/Serein207/CVRecognition.git`
 
 载入 `CMakeLists.txt`
 
