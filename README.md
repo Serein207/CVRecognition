@@ -26,6 +26,8 @@
 
 将 `xxxx\Qt\6.5.0\msvc2019_64\bin` 添加到 **系统** 环境变量中
 
+**修改环境变量后请重启IDE！**
+
 clone地址 `https://github.com/Serein207/CVRecognition.git`
 
 ## 5. 开发
