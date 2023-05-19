@@ -187,7 +187,7 @@
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="button_CvEntry_4">
+        <widget class="QPushButton" name="button_singleAnalyse">
          <property name="minimumSize">
           <size>
            <width>180</width>

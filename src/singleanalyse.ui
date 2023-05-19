@@ -25,7 +25,7 @@ QDialog {
   <widget class="QPushButton" name="button_showMainWin">
    <property name="geometry">
     <rect>
-     <x>0</x>
+     <x>10</x>
      <y>0</y>
      <width>61</width>
      <height>24</height>
@@ -51,7 +51,7 @@ QDialog {
     <string>&lt; 返回</string>
    </property>
   </widget>
-  <widget class="QWidget" name="">
+  <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>20</x>

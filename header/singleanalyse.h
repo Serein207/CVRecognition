@@ -17,6 +17,12 @@ public:
 
 private:
     Ui::SingleAnalyse *ui;
+
+signals:
+    void showMainWinSig();
+
+public slots:
+    void showMainWin();
 };
 
 #endif // SINGLEANALYSE_H
