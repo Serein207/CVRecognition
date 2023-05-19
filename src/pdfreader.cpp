@@ -1,13 +1,8 @@
 #include "pdfreader.h"
 
-PDFReader::PDFReader()
+void PDFReader::read(const QString& filepath)
 {
-
-}
-
-QString PDFReader::readCV(QString filepath)
-{
-    QPdfDocument *pdfDoc = new QPdfDocument();
+    const auto pdfDoc = new QPdfDocument();
     pdfDoc->load(filepath);
     QString info;
     for (int pageIndex = 0; pageIndex < pdfDoc->pageCount(); ++pageIndex) {
@@ -16,5 +11,8 @@ QString PDFReader::readCV(QString filepath)
         info.append(text + "\n");
         qDebug() << text;
     }
-    return info;
+    delete pdfDoc;
+
+    qDebug() << info;
+    // TODO: info接入资源管理
 }

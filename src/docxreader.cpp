@@ -1,17 +1,17 @@
 #include "docxreader.h"
 
-QString DOCXReader::readCV(QString filepath)
+void DOCXReader::read(QString filepath)
 {
-    QAxObject *m_docx = m_document->querySubObject("Open(const QString&, bool)", filepath, true);
+    QAxObject *docx = m_document->querySubObject("Open(const QString&, bool)", filepath, true);
     qDebug()<<"open docx succuss!";
 
-    QAxObject* shapes = m_docx->querySubObject("Shapes");
+    QAxObject* shapes = docx->querySubObject("Shapes");
     QString info;
 
-    QAxObject* content = m_docx->querySubObject("Content");
+    QAxObject* content = docx->querySubObject("Content");
     info.append(content->dynamicCall("Text()").toString().replace("\n", "").replace("/", "") + "\n");
 
-    int shapeCount = shapes->dynamicCall("Count()").toInt();
+    const int shapeCount = shapes->dynamicCall("Count()").toInt();
     for (int i = 1; i <= shapeCount; i++) {
         QAxObject* shape = shapes->querySubObject("Item(int)", i);
 
@@ -28,16 +28,17 @@ QString DOCXReader::readCV(QString filepath)
         delete shape;
     }
 
-    m_docx->dynamicCall("Save()");
-    m_docx->dynamicCall("Close()");
+    docx->dynamicCall("Save()");
+    docx->dynamicCall("Close()");
 
     delete shapes;
-    delete m_docx;
+    delete docx;
 
-    return info;
+    qDebug() << info;
+    // TODO: info 接入资源管理
 }
 
-void DOCXReader::deleteWord()
+void DOCXReader::deleteWord() const
 {
     m_word->dynamicCall("Quit()");
 
@@ -49,7 +50,7 @@ QString DOCXReader::readCVHelper(QAxObject * shape)
 {
     QString info;
     QAxObject* groupItems = shape->querySubObject("GroupItems");
-    int itemCount = groupItems->dynamicCall("Count()").toInt();
+    const int itemCount = groupItems->dynamicCall("Count()").toInt();
 
     for (int i = 1; i <= itemCount; i++) {
         QAxObject* item = groupItems->querySubObject("Item(int)", i);
@@ -75,7 +76,7 @@ QString DOCXReader::readCVHelper(QAxObject * shape)
 
 QString DOCXReader::readTextFrame(QAxObject * textFrame)
 {
-    QAxObject* textRange = textFrame->querySubObject("TextRange");
+    const QAxObject* textRange = textFrame->querySubObject("TextRange");
     QString text = textRange->property("Text").toString().replace("\u0007", "");
 
     // 处理文本
