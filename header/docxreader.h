@@ -32,7 +32,7 @@ private:
     void deleteWord() const;
 
     QString readCVHelper(QAxObject*);
-    QString readTextFrame(QAxObject*);
+    static QString readTextFrame(QAxObject*);
 };
 
 #endif // DOCXREADER_H

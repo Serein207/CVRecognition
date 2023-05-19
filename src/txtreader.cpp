@@ -14,5 +14,7 @@ void TxtReader::read(QString filename)
 
     QTextStream in(&file);
     const QString info = in.readAll();
+
+    qDebug() << info;
     // TODO: info 接入资源管理
 }

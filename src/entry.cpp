@@ -76,6 +76,8 @@ void Entry::selectFile()  {
 
     if (path.isEmpty()) return;
 
+    // TODO: 多个（种）文件同时读取，将路径存入QVector<QString>中
+
     readFile(path);
     // TODO: 对于简历信息和岗位信息需要重写虚函数，并且在函数开头调用__super::readFile()
 }

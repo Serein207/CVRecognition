@@ -13,5 +13,6 @@ void PDFReader::read(const QString& filepath)
     }
     delete pdfDoc;
 
+    qDebug() << info;
     // TODO: info接入资源管理
 }
