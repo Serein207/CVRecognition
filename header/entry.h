@@ -11,6 +11,7 @@
 #include <QDir>
 #include <QFileDialog>
 #include <QSet>
+#include <QProgressDialog>
 
 class Entry : public QDialog {
     Q_OBJECT

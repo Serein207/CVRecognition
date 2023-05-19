@@ -60,7 +60,17 @@ QStringList Entry::getContents() {
     }
 
     QStringList contents;
+    auto progressDialog = new QProgressDialog(tr("正在读取"), tr("取消"), 0, m_filePaths.size(), this);
+    progressDialog->setWindowModality(Qt::ApplicationModal);
+    progressDialog->show();
+
+    int count = 1;
     for (const auto& filename : m_filePaths) {
+        if (progressDialog->wasCanceled()) {
+            contents.clear();
+            progressDialog->close();
+            break;
+        }
         if (filename.contains(".txt")) {
             contents.append(TxtReader::read(filename));
         }
@@ -75,6 +85,8 @@ QStringList Entry::getContents() {
             // TODO
             // contents.append(PicReader::read(filename));
         }
+        progressDialog->setValue(count++);
+        QCoreApplication::processEvents();
     }
     return contents;
 }

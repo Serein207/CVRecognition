@@ -1,5 +1,4 @@
 #include "docxreader.h"
-#include "store.h"
 
 QString DOCXReader::read(QString filepath)
 {
