@@ -9,7 +9,7 @@
 class TxtReader
 {
 public:
-    static void read(QString filename);
+    static QString read(const QString& filename);
 private:
     TxtReader() = default;
 };

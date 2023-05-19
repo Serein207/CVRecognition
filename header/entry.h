@@ -10,6 +10,7 @@
 #include <QMessageBox>
 #include <QDir>
 #include <QFileDialog>
+#include <QSet>
 
 class Entry : public QDialog {
     Q_OBJECT
@@ -21,9 +22,15 @@ public:
 protected:
     void dragEnterEvent(QDragEnterEvent* event) override;
     void dropEvent(QDropEvent* event) override;
+    QStringList getContents();
 
-    // TODO: 变为槽函数，连接录入按钮信号
-    virtual void readFile(const QString& filename);
+    QSet<QString> m_filePaths;
+
+private:
+    void handleFilePaths(const QStringList& paths);
+
+    template <typename... Args>
+    static bool isContained(const QString& filename, const Args&... formats);
 
 signals:
     void showMainWinSig();

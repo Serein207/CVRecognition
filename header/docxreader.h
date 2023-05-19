@@ -14,9 +14,9 @@ public:
     DOCXReader(const DOCXReader&) = delete;
     DOCXReader& operator=(const DOCXReader&) = delete;
 
-    void read(QString);
-    //注意，在程序进程退出时请使用deleteWord进行Word的正常关闭
+    QString read(QString);
     ~DOCXReader() { deleteWord(); }
+
 private:
     QAxWidget *m_word;
     QAxObject *m_document;

@@ -119,7 +119,7 @@ border-radius: 10px;
        </spacer>
       </item>
       <item>
-       <widget class="QPushButton" name="button_Entry">
+       <widget class="QPushButton" name="button_input">
         <property name="font">
          <font>
           <family>Microsoft JhengHei UI Light</family>

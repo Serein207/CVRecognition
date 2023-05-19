@@ -15,8 +15,14 @@ public:
     explicit PostEntry(QWidget *parent = nullptr);
     ~PostEntry();
 
+protected:
+    void dropEvent(QDropEvent* event) override;
+
 private:
     Ui::PostEntry *ui;
+
+public slots:
+    void readFile();
 };
 
 #endif // POSTENTRY_H

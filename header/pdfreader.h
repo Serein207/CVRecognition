@@ -7,7 +7,7 @@
 class PDFReader
 {
 public:
-    static void read(const QString& filepath);
+    static QString read(const QString& filepath);
 private:
     PDFReader() = default;
 };

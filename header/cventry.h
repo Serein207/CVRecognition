@@ -15,8 +15,14 @@ public:
     explicit CvEntry(QWidget *parent = nullptr);
     ~CvEntry();
 
+protected:
+    void dropEvent(QDropEvent* event) override;
+
 private:
     Ui::CvEntry *ui;
+
+public slots:
+    void readFile();
 };
 
 #endif // CVENTRY_H

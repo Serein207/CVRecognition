@@ -1,6 +1,7 @@
 #include "docxreader.h"
+#include "store.h"
 
-void DOCXReader::read(QString filepath)
+QString DOCXReader::read(QString filepath)
 {
     QAxObject *docx = m_document->querySubObject("Open(const QString&, bool)", filepath, true);
     qDebug()<<"open docx succuss!";
@@ -29,21 +30,18 @@ void DOCXReader::read(QString filepath)
     }
 
     docx->dynamicCall("Save()");
-    docx->dynamicCall("Close()");
+    // docx->dynamicCall("Close()");
 
     delete shapes;
     delete docx;
 
-    qDebug() << info;
-    // TODO: info 接入资源管理
+    return info;
 }
 
 void DOCXReader::deleteWord() const
 {
     m_word->dynamicCall("Quit()");
-
     delete m_document;
-    delete m_word;
 }
 
 QString DOCXReader::readCVHelper(QAxObject * shape)
@@ -78,9 +76,6 @@ QString DOCXReader::readTextFrame(QAxObject * textFrame)
 {
     const QAxObject* textRange = textFrame->querySubObject("TextRange");
     QString text = textRange->property("Text").toString().replace("\u0007", "");
-
-    // 处理文本
-    qDebug() << text;
 
     // 释放资源
     delete textRange;

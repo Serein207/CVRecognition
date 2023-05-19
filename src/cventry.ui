@@ -98,8 +98,11 @@ border-radius: 10px;
     </item>
     <item>
      <widget class="QTextEdit" name="textEdit">
+      <property name="readOnly">
+       <bool>true</bool>
+      </property>
       <property name="placeholderText">
-       <string>输入文本或拖拽文件到输入框内</string>
+       <string>选择文件或拖拽文件到此处</string>
       </property>
      </widget>
     </item>
@@ -119,14 +122,14 @@ border-radius: 10px;
        </spacer>
       </item>
       <item>
-       <widget class="QPushButton" name="button_SelectFile_2">
+       <widget class="QPushButton" name="button_input">
         <property name="font">
          <font>
           <family>Microsoft JhengHei UI Light</family>
          </font>
         </property>
         <property name="text">
-         <string>开始分析</string>
+         <string>录入</string>
         </property>
        </widget>
       </item>

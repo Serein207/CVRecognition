@@ -32,52 +32,81 @@ void Entry::dropEvent(QDropEvent* event) {
     }
 
     QList<QUrl> urlList = mimeData->urls();
-    const QString filename = urlList[0].toLocalFile();
-
-    if (filename.isEmpty()) {
-        QMessageBox msg;
-        msg.setWindowTitle("错误！");
-        msg.setWindowFlag(Qt::CustomizeWindowHint);
-        msg.setText("无效的文件路径！");
-        msg.exec();
-        return;
+    QStringList paths;
+    for (const auto& url : urlList) {
+        const QString filename = url.toLocalFile();
+        if (filename.isEmpty()) {
+            QMessageBox msg;
+            msg.setWindowTitle("错误！");
+            msg.setWindowFlag(Qt::CustomizeWindowHint);
+            msg.setText("无效的文件路径！");
+            msg.exec();
+            return;
+        }
+        paths.append(filename);
     }
 
-    // TODO: 多个（种）文件同时读取，将路径存入QVector<QString>中
-
-    readFile(filename);
-    // TODO: 对于简历信息和岗位信息需要重写虚函数，并且在函数开头调用__super::readFile()
+    handleFilePaths(paths);
 }
 
-void Entry::readFile(const QString& filename) {
-    if (filename.contains(".txt")) {
-        TxtReader::read(filename);
-    } else if (filename.contains(".docx")) {
-        DOCXReader::getInstance()->read(filename);
-    } else if (filename.contains(".pdf")) {
-        PDFReader::read(filename);
-    } else if (filename.contains("jpg") ||
-               filename.contains("png")) {
-        // TODO
-    } else {
+QStringList Entry::getContents() {
+    if (m_filePaths.isEmpty()) {
         QMessageBox msg(this);
-        msg.setWindowTitle("错误！");
         msg.setWindowFlag(Qt::CustomizeWindowHint);
-        msg.setText("不支持此格式的文件！");
+        msg.setWindowTitle(tr("错误！"));
+        msg.setText(tr("文件列表为空！"));
         msg.exec();
+        return QStringList{};
     }
+
+    QStringList contents;
+    for (const auto& filename : m_filePaths) {
+        if (filename.contains(".txt")) {
+            contents.append(TxtReader::read(filename));
+        }
+        else if (filename.contains(".docx")) {
+            contents.append(DOCXReader::getInstance()->read(filename));
+        }
+        else if (filename.contains(".pdf")) {
+            contents.append(PDFReader::read(filename));
+        }
+        else if (filename.contains("jpg") ||
+            filename.contains("png")) {
+            // TODO
+            // contents.append(PicReader::read(filename));
+        }
+    }
+    return contents;
 }
 
 void Entry::selectFile()  {
     const QString userName = QDir::home().dirName();
     const QString defaultPath = QString("C:/Users/%1/Documents").arg(userName);
-    const QString path = QFileDialog::getOpenFileName(this, "打开",
+    const QStringList paths = QFileDialog::getOpenFileNames(this, "打开",
                        defaultPath, "*.txt;*.png;*.jpg;*.pdf;*.docx");
 
-    if (path.isEmpty()) return;
+    if (paths.isEmpty()) return;
 
-    // TODO: 多个（种）文件同时读取，将路径存入QVector<QString>中
+    handleFilePaths(paths);
+}
 
-    readFile(path);
-    // TODO: 对于简历信息和岗位信息需要重写虚函数，并且在函数开头调用__super::readFile()
+void Entry::handleFilePaths(const QStringList& paths) {
+    for (const auto& filename: paths) {
+        if (isContained(filename, tr(".txt"), tr(".docx"), tr(".pdf"), tr(".jpg"), tr(".png"))) {
+            m_filePaths.insert(filename);
+        }
+        else {
+            QMessageBox msg(this);
+            msg.setWindowTitle("错误！");
+            msg.setWindowFlag(Qt::CustomizeWindowHint);
+            QString errorMsg = QString("不支持此格式的文件\n出错文件：%1").arg(filename);
+            msg.setText(errorMsg);
+            msg.exec();
+        }
+    }
+}
+
+template <typename... Args>
+bool Entry::isContained(const QString& filename, const Args&... formats) {
+    return (filename.contains(formats) || ...);
 }
