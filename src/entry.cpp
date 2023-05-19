@@ -1,5 +1,7 @@
 #include "entry.h"
 #include "txtreader.h"
+#include "pdfreader.h"
+#include "docxreader.h"
 
 Entry::Entry(QWidget* parent) :
     QDialog(parent, Qt::WindowTitleHint | Qt::CustomizeWindowHint)
@@ -30,7 +32,7 @@ void Entry::dropEvent(QDropEvent* event) {
     }
 
     QList<QUrl> urlList = mimeData->urls();
-    QString filename = urlList[0].toLocalFile();
+    const QString filename = urlList[0].toLocalFile();
 
     if (filename.isEmpty()) {
         QMessageBox msg;
@@ -41,19 +43,22 @@ void Entry::dropEvent(QDropEvent* event) {
         return;
     }
 
+    // TODO: 多个（种）文件同时读取，将路径存入QVector<QString>中
+
     readFile(filename);
+    // TODO: 对于简历信息和岗位信息需要重写虚函数，并且在函数开头调用__super::readFile()
 }
 
-void Entry::readFile(QString& filename) {
+void Entry::readFile(const QString& filename) {
     if (filename.contains(".txt")) {
         TxtReader::read(filename);
     } else if (filename.contains(".docx")) {
-        // TODO
+        DOCXReader::getInstance()->read(filename);
     } else if (filename.contains(".pdf")) {
-        // TODO
+        PDFReader::read(filename);
     } else if (filename.contains("jpg") ||
                filename.contains("png")) {
-        //TODO
+        // TODO
     } else {
         QMessageBox msg(this);
         msg.setWindowTitle("错误！");
@@ -64,10 +69,9 @@ void Entry::readFile(QString& filename) {
 }
 
 void Entry::selectFile()  {
-    QDir dir;
-    QString userName = dir.home().dirName();
-    QString defaultPath = QString("C:/Users/%1/Documents").arg(userName);
-    QString path = QFileDialog::getOpenFileName(this, "打开",
+    const QString userName = QDir::home().dirName();
+    const QString defaultPath = QString("C:/Users/%1/Documents").arg(userName);
+    const QString path = QFileDialog::getOpenFileName(this, "打开",
                        defaultPath, "*.txt;*.png;*.jpg;*.pdf;*.docx");
     readFile(path);
 }

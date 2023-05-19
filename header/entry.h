@@ -19,11 +19,11 @@ public:
     virtual ~Entry() = default;
 
 protected:
-    void dragEnterEvent(QDragEnterEvent* event);
-    void dropEvent(QDropEvent* event);
+    void dragEnterEvent(QDragEnterEvent* event) override;
+    void dropEvent(QDropEvent* event) override;
 
-private:
-    void readFile(QString& filename);
+    // TODO: 变为槽函数，连接录入按钮信号
+    virtual void readFile(const QString& filename);
 
 signals:
     void showMainWinSig();

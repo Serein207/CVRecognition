@@ -13,7 +13,6 @@ void TxtReader::read(QString filename)
     }
 
     QTextStream in(&file);
-    QString resources = in.readAll();
-    qDebug() << resources;
-    // TODO: output resources
+    const QString info = in.readAll();
+    // TODO: info 接入资源管理
 }
