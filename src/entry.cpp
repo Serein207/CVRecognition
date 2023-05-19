@@ -73,5 +73,9 @@ void Entry::selectFile()  {
     const QString defaultPath = QString("C:/Users/%1/Documents").arg(userName);
     const QString path = QFileDialog::getOpenFileName(this, "打开",
                        defaultPath, "*.txt;*.png;*.jpg;*.pdf;*.docx");
+
+    if (path.isEmpty()) return;
+
     readFile(path);
+    // TODO: 对于简历信息和岗位信息需要重写虚函数，并且在函数开头调用__super::readFile()
 }
