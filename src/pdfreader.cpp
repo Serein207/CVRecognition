@@ -9,6 +9,7 @@ QString PDFReader::read(const QString& filepath)
         QPdfSelection page = pdfDoc->getAllText(pageIndex);
         QString text = page.text();
         info.append(text + "\n");
+        qDebug() << text;
     }
     delete pdfDoc;
 

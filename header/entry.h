@@ -12,6 +12,7 @@
 #include <QFileDialog>
 #include <QSet>
 #include <QProgressDialog>
+#include <QCoreApplication>
 
 class Entry : public QDialog {
     Q_OBJECT
