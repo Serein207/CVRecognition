@@ -66,7 +66,7 @@ FILE(GLOB MOC_FILES "moc/moc_*.cpp")
 include_directories(./header)
 
 IF(FORMS)
-	qt_wrap_ui(FORMS_UIC ${FORMS})
+    qt_wrap_ui(FORMS_UIC ${FORMS})
 ENDIF()
 
 #将包含Q_OBJECT的头文件编译成moc_*.cpp文件
@@ -77,9 +77,6 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 #将所有文件编译成EXE
 add_executable(${PROJECT_NAME} ${HEADER_FILES} ${SRC_FILES} ${MOC_FILES} ${FORMS_UIC} ${RESOURCE_FILES} ${RES_FILES})
-
-#设置EXE文件的输出目录
-set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR}/x64)
 
 target_link_libraries(${PROJECT_NAME}
 PRIVATE 

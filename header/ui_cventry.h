@@ -99,11 +99,11 @@ public:
 
         horizontalLayout_2->addItem(horizontalSpacer_2);
 
-        button_SelectFile_2 = new QPushButton(layoutWidget);
-        button_SelectFile_2->setObjectName("button_SelectFile_2");
-        button_SelectFile_2->setFont(font1);
+        button_SelectFile = new QPushButton(layoutWidget);
+        button_SelectFile->setObjectName("button_SelectFile");
+        button_SelectFile->setFont(font1);
 
-        horizontalLayout_2->addWidget(button_SelectFile_2);
+        horizontalLayout_2->addWidget(button_SelectFile);
 
 
         verticalLayout->addLayout(horizontalLayout_2);
@@ -119,8 +119,7 @@ public:
         CvEntry->setWindowTitle(QCoreApplication::translate("CvEntry", "Dialog", nullptr));
         label->setText(QCoreApplication::translate("CvEntry", "\347\256\200\345\216\206\345\275\225\345\205\245", nullptr));
         label_2->setText(QCoreApplication::translate("CvEntry", "\346\224\257\346\214\201\346\226\207\346\234\254\343\200\201PDF\343\200\201DOCX\343\200\201\345\233\276\347\211\207\357\274\210JPEG/PNG\357\274\211\345\275\225\345\205\245", nullptr));
-        button_SelectFile->setText(QCoreApplication::translate("CvEntry", "\351\200\211\346\213\251\346\226\207\344\273\266", nullptr));
-        button_SelectFile_2->setText(QCoreApplication::translate("CvEntry", "\345\274\200\345\247\213\345\210\206\346\236\220", nullptr));
+        button_SelectFile->setText(QCoreApplication::translate("CvEntry", "\345\274\200\345\247\213\345\210\206\346\236\220", nullptr));
     } // retranslateUi
 
 };
