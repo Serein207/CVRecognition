@@ -20,15 +20,24 @@ CvEntry::~CvEntry()
 }
 
 void CvEntry::readFile() {
-    Store::getStore()->m_cvs += getContents();
+    Store::getStore()->cvs.insert(getContents());
     m_filePaths.clear();
     ui->listWidget->clear();
 }
 
 void CvEntry::dropEvent(QDropEvent* event) {
-    __super::dropEvent(event);
+    Entry::dropEvent(event);
     ui->listWidget->clear();
     foreach (const auto& path, m_filePaths) {
+        ui->listWidget->addItem(path);
+        ui->listWidget->sortItems();
+    }
+}
+
+void CvEntry::selectFile() {
+    Entry::selectFile();
+    ui->listWidget->clear();
+    foreach(const auto & path, m_filePaths) {
         ui->listWidget->addItem(path);
         ui->listWidget->sortItems();
     }

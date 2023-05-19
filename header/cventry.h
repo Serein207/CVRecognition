@@ -22,7 +22,8 @@ private:
     Ui::CvEntry *ui;
 
 public slots:
-    void readFile();
+    virtual void readFile();
+    void selectFile() override;
 };
 
 #endif // CVENTRY_H

@@ -49,18 +49,19 @@ void Entry::dropEvent(QDropEvent* event) {
     handleFilePaths(paths);
 }
 
-QStringList Entry::getContents() {
+QMap<QString, QString> Entry::getContents() {
     if (m_filePaths.isEmpty()) {
         QMessageBox msg(this);
         msg.setWindowFlag(Qt::CustomizeWindowHint);
         msg.setWindowTitle(tr("错误！"));
         msg.setText(tr("文件列表为空！"));
         msg.exec();
-        return QStringList{};
+        return QMap<QString, QString>{};
     }
 
-    QStringList contents;
-    auto progressDialog = new QProgressDialog(tr("正在读取"), tr("取消"), 0, m_filePaths.size(), this, Qt::CustomizeWindowHint);
+    QMap<QString, QString> contents;
+    const auto progressDialog = 
+        new QProgressDialog(tr("正在读取"), tr("取消"), 0, m_filePaths.size(), this, Qt::CustomizeWindowHint);
     progressDialog->setWindowModality(Qt::ApplicationModal);
     progressDialog->setWindowTitle(tr("文件读取中"));
     progressDialog->show();
@@ -74,18 +75,18 @@ QStringList Entry::getContents() {
             break;
         }
         if (filename.contains(".txt")) {
-            contents.append(TxtReader::read(filename));
+            contents.insert(filename, TxtReader::read(filename));
         }
         else if (filename.contains(".docx")) {
-            contents.append(DOCXReader::getInstance()->read(filename));
+            contents.insert(filename, DOCXReader::getInstance()->read(filename));
         }
         else if (filename.contains(".pdf")) {
-            contents.append(PDFReader::read(filename));
+            contents.insert(filename, PDFReader::read(filename));
         }
         else if (filename.contains("jpg") ||
                  filename.contains("png")) {
             // TODO
-            // contents.append(PicReader::read(filename));
+            // contents.insert(filename, PicReader::read(filename));
         }
         progressDialog->setValue(count++);
     }

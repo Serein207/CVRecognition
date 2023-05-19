@@ -2,6 +2,7 @@
 #define SINGLEANALYSE_H
 
 #include <QDialog>
+#include <QMessageBox>
 
 namespace Ui {
 class SingleAnalyse;
@@ -23,6 +24,8 @@ signals:
 
 public slots:
     void showMainWin();
+    void loadFiles();
+    void analyse();
 };
 
 #endif // SINGLEANALYSE_H

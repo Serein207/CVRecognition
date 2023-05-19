@@ -1,7 +1,8 @@
 #ifndef STORE_H
 #define STORE_H
 
-#include <QStringList>
+#include <QMap>
+#include <QString>
 
 class Store {
 public:
@@ -14,8 +15,8 @@ public:
 
     ~Store() { delete Store::getStore(); }
 
-    QStringList m_cvs;
-    QStringList m_post;
+    QMap<QString, QString> cvs;
+    QMap<QString, QString> post;
 
 private:
     Store() = default;

@@ -23,6 +23,7 @@ private:
 
 public slots:
     void readFile();
+    void selectFile() override;
 };
 
 #endif // POSTENTRY_H

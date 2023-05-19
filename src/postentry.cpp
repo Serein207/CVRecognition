@@ -20,14 +20,23 @@ PostEntry::~PostEntry()
 }
 
 void PostEntry::readFile() {
-    Store::getStore()->m_post += getContents();
+    Store::getStore()->post.insert(getContents());
     m_filePaths.clear();
     ui->listWidget->clear();
 }
 
 void PostEntry::dropEvent(QDropEvent* event) {
-    __super::dropEvent(event);
+    Entry::dropEvent(event);
     foreach (const auto& path, m_filePaths) {
+        ui->listWidget->addItem(path);
+        ui->listWidget->sortItems();
+    }
+}
+
+void PostEntry::selectFile() {
+    Entry::selectFile();
+    ui->listWidget->clear();
+    foreach(const auto & path, m_filePaths) {
         ui->listWidget->addItem(path);
         ui->listWidget->sortItems();
     }

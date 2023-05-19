@@ -22,6 +22,8 @@ MainUI::MainUI(QWidget *parent) :
     connect(ui->button_postEntry, &QPushButton::clicked, this, &MainUI::showPostEntryDialog);
     connect(ui->button_singleAnalyse, &QPushButton::clicked, this, &MainUI::showSingleAnalyseDialog);
     connect(ui->button_allAnalyse, &QPushButton::clicked, this, &MainUI::showAllAnalyseDialog);
+
+    connect(ui->button_singleAnalyse, &QPushButton::clicked, singleAnalyseDialog, &SingleAnalyse::loadFiles);
 }
 
 MainUI::~MainUI() {

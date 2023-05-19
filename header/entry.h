@@ -23,8 +23,8 @@ public:
 
 protected:
     void dragEnterEvent(QDragEnterEvent* event) override;
-    void dropEvent(QDropEvent* event) override;
-    QStringList getContents();
+    virtual void dropEvent(QDropEvent* event) override;
+    QMap<QString, QString> getContents();
 
     QSet<QString> m_filePaths;
 
@@ -39,7 +39,7 @@ signals:
 
 public slots:
     void showMainWin();
-    void selectFile();
+    virtual void selectFile();
 };
 
 #endif // ENTRY_H
