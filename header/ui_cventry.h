@@ -36,7 +36,7 @@ public:
     QTextBrowser *textBrowser;
     QHBoxLayout *horizontalLayout_2;
     QSpacerItem *horizontalSpacer_2;
-    QPushButton *button_SelectFile_2;
+    QPushButton *button_input;
 
     void setupUi(QDialog *CvEntry)
     {

@@ -35,7 +35,7 @@ public:
     QTextBrowser *textBrowser_3;
     QHBoxLayout *horizontalLayout_5;
     QSpacerItem *horizontalSpacer_6;
-    QPushButton *button_Entry;
+    QPushButton *button_input;
     QPushButton *button_showMainWin;
 
     void setupUi(QDialog *PostEntry)
