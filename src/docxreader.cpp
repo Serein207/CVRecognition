@@ -1,16 +1,15 @@
 #include "docxreader.h"
 
-QString DOCXReader::read(QString filepath)
-{
+QString DOCXReader::read(const QString& filepath) const {
     // 文件打开
-    int docomentCount = m_documents->dynamicCall("Count()").toInt();
+    const int documentsCount = m_documents->dynamicCall("Count()").toInt();
 
     //查找是否为历史文件
     bool flag = true;
-    QFileInfo fileinfo(filepath);
-    for(int i = 1; i <= docomentCount; i++){
+    const QFileInfo fileInfo(filepath);
+    for(int i = 1; i <= documentsCount; i++){
         QAxObject* document = m_documents->querySubObject("Item(int)", i);
-        if(!fileinfo.fileName().compare(document->property("Name").toString())){
+        if(!fileInfo.fileName().compare(document->property("Name").toString())){
             document->dynamicCall("Activate()");
             flag = false;
             break;
@@ -22,14 +21,14 @@ QString DOCXReader::read(QString filepath)
         //打开新文件
         m_documents->dynamicCall("Open(const QString&, bool)", filepath, false);
     }
-    QAxObject *m_docx = m_word->querySubObject("ActiveDocument");
-    qDebug()<<"Open docx file" << m_docx->dynamicCall("Name").toString() <<"succuss!";
+    QAxObject *docx = m_word->querySubObject("ActiveDocument");
+    qDebug()<<"Open docx file" << docx->dynamicCall("Name").toString() <<"success!";
 
-    QAxObject* shapes = m_docx->querySubObject("Shapes");
+    QAxObject* shapes = docx->querySubObject("Shapes");
     QString info;
 
     // 普通文本读取，debug未进行输出，如有需要可以自行定义QString输出
-    QAxObject* content = m_docx->querySubObject("Content");
+    QAxObject* content = docx->querySubObject("Content");
     info.append(content->dynamicCall("Text()").toString().replace("/", "") + "\n");
 
     const int shapeCount = shapes->dynamicCall("Count()").toInt();
@@ -45,7 +44,7 @@ QString DOCXReader::read(QString filepath)
         }
         else if(!theType.compare("6")){
             // 合并框：6
-            info.append(readCVHelper(shape));
+            info.append(readCvHelper(shape));
         }
         else if(!theType.compare("1")){
             // 文本框：1
@@ -58,10 +57,10 @@ QString DOCXReader::read(QString filepath)
         delete shape;
     }
 
-    m_docx->dynamicCall("Save()");
+    docx->dynamicCall("Save()");
 
     delete shapes;
-    delete m_docx;
+    delete docx;
 
     info.replace("\r\n\r\n", "").replace("\n\n", "\n");
     return info;
@@ -73,8 +72,7 @@ void DOCXReader::deleteWord() const
     delete m_documents;
 }
 
-QString DOCXReader::readCVHelper(QAxObject * shape)
-{
+QString DOCXReader::readCvHelper(QAxObject * shape) {
     QString info;
     QAxObject* groupItems = shape->querySubObject("GroupItems");
     const int itemCount = groupItems->dynamicCall("Count()").toInt();
@@ -89,7 +87,7 @@ QString DOCXReader::readCVHelper(QAxObject * shape)
             info.append(readTextFrame(textFrame) + "\n");
         }
         if(!itemType.compare("6")){
-            info.append(readCVHelper(item));
+            info.append(readCvHelper(item));
         }
 
         // 释放资源
@@ -101,8 +99,7 @@ QString DOCXReader::readCVHelper(QAxObject * shape)
     return info;
 }
 
-QString DOCXReader::readTextFrame(QAxObject * textFrame)
-{
+QString DOCXReader::readTextFrame(QAxObject * textFrame) {
     const QAxObject* textRange = textFrame->querySubObject("TextRange");
     QString text = textRange->property("Text").toString().replace("\u0007", "");
 

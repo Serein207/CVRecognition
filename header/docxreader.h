@@ -6,18 +6,18 @@
 #include <QThread>
 #include <QFileInfo>
 
-class DOCXReader
-{
-
+class DOCXReader {
 public:
     static DOCXReader * getInstance(){
         static DOCXReader instance;
         return &instance;
     }
 
-    QString read(QString);
+    QString read(const QString& filepath) const;
     // 注意，在程序进程退出时请使用deleteWord进行Word的正常关闭
     void deleteWord() const;
+    DOCXReader(const DOCXReader&) = delete;
+    DOCXReader& operator=(const DOCXReader&) = delete;
 
 private:
     QAxWidget *m_word;
@@ -30,11 +30,9 @@ private:
         m_word->setProperty("Visible",false);
         m_documents = m_word->querySubObject("Documents");
     };
-    DOCXReader(const DOCXReader&) = delete;
-    DOCXReader& operator=(const DOCXReader&) = delete;
 
-    QString readCVHelper(QAxObject*);
-    QString readTextFrame(QAxObject*);
+    static QString readCvHelper(QAxObject*);
+    static QString readTextFrame(QAxObject*);
 
 };
 
