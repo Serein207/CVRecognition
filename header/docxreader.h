@@ -18,6 +18,7 @@ public:
     void deleteWord() const;
     DOCXReader(const DOCXReader&) = delete;
     DOCXReader& operator=(const DOCXReader&) = delete;
+    ~DOCXReader() { deleteWord(); }
 
 private:
     QAxWidget *m_word;

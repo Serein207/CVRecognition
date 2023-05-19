@@ -60,12 +60,14 @@ QStringList Entry::getContents() {
     }
 
     QStringList contents;
-    auto progressDialog = new QProgressDialog(tr("正在读取"), tr("取消"), 0, m_filePaths.size(), this);
+    auto progressDialog = new QProgressDialog(tr("正在读取"), tr("取消"), 0, m_filePaths.size(), this, Qt::CustomizeWindowHint);
     progressDialog->setWindowModality(Qt::ApplicationModal);
+    progressDialog->setWindowTitle(tr("文件读取中"));
     progressDialog->show();
 
     int count = 1;
-    for (const auto& filename : m_filePaths) {
+    foreach (const auto& filename, m_filePaths) {
+        QCoreApplication::processEvents();
         if (progressDialog->wasCanceled()) {
             contents.clear();
             progressDialog->close();
@@ -81,12 +83,11 @@ QStringList Entry::getContents() {
             contents.append(PDFReader::read(filename));
         }
         else if (filename.contains("jpg") ||
-            filename.contains("png")) {
+                 filename.contains("png")) {
             // TODO
             // contents.append(PicReader::read(filename));
         }
         progressDialog->setValue(count++);
-        QCoreApplication::processEvents();
     }
     return contents;
 }

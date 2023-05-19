@@ -8,7 +8,7 @@ PostEntry::PostEntry(QWidget *parent) :
 {
     this->setModal(true);
     ui->setupUi(this);
-    ui->textEdit->setAcceptDrops(false);
+    ui->listWidget->setAcceptDrops(false);
     connect(ui->button_showMainWin, &QPushButton::clicked, this, &PostEntry::showMainWin);
     connect(ui->button_SelectFile, &QPushButton::clicked, this, &PostEntry::selectFile);
     connect(ui->button_input, &QPushButton::clicked, this, &PostEntry::readFile);
@@ -22,12 +22,13 @@ PostEntry::~PostEntry()
 void PostEntry::readFile() {
     Store::getStore()->m_post += getContents();
     m_filePaths.clear();
-    ui->textEdit->clear();
+    ui->listWidget->clear();
 }
 
 void PostEntry::dropEvent(QDropEvent* event) {
     __super::dropEvent(event);
-    for (const auto& path : m_filePaths) {
-        ui->textEdit->setText(path);
+    foreach (const auto& path, m_filePaths) {
+        ui->listWidget->addItem(path);
+        ui->listWidget->sortItems();
     }
 }

@@ -66,8 +66,8 @@ QString DOCXReader::read(const QString& filepath) const {
     return info;
 }
 
-void DOCXReader::deleteWord() const
-{
+void DOCXReader::deleteWord() const {
+    // qDebug() << "destructor";
     m_word->dynamicCall("Quit()");
     delete m_documents;
 }

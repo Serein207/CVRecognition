@@ -8,7 +8,7 @@ CvEntry::CvEntry(QWidget *parent) :
 {
     this->setModal(true);
     ui->setupUi(this);
-    ui->textEdit->setAcceptDrops(false);
+    ui->listWidget->setAcceptDrops(false);
     connect(ui->button_showMainWin, &QPushButton::clicked, this, &CvEntry::showMainWin);
     connect(ui->button_SelectFile, &QPushButton::clicked, this, &CvEntry::selectFile);
     connect(ui->button_input, &QPushButton::clicked, this, &CvEntry::readFile);
@@ -22,13 +22,14 @@ CvEntry::~CvEntry()
 void CvEntry::readFile() {
     Store::getStore()->m_cvs += getContents();
     m_filePaths.clear();
-    ui->textEdit->clear();
+    ui->listWidget->clear();
 }
 
 void CvEntry::dropEvent(QDropEvent* event) {
     __super::dropEvent(event);
-    ui->textEdit->clear();
-    for (const auto& path : m_filePaths) {
-        ui->textEdit->append(path);
+    ui->listWidget->clear();
+    foreach (const auto& path, m_filePaths) {
+        ui->listWidget->addItem(path);
+        ui->listWidget->sortItems();
     }
 }
