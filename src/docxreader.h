@@ -3,6 +3,8 @@
 
 #include <QtAxContainer/QAxWidget>
 #include <QAxObject>
+#include <QThread>
+#include <QFileInfo>
 
 class DOCXReader
 {
@@ -14,24 +16,26 @@ public:
     }
 
     QString readCV(QString);
-    //注意，在程序进程退出时请使用deleteWord进行Word的正常关闭
+    // 注意，在程序进程退出时请使用deleteWord进行Word的正常关闭
     void deleteWord();
+
 private:
     QAxWidget *m_word;
-    QAxObject *m_document;
+    QAxObject *m_documents;
 
     DOCXReader(){
-        //创建Word应用
+        // 创建Word应用
         m_word = new QAxWidget("Word.Application");
-        //设置不可见
+        // 设置不可见
         m_word->setProperty("Visible",false);
-        m_document = m_word->querySubObject("Documents");
+        m_documents = m_word->querySubObject("Documents");
     };
     DOCXReader(const DOCXReader&) = delete;
     DOCXReader& operator=(const DOCXReader&) = delete;
 
     QString readCVHelper(QAxObject*);
     QString readTextFrame(QAxObject*);
+
 };
 
 #endif // DOCXREADER_H
