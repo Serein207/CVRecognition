@@ -2,6 +2,7 @@
 
 QString DOCXReader::read(const QString& filepath) const {
     // 文件打开
+    //qDebug()<< filepath;
     const int documentsCount = m_documents->dynamicCall("Count()").toInt();
 
     //查找是否为历史文件
@@ -63,6 +64,7 @@ QString DOCXReader::read(const QString& filepath) const {
     delete docx;
 
     info.replace("\r\n\r\n", "").replace("\n\n", "\n");
+    //qDebug() << info;
     return info;
 }
 
