@@ -30,7 +30,7 @@ private:
         // 设置不可见
         m_word->setProperty("Visible",false);
         m_documents = m_word->querySubObject("Documents");
-    };
+    }
 
     static QString readCvHelper(QAxObject*);
     static QString readTextFrame(QAxObject*);

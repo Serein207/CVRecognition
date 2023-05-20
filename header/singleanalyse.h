@@ -24,7 +24,7 @@ signals:
 
 public slots:
     void showMainWin();
-    void loadFiles();
+    void loadFiles() const;
     void analyse();
 };
 

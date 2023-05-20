@@ -14,8 +14,7 @@ SingleAnalyse::SingleAnalyse(QWidget *parent) :
     connect(ui->button_analyse, &QPushButton::clicked, this, &SingleAnalyse::analyse);
 }
 
-SingleAnalyse::~SingleAnalyse()
-{
+SingleAnalyse::~SingleAnalyse() {
     delete ui;
 }
 
@@ -24,7 +23,8 @@ void SingleAnalyse::showMainWin() {
     this->close();
 }
 
-void SingleAnalyse::loadFiles(){
+void SingleAnalyse::loadFiles() const{
+    Store::getStore()->readCvFile();
     ui->listWidget->clear();
     for (auto item = Store::getStore()->cvs.keyBegin();
         item != Store::getStore()->cvs.keyEnd(); ++item) {

@@ -41,3 +41,5 @@ clone地址 `https://github.com/Serein207/CVRecognition.git`
 载入 `CMakeLists.txt`
 
 头文件位于 `header` ；源文件位于 `src`
+
+> 如果代码无法正常编译运行，尝试删除 `out/build` 文件夹后重新载入 `CMakeLists.txt`

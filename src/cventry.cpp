@@ -14,13 +14,13 @@ CvEntry::CvEntry(QWidget *parent) :
     connect(ui->button_input, &QPushButton::clicked, this, &CvEntry::readFile);
 }
 
-CvEntry::~CvEntry()
-{
+CvEntry::~CvEntry() {
     delete ui;
 }
 
 void CvEntry::readFile() {
     Store::getStore()->cvs.insert(getContents());
+    Store::getStore()->writeCvFile();
     m_filePaths.clear();
     ui->listWidget->clear();
 }
