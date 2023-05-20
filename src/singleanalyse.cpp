@@ -24,7 +24,7 @@ void SingleAnalyse::showMainWin() {
 }
 
 void SingleAnalyse::loadFiles() const{
-    Store::getStore()->readCvFile();
+    Store::getStore()->readCvStore();
     ui->listWidget->clear();
     for (auto item = Store::getStore()->cvs.keyBegin();
         item != Store::getStore()->cvs.keyEnd(); ++item) {

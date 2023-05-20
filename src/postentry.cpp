@@ -21,7 +21,7 @@ PostEntry::~PostEntry()
 
 void PostEntry::readFile() {
     Store::getStore()->post.insert(getContents());
-    Store::getStore()->writePostFile();
+    Store::getStore()->writePostStore();
     m_filePaths.clear();
     ui->listWidget->clear();
 }

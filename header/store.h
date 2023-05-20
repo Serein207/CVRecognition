@@ -23,26 +23,49 @@ public:
     QMap<QString, QString> cvs;
     QMap<QString, QString> post;
 
-    void writeCvFile() {
-        writeFile("cv", cvs);
+    void writeCvStore() {
+        writeStore("cv", cvs);
     }
-    void writePostFile() {
-        writeFile("post", post);
+    void writePostStore() {
+        writeStore("post", post);
     }
-    void readCvFile() {
-        readFile("cv", cvs);
+    void readCvStore() {
+        readStore("cv", cvs);
     }
-    void readPostFile() {
-        readFile("post", post);
+    void readPostStore() {
+        readStore("post", post);
     }
 
 private:
     Store() = default;
 
-    static void writeFile(const QString& kind, QMap<QString, QString>& map) {
+    static void writeStore(const QString& kind, const QMap<QString, QString>& map) {
         int count = 1;
         for (auto item = map.constKeyValueBegin();
             item != map.constKeyValueEnd(); ++item) {
+            const QDir dataDir(".\\data");
+            if (!dataDir.exists()) {
+                if (!QDir().mkdir(".\\data")) {
+                    QMessageBox msg;
+                    msg.setWindowFlag(Qt::CustomizeWindowHint);
+                    msg.setWindowTitle("错误！");
+                    msg.setText("文件夹data创建失败");
+                    msg.exec();
+                    return;
+                }
+            }
+            const QDir dir(QString(".\\data\\%1").arg(kind));
+            if (!dir.exists()) {
+                if (!QDir().mkdir(QString(".\\data\\%1").arg(kind))) {
+                    QMessageBox msg;
+                    msg.setWindowFlag(Qt::CustomizeWindowHint);
+                    msg.setWindowTitle("错误！");
+                    msg.setText(QString("文件夹%1创建失败").arg(kind));
+                    msg.exec();
+                    return;
+                }
+            }
+
             const QString path = QString(".\\data\\%1\\%2.txt").arg(kind).arg(count++);
             QFile file(path);
             if(!file.open(QFile::ReadWrite | QFile::Text)) {
@@ -62,15 +85,36 @@ private:
         }
     }
 
-    static void readFile(const QString& kind, QMap<QString, QString>& map) {
+    static void readStore(const QString& kind, QMap<QString, QString>& map) {
         map.clear();
-        const auto dir = new QDir(QString(".\\data\\%1").arg(kind));
+        const QDir dataDir(".\\data");
+        if (!dataDir.exists()) {
+            if (!QDir().mkdir(".\\data")) {
+                QMessageBox msg;
+                msg.setWindowFlag(Qt::CustomizeWindowHint);
+                msg.setWindowTitle("错误！");
+                msg.setText("文件夹data创建失败");
+                msg.exec();
+                return;
+            }
+        }
+        const QDir dir(QString(".\\data\\%1").arg(kind));
+        if (!dir.exists()) {
+            if (!QDir().mkdir(QString(".\\data\\%1").arg(kind))) {
+                QMessageBox msg;
+                msg.setWindowFlag(Qt::CustomizeWindowHint);
+                msg.setWindowTitle("错误！");
+                msg.setText(QString("文件夹%1创建失败").arg(kind));
+                msg.exec();
+                return;
+            }
+        }
         QStringList filters;
         filters << "*.txt";
-        const auto files = new QList<QFileInfo>(dir->entryInfoList(filters));
+        const auto files = new QList<QFileInfo>(dir.entryInfoList(filters));
         for (int i = 0; i < files->count(); ++i) {
             auto fileName = files->at(i).fileName();
-            QFile file(QString("%1\\%2").arg(dir->path()).arg(fileName));
+            QFile file(QString("%1\\%2").arg(dir.path()).arg(fileName));
             if(!file.open(QFile::ReadOnly | QFile::Text)) {
                 QMessageBox msg;
                 msg.setWindowFlag(Qt::CustomizeWindowHint);
@@ -87,8 +131,6 @@ private:
             map.insert(filePath, content);
             file.close();
         }
-
-        delete dir;
         delete files;
     }
 };

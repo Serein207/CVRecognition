@@ -20,7 +20,7 @@ CvEntry::~CvEntry() {
 
 void CvEntry::readFile() {
     Store::getStore()->cvs.insert(getContents());
-    Store::getStore()->writeCvFile();
+    Store::getStore()->writeCvStore();
     m_filePaths.clear();
     ui->listWidget->clear();
 }
