@@ -11,6 +11,7 @@
 
 #include <QtCore/QVariant>
 #include <QtWidgets/QApplication>
+#include <QtWidgets/QCheckBox>
 #include <QtWidgets/QDialog>
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QLabel>
@@ -34,6 +35,7 @@ public:
     QListWidget *listWidget_Cvs;
     QHBoxLayout *horizontalLayout_2;
     QSpacerItem *horizontalSpacer_2;
+    QCheckBox *cvAllSelect;
     QPushButton *button_deleteCv;
     QWidget *layoutWidget_2;
     QVBoxLayout *verticalLayout_2;
@@ -43,6 +45,7 @@ public:
     QListWidget *listWidget_Post;
     QHBoxLayout *horizontalLayout_4;
     QSpacerItem *horizontalSpacer_3;
+    QCheckBox *postAllSelect;
     QPushButton *button_deletePost;
 
     void setupUi(QDialog *FileManage)
@@ -126,6 +129,12 @@ public:
 
         horizontalLayout_2->addItem(horizontalSpacer_2);
 
+        cvAllSelect = new QCheckBox(layoutWidget);
+        cvAllSelect->setObjectName("cvAllSelect");
+        cvAllSelect->setFont(font);
+
+        horizontalLayout_2->addWidget(cvAllSelect);
+
         button_deleteCv = new QPushButton(layoutWidget);
         button_deleteCv->setObjectName("button_deleteCv");
         button_deleteCv->setFont(font);
@@ -169,6 +178,12 @@ public:
 
         horizontalLayout_4->addItem(horizontalSpacer_3);
 
+        postAllSelect = new QCheckBox(layoutWidget_2);
+        postAllSelect->setObjectName("postAllSelect");
+        postAllSelect->setFont(font);
+
+        horizontalLayout_4->addWidget(postAllSelect);
+
         button_deletePost = new QPushButton(layoutWidget_2);
         button_deletePost->setObjectName("button_deletePost");
         button_deletePost->setFont(font);
@@ -190,9 +205,11 @@ public:
         button_showMainWin->setText(QCoreApplication::translate("FileManage", "< \350\277\224\345\233\236", nullptr));
         label->setText(QCoreApplication::translate("FileManage", "\347\256\200\345\216\206\346\226\207\344\273\266", nullptr));
         label_2->setText(QCoreApplication::translate("FileManage", "\351\200\211\346\213\251\351\234\200\350\246\201\345\210\240\351\231\244\347\232\204\346\226\207\344\273\266", nullptr));
+        cvAllSelect->setText(QCoreApplication::translate("FileManage", "\345\205\250\351\200\211", nullptr));
         button_deleteCv->setText(QCoreApplication::translate("FileManage", "\345\210\240\351\231\244", nullptr));
         label_3->setText(QCoreApplication::translate("FileManage", "\345\262\227\344\275\215\351\234\200\346\261\202\346\226\207\344\273\266", nullptr));
         label_4->setText(QCoreApplication::translate("FileManage", "\351\200\211\346\213\251\351\234\200\350\246\201\345\210\240\351\231\244\347\232\204\346\226\207\344\273\266", nullptr));
+        postAllSelect->setText(QCoreApplication::translate("FileManage", "\345\205\250\351\200\211", nullptr));
         button_deletePost->setText(QCoreApplication::translate("FileManage", "\345\210\240\351\231\244", nullptr));
     } // retranslateUi
 

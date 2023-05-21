@@ -14,6 +14,9 @@ FileManage::FileManage(QWidget *parent) :
     connect(ui->button_showMainWin, &QPushButton::clicked, this, &FileManage::showMainWin);
     connect(ui->button_deleteCv, &QPushButton::clicked, this, &FileManage::deleteCvFile);
     connect(ui->button_deletePost, &QPushButton::clicked, this, &FileManage::deletePostFile);
+
+    connect(ui->cvAllSelect, &QCheckBox::clicked, this, &FileManage::cvAllSelectBox);
+    connect(ui->postAllSelect, &QCheckBox::clicked, this, &FileManage::postAllSelectBox);
 }
 
 FileManage::~FileManage() {
@@ -77,3 +80,22 @@ void FileManage::deletePostFile() {
     deleteFile(ui->listWidget_Post, Store::getStore()->post);
 }
 
+void FileManage::cvAllSelectBox() {
+    if (ui->cvAllSelect->isChecked()) {
+        ui->listWidget_Cvs->selectAll();
+    } else {
+        foreach(auto& item, ui->listWidget_Cvs->selectedItems()) {
+            item->setSelected(false);
+        }
+    }
+}
+
+void FileManage::postAllSelectBox() {
+    if (ui->postAllSelect->isChecked()) {
+        ui->listWidget_Post->selectAll();
+    } else {
+       foreach (auto& item, ui->listWidget_Post->selectedItems()) {
+           item->setSelected(false);
+       }
+    }
+}

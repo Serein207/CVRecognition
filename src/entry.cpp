@@ -94,6 +94,11 @@ QMap<QString, QString> Entry::getContents() {
         if (content.isEmpty()) continue;
         contents.insert(filename, content);
     }
+    QMessageBox msg(this);
+    msg.setWindowTitle("成功");
+    msg.setWindowFlag(Qt::Drawer);
+    msg.setText("完成文件读取");
+    msg.exec();
     return contents;
 }
 

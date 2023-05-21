@@ -26,7 +26,7 @@ QString PicReader::read(const QString& filename)
         //options.emplace("item_names", "errorcode|errormsg|session_id|recognize_list");
         QString result = QString::fromStdString(client.generic_url("MeaningLessNull",
             options));
-        qDebug()<<result;
+        //qDebug()<<result;
         QJsonDocument imageJson = QJsonDocument::fromJson(result.toUtf8());
         if(imageJson["state"]!=QJsonValue("OK")){
             QMessageBox msg;

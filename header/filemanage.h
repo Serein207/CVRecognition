@@ -29,6 +29,9 @@ public slots:
     void deleteCvFile();
     void deletePostFile();
     void loadFiles() const;
+
+    void cvAllSelectBox();
+    void postAllSelectBox();
 };
 
 #endif // FILEMANAGE_H

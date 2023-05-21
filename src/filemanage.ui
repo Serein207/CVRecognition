@@ -127,6 +127,18 @@ QListWidget::item:selected {
        </spacer>
       </item>
       <item>
+       <widget class="QCheckBox" name="cvAllSelect">
+        <property name="font">
+         <font>
+          <family>Microsoft JhengHei UI Light</family>
+         </font>
+        </property>
+        <property name="text">
+         <string>全选</string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <widget class="QPushButton" name="button_deleteCv">
         <property name="font">
          <font>
@@ -197,6 +209,18 @@ QListWidget::item:selected {
          </size>
         </property>
        </spacer>
+      </item>
+      <item>
+       <widget class="QCheckBox" name="postAllSelect">
+        <property name="font">
+         <font>
+          <family>Microsoft JhengHei UI Light</family>
+         </font>
+        </property>
+        <property name="text">
+         <string>全选</string>
+        </property>
+       </widget>
       </item>
       <item>
        <widget class="QPushButton" name="button_deletePost">
