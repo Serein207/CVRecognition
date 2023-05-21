@@ -92,7 +92,5 @@ QString PicReader::read(const QString& filename)
             return getImageInfo(image,suffix);
         }
     }
-
-
     return info;
 }
