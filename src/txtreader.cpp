@@ -6,7 +6,7 @@ QString TxtReader::read(const QString& filename)
     if (!file.open(QIODevice::ReadOnly)) {
         QMessageBox msg;
         msg.setWindowTitle("错误！");
-        msg.setWindowFlag(Qt::CustomizeWindowHint);
+        msg.setWindowFlag(Qt::Drawer);
         msg.setText("文件打开失败！");
         msg.exec();
         return QString{};

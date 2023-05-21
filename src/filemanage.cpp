@@ -52,7 +52,7 @@ void FileManage::deleteFile(const QListWidget* listWidget, QMap<QString, QString
 
     map.erase(item);
     Store::getStore()->writeCvStore();
-    Store::getStore()->writeCvStore();
+    Store::getStore()->writePostStore();
     loadFiles();
 
     QMessageBox msg(this);
