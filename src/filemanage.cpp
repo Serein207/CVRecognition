@@ -9,6 +9,8 @@ FileManage::FileManage(QWidget *parent) :
     ui->setupUi(this);
     this->setModal(true);
     this->setWindowTitle(tr("文件管理"));
+    ui->listWidget_Cvs->setSelectionMode(QAbstractItemView::MultiSelection);
+    ui->listWidget_Post->setSelectionMode(QAbstractItemView::MultiSelection);
     connect(ui->button_showMainWin, &QPushButton::clicked, this, &FileManage::showMainWin);
     connect(ui->button_deleteCv, &QPushButton::clicked, this, &FileManage::deleteCvFile);
     connect(ui->button_deletePost, &QPushButton::clicked, this, &FileManage::deletePostFile);
@@ -32,8 +34,13 @@ void FileManage::deleteFile(const QListWidget* listWidget, QMap<QString, QString
         msg.exec();
         return;
     }
-    const QString filePath = listWidget->currentItem()->text();
-    Store::deleteStore(filePath, map);
+
+    const QList<QListWidgetItem*> items = listWidget->selectedItems();
+    foreach(const auto& item, items) {
+        const QString filePath = item->text();
+        Store::deleteStore(filePath, map);
+    }
+    
     loadFiles();
 
     QMessageBox msg(this);
