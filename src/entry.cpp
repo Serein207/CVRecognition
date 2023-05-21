@@ -2,6 +2,7 @@
 #include "txtreader.h"
 #include "pdfreader.h"
 #include "docxreader.h"
+#include "picreader.h""
 
 Entry::Entry(QWidget* parent) :
     QDialog(parent, Qt::WindowTitleHint | Qt::CustomizeWindowHint)
@@ -83,10 +84,9 @@ QMap<QString, QString> Entry::getContents() {
         else if (filename.contains(".pdf")) {
             contents.insert(filename, PDFReader::read(filename));
         }
-        else if (filename.contains("jpg") ||
-                 filename.contains("png")) {
-            // TODO
-            // contents.insert(filename, PicReader::read(filename));
+        else if (filename.contains(".jpg") ||
+                 filename.contains(".png")) {
+            contents.insert(filename, PicReader::read(filename));
         }
         progressDialog->setValue(count++);
     }
