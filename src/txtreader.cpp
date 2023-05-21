@@ -13,5 +13,7 @@ QString TxtReader::read(const QString& filename)
     }
 
     QTextStream in(&file);
-    return in.readAll();
+    QString info = in.readAll();
+    file.close();
+    return info;
 }

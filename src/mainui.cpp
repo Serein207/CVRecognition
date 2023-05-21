@@ -9,6 +9,7 @@ MainUI::MainUI(QWidget *parent) :
     postEntryDialog = new PostEntry(this);
     singleAnalyseDialog = new SingleAnalyse(this);
     allAnalyseDialog = new AllAnalyse(this);
+    fileManageDialog = new FileManage(this);
 
     ui->setupUi(this);
     this->show();
@@ -17,11 +18,13 @@ MainUI::MainUI(QWidget *parent) :
     connect(postEntryDialog, &PostEntry::showMainWinSig, this, &MainUI::showMe);
     connect(singleAnalyseDialog, &SingleAnalyse::showMainWinSig, this, &MainUI::showMe);
     connect(allAnalyseDialog, &AllAnalyse::showMainWinSig, this, &MainUI::showMe);
+    connect(fileManageDialog, &FileManage::showMainWinSig, this, &MainUI::showMe);
 
     connect(ui->button_CvEntry, &QPushButton::clicked, this, &MainUI::showCvEntryDialog);
     connect(ui->button_postEntry, &QPushButton::clicked, this, &MainUI::showPostEntryDialog);
     connect(ui->button_singleAnalyse, &QPushButton::clicked, this, &MainUI::showSingleAnalyseDialog);
     connect(ui->button_allAnalyse, &QPushButton::clicked, this, &MainUI::showAllAnalyseDialog);
+    connect(ui->button_fileManage, &QPushButton::clicked, this, &MainUI::showFileManageDialog);
 
     connect(ui->button_singleAnalyse, &QPushButton::clicked, singleAnalyseDialog, &SingleAnalyse::loadFiles);
 }
@@ -48,4 +51,8 @@ void MainUI::showSingleAnalyseDialog() {
 
 void MainUI::showAllAnalyseDialog() {
     allAnalyseDialog->show();
+}
+
+void MainUI::showFileManageDialog() {
+    fileManageDialog->show();
 }

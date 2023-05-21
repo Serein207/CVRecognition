@@ -14,8 +14,7 @@ PostEntry::PostEntry(QWidget *parent) :
     connect(ui->button_input, &QPushButton::clicked, this, &PostEntry::readFile);
 }
 
-PostEntry::~PostEntry()
-{
+PostEntry::~PostEntry() {
     delete ui;
 }
 

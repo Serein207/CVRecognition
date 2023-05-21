@@ -25,7 +25,7 @@ class Ui_AllAnalyse
 {
 public:
     QPushButton *button_showMainWin;
-    QWidget *widget;
+    QWidget *layoutWidget;
     QVBoxLayout *verticalLayout;
     QLabel *label_2;
     QHBoxLayout *horizontalLayout_2;
@@ -37,6 +37,9 @@ public:
         if (AllAnalyse->objectName().isEmpty())
             AllAnalyse->setObjectName("AllAnalyse");
         AllAnalyse->resize(583, 513);
+        AllAnalyse->setStyleSheet(QString::fromUtf8("QDialog {\n"
+"  background-color: rgb(255, 255, 255);\n"
+"}"));
         button_showMainWin = new QPushButton(AllAnalyse);
         button_showMainWin->setObjectName("button_showMainWin");
         button_showMainWin->setGeometry(QRect(10, 10, 61, 24));
@@ -50,13 +53,13 @@ public:
 "  background-color: rgb(255, 255, 255);\n"
 "  text-align: left;\n"
 "}"));
-        widget = new QWidget(AllAnalyse);
-        widget->setObjectName("widget");
-        widget->setGeometry(QRect(22, 42, 130, 61));
-        verticalLayout = new QVBoxLayout(widget);
+        layoutWidget = new QWidget(AllAnalyse);
+        layoutWidget->setObjectName("layoutWidget");
+        layoutWidget->setGeometry(QRect(22, 42, 130, 61));
+        verticalLayout = new QVBoxLayout(layoutWidget);
         verticalLayout->setObjectName("verticalLayout");
         verticalLayout->setContentsMargins(0, 0, 0, 0);
-        label_2 = new QLabel(widget);
+        label_2 = new QLabel(layoutWidget);
         label_2->setObjectName("label_2");
         QFont font1;
         font1.setFamilies({QString::fromUtf8("Microsoft JhengHei UI Light")});
@@ -71,7 +74,7 @@ public:
 
         horizontalLayout_2->addItem(horizontalSpacer_2);
 
-        button_analyse = new QPushButton(widget);
+        button_analyse = new QPushButton(layoutWidget);
         button_analyse->setObjectName("button_analyse");
         button_analyse->setFont(font);
 

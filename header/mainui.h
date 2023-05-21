@@ -6,6 +6,7 @@
 #include "postentry.h"
 #include "singleanalyse.h"
 #include "allanalyse.h"
+#include "filemanage.h"
 
 namespace Ui {
 class MainUI;
@@ -25,6 +26,7 @@ private:
     PostEntry* postEntryDialog;
     SingleAnalyse* singleAnalyseDialog;
     AllAnalyse* allAnalyseDialog;
+    FileManage* fileManageDialog;
 
 public slots:
     void showMe();
@@ -32,6 +34,7 @@ public slots:
     void showPostEntryDialog();
     void showSingleAnalyseDialog();
     void showAllAnalyseDialog();
+    void showFileManageDialog();
 };
 
 #endif // MAINUI_H

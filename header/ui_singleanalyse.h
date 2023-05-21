@@ -37,7 +37,6 @@ public:
     QHBoxLayout *horizontalLayout_2;
     QSpacerItem *horizontalSpacer_2;
     QPushButton *button_analyse;
-    QSpacerItem *horizontalSpacer;
     QVBoxLayout *verticalLayout_2;
     QLabel *label;
     QLineEdit *name;
@@ -128,10 +127,6 @@ public:
 
         horizontalLayout_3->addLayout(verticalLayout);
 
-        horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
-
-        horizontalLayout_3->addItem(horizontalSpacer);
-
         verticalLayout_2 = new QVBoxLayout();
         verticalLayout_2->setObjectName("verticalLayout_2");
         label = new QLabel(layoutWidget);
@@ -149,6 +144,7 @@ public:
         font3.setPointSize(18);
         font3.setBold(false);
         name->setFont(font3);
+        name->setReadOnly(true);
 
         verticalLayout_2->addWidget(name);
 
@@ -161,6 +157,7 @@ public:
         age = new QLineEdit(layoutWidget);
         age->setObjectName("age");
         age->setFont(font3);
+        age->setReadOnly(true);
 
         verticalLayout_2->addWidget(age);
 
@@ -173,6 +170,7 @@ public:
         education = new QLineEdit(layoutWidget);
         education->setObjectName("education");
         education->setFont(font3);
+        education->setReadOnly(true);
 
         verticalLayout_2->addWidget(education);
 
@@ -185,6 +183,7 @@ public:
         college = new QLineEdit(layoutWidget);
         college->setObjectName("college");
         college->setFont(font3);
+        college->setReadOnly(true);
 
         verticalLayout_2->addWidget(college);
 
@@ -197,6 +196,7 @@ public:
         work = new QLineEdit(layoutWidget);
         work->setObjectName("work");
         work->setFont(font3);
+        work->setReadOnly(true);
 
         verticalLayout_2->addWidget(work);
 
@@ -209,6 +209,7 @@ public:
         recommend = new QLineEdit(layoutWidget);
         recommend->setObjectName("recommend");
         recommend->setFont(font3);
+        recommend->setReadOnly(true);
 
         verticalLayout_2->addWidget(recommend);
 
