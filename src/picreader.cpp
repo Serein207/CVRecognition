@@ -26,8 +26,16 @@ QString PicReader::read(const QString& filename)
         //options.emplace("item_names", "errorcode|errormsg|session_id|recognize_list");
         QString result = QString::fromStdString(client.generic_url("MeaningLessNull",
             options));
-        //qDebug()<<result;
+        qDebug()<<result;
         QJsonDocument imageJson = QJsonDocument::fromJson(result.toUtf8());
+        if(imageJson["state"]!=QJsonValue("OK")){
+            QMessageBox msg;
+            msg.setWindowTitle("错误！");
+            msg.setWindowFlag(Qt::Drawer);
+            msg.setText("网络连接失败");
+            msg.exec();
+            return QString{};
+        }
         QJsonValue wordArrayValue = imageJson["body"]["content"]["prism_wordsInfo"];
         if (wordArrayValue.type() == QJsonValue::Array) {
             QJsonArray wordSearchArray = wordArrayValue.toArray();
@@ -66,9 +74,11 @@ QString PicReader::read(const QString& filename)
             msg.exec();
             return QString{};
         }
-        for(int i = 0;i <= pdfdoc.pageCount() ;i++){
+        for(int i = 0;i < pdfdoc.pageCount() ;i++){
             image = pdfdoc.render(i,pdfdoc.pagePointSize(i).toSize());
-            info += getImageInfo(image,suffix);
+            QString singleImageInfo = getImageInfo(image,suffix);
+            if(singleImageInfo.isEmpty())return QString{};
+            info += singleImageInfo;
         }
     }else{
         if(!image.load(filename)){
