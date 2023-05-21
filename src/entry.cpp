@@ -38,7 +38,7 @@ void Entry::dropEvent(QDropEvent* event) {
         if (filename.isEmpty()) {
             QMessageBox msg;
             msg.setWindowTitle("错误！");
-            msg.setWindowFlag(Qt::CustomizeWindowHint);
+            msg.setWindowFlag(Qt::Drawer);
             msg.setText("无效的文件路径！");
             msg.exec();
             return;
@@ -52,7 +52,7 @@ void Entry::dropEvent(QDropEvent* event) {
 QMap<QString, QString> Entry::getContents() {
     if (m_filePaths.isEmpty()) {
         QMessageBox msg(this);
-        msg.setWindowFlag(Qt::CustomizeWindowHint);
+        msg.setWindowFlag(Qt::Drawer);
         msg.setWindowTitle(tr("错误！"));
         msg.setText(tr("文件列表为空！"));
         msg.exec();
@@ -112,7 +112,7 @@ void Entry::handleFilePaths(const QStringList& paths) {
         else {
             QMessageBox msg(this);
             msg.setWindowTitle("错误！");
-            msg.setWindowFlag(Qt::CustomizeWindowHint);
+            msg.setWindowFlag(Qt::Drawer);
             QString errorMsg = QString("不支持此格式的文件\n出错文件：%1").arg(filename);
             msg.setText(errorMsg);
             msg.exec();

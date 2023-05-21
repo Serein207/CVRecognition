@@ -2,6 +2,7 @@
 #define FILEMANAGE_H
 
 #include <QDialog>
+#include <QListWidget>
 
 namespace Ui {
 class FileManage;
@@ -18,11 +19,16 @@ public:
 private:
     Ui::FileManage *ui;
 
+    void deleteFile(const QListWidget* listWidget, QMap<QString, QString>& map);
+
 signals:
     void showMainWinSig();
 
 public slots:
     void showMainWin();
+    void deleteCvFile();
+    void deletePostFile();
+    void loadFiles() const;
 };
 
 #endif // FILEMANAGE_H

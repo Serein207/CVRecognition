@@ -52,7 +52,30 @@ public:
         FileManage->resize(582, 433);
         FileManage->setStyleSheet(QString::fromUtf8("QDialog {\n"
 "  background-color: rgb(255, 255, 255);\n"
-"}"));
+"}\n"
+"\n"
+"QListWidget {\n"
+"	font: 25 9pt \"Microsoft YaHei Light\";\n"
+"	border: 15px solid white; /* \350\256\276\347\275\256\350\276\271\346\241\206\347\232\204\345\244\247\345\260\217\357\274\214\346\240\267\345\274\217\357\274\214\351\242\234\350\211\262 */\n"
+"	border-radius: 10px;\n"
+"}\n"
+"\n"
+"QListWidget::item {\n"
+"    height: 30px;\n"
+"}\n"
+"\n"
+"QListWidget::item:hover {\n"
+"	background-color: transparent;\n"
+"	padding: 10px;\n"
+"	border-left: 3px solid rgb(130, 130, 130);\n"
+"}\n"
+"QListWidget::item:selected {\n"
+"	background-color: transparent;\n"
+"	color: black;\n"
+"	padding: 10px;\n"
+"	border-left: 3px solid black;\n"
+"}\n"
+""));
         button_showMainWin = new QPushButton(FileManage);
         button_showMainWin->setObjectName("button_showMainWin");
         button_showMainWin->setGeometry(QRect(10, 10, 61, 24));

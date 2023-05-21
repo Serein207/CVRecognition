@@ -9,7 +9,6 @@ SingleAnalyse::SingleAnalyse(QWidget *parent) :
     ui->setupUi(this);
     this->setModal(true);
     this->setWindowTitle(tr("单独分析"));
-    loadFiles();
     connect(ui->button_showMainWin, &QPushButton::clicked, this, &SingleAnalyse::showMainWin);
     connect(ui->button_analyse, &QPushButton::clicked, this, &SingleAnalyse::analyse);
 }
@@ -23,7 +22,7 @@ void SingleAnalyse::showMainWin() {
     this->close();
 }
 
-void SingleAnalyse::loadFiles() const{
+void SingleAnalyse::loadFiles() const {
     Store::getStore()->readCvStore();
     ui->listWidget->clear();
     for (auto item = Store::getStore()->cvs.keyBegin();
@@ -34,12 +33,20 @@ void SingleAnalyse::loadFiles() const{
 }
 
 void SingleAnalyse::analyse() {
+    if (!ui->listWidget->selectedItems().count()) {
+        QMessageBox msg(this);
+        msg.setWindowTitle(tr("错误！"));
+        msg.setWindowFlag(Qt::Drawer);
+        msg.setText(tr("未选择简历！"));
+        msg.exec();
+        return;
+    }
     const auto path = ui->listWidget->currentItem()->text();
     if (path.isEmpty()) {
         QMessageBox msg(this);
         msg.setWindowTitle(tr("错误！"));
-        msg.setWindowFlag(Qt::CustomizeWindowHint);
-        msg.setText(tr("未选择简历！"));
+        msg.setWindowFlag(Qt::Drawer);
+        msg.setText(tr("文件路径为空！"));
         msg.exec();
         return;
     }
