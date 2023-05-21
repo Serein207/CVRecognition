@@ -1,4 +1,5 @@
 #include "pdfreader.h"
+#include "picreader.h"
 
 QString PDFReader::read(const QString& filepath)
 {
@@ -8,10 +9,13 @@ QString PDFReader::read(const QString& filepath)
     for (int pageIndex = 0; pageIndex < pdfDoc->pageCount(); ++pageIndex) {
         QPdfSelection page = pdfDoc->getAllText(pageIndex);
         QString text = page.text();
-        info.append(text + "\n");
+        if(!text.isEmpty())
+            info.append(text + "\n");
         // qDebug() << text;
     }
     delete pdfDoc;
-
-    return info;
+    if(info.isEmpty())
+        return PicReader::read(filepath);
+    else
+        return info;
 }
