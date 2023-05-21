@@ -104,6 +104,25 @@ void Store::readStore(const QString& kind, QMap<QString, QString>& map) {
     delete files;
 }
 
-void Store::deleteStore(const QString kind, QMap<QString, QString>& map) {
-    
+void Store::deleteStore(const QString& filePath, QMap<QString, QString>& map) {
+    if (filePath.isEmpty()) {
+        QMessageBox msg;
+        msg.setWindowFlag(Qt::Drawer);
+        msg.setWindowTitle("错误！");
+        msg.setText("文件路径为空！");
+        msg.exec();
+    }
+
+    const auto item = map.find(filePath);
+    if (item == map.end()) {
+        QMessageBox msg;
+        msg.setWindowFlag(Qt::Drawer);
+        msg.setWindowTitle("错误！");
+        msg.setText("文件不存在！");
+        msg.exec();
+    }
+
+    map.erase(item);
+    Store::getStore()->writeCvStore();
+    Store::getStore()->writePostStore();
 }

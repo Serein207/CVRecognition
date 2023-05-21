@@ -30,14 +30,13 @@ public:
     void readPostStore() {
         readStore("post", post);
     }
-
+    static void deleteStore(const QString& filePath, QMap<QString, QString>& map);
 
 private:
     Store() = default;
 
     static void writeStore(const QString& kind, const QMap<QString, QString>& map);
     static void readStore(const QString& kind, QMap<QString, QString>& map);
-    static void deleteStore(const QString kind, QMap<QString, QString>& map);
 };
 
 #endif // STORE_H

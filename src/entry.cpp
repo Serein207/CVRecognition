@@ -68,6 +68,7 @@ QMap<QString, QString> Entry::getContents() {
     progressDialog->show();
 
     int count = 1;
+    QString content;
     foreach (const auto& filename, m_filePaths) {
         QCoreApplication::processEvents();
         if (progressDialog->wasCanceled()) {
@@ -76,19 +77,22 @@ QMap<QString, QString> Entry::getContents() {
             break;
         }
         if (filename.contains(".txt")) {
-            contents.insert(filename, TxtReader::read(filename));
+            content = TxtReader::read(filename);
         }
         else if (filename.contains(".docx")) {
-            contents.insert(filename, DOCXReader::getInstance()->read(filename));
+            content = DOCXReader::getInstance()->read(filename);
         }
         else if (filename.contains(".pdf")) {
-            contents.insert(filename, PDFReader::read(filename));
+            content = PDFReader::read(filename);
         }
         else if (filename.contains(".jpg") ||
                  filename.contains(".png")) {
-            contents.insert(filename, PicReader::read(filename));
+            content = PicReader::read(filename);
         }
+        
         progressDialog->setValue(count++);
+        if (content.isEmpty()) continue;
+        contents.insert(filename, content);
     }
     return contents;
 }

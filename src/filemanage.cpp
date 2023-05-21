@@ -33,26 +33,7 @@ void FileManage::deleteFile(const QListWidget* listWidget, QMap<QString, QString
         return;
     }
     const QString filePath = listWidget->currentItem()->text();
-    if (filePath.isEmpty()) {
-        QMessageBox msg(this);
-        msg.setWindowFlag(Qt::Drawer);
-        msg.setWindowTitle(tr("错误！"));
-        msg.setText(tr("文件路径为空！"));
-        msg.exec();
-    }
-
-    const auto item = map.find(filePath);
-    if (item == map.end()) {
-        QMessageBox msg(this);
-        msg.setWindowFlag(Qt::Drawer);
-        msg.setWindowTitle(tr("错误！"));
-        msg.setText(tr("文件不存在！"));
-        msg.exec();
-    }
-
-    map.erase(item);
-    Store::getStore()->writeCvStore();
-    Store::getStore()->writePostStore();
+    Store::deleteStore(filePath, map);
     loadFiles();
 
     QMessageBox msg(this);
