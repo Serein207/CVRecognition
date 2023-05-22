@@ -44,13 +44,14 @@ QString DOCXReader::read(const QString& filepath)
     const int shapeCount = shapes->dynamicCall("Count()").toInt();
     for (int i = 1; i <= shapeCount; i++) {
         QAxObject* shape = shapes->querySubObject("Item(int)", i);
+
         QString theType = shape->dynamicCall("Type").toString();
 
         if (!theType.compare("17")) {
             // 文本框：17
             try {
                 QAxObject* textFrame = shape->querySubObject("TextFrame");
-                connect(textFrame, &QAxObject::exception, this, &DOCXReader::handleException);
+                connect(textFrame, &QAxObject::exception, getInstance(), &DOCXReader::handleException);
                 QString temp = readTextFrame(textFrame);
                 if (!(!temp.compare("\r") || !temp.compare("") || !temp.compare(" ") || !temp.compare("\n") || !temp.compare("\f") || !temp.compare("\u0007"))) {
                     info.append(temp + "\n");
@@ -152,7 +153,6 @@ QString DOCXReader::readCvHelper(QAxObject* shape)
 
     // 释放资源
     delete groupItems;
-
     return info;
 }
 
@@ -163,6 +163,12 @@ QString DOCXReader::readTextFrame(QAxObject* textFrame)
 
     //qDebug() << text;
 
+=========
+QString DOCXReader::readTextFrame(QAxObject * textFrame) {
+    const QAxObject* textRange = textFrame->querySubObject("TextRange");
+    QString text = textRange->property("Text").toString().replace("\u0007", "");
+
+>>>>>>>>> Temporary merge branch 2
     // 释放资源
     delete textRange;
     delete textFrame;
