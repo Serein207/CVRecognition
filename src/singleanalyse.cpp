@@ -1,7 +1,10 @@
 #include "singleanalyse.h"
 #include "ui_singleanalyse.h"
 #include "store.h"
-#include "picreader.h"
+#include "cmssinterface.h"
+#include <QJsonDocument>
+#include <QJsonArray>
+#include <QJsonValue>
 
 SingleAnalyse::SingleAnalyse(QWidget *parent) :
     QDialog(parent, Qt::WindowTitleHint | Qt::CustomizeWindowHint),
@@ -56,6 +59,37 @@ void SingleAnalyse::analyse() {
 
     qDebug() << path;
     qDebug() << content;
+
     // TODO: 分析简历并在文本框内显示内容
-    BasicInfo::parserName(content);
+    for (int i = 0; i < content.length(); i += 399) {
+        QJsonDocument entityJson = QJsonDocument::fromJson(
+            CmssInterface::getCmssInterface()->
+                getEntityJson(content.mid(i, 399)).toUtf8()
+        );
+        if (entityJson["state"] != QJsonValue("OK")) {
+            QMessageBox msg;
+            msg.setWindowTitle("错误！");
+            msg.setWindowFlag(Qt::Drawer);
+            msg.setText("网络连接失败");
+            msg.exec();
+            return;
+        }
+
+        QJsonValue itemsValue = entityJson["body"]["items"];
+        if (itemsValue.type() == QJsonValue::Array) {
+            QJsonArray itemsArray = itemsValue.toArray();
+            for (int j = 0; j < itemsArray.count(); ++j) {
+                QJsonArray nerTokens = itemsArray.at(j)["nerTokens"].toArray();
+                for (int k = 0; k < nerTokens.count(); ++k) {
+                    if (nerTokens.at(k)["type"].toString().contains("PER")) {
+                        const QString name = nerTokens.at(j)["word"].toString();
+                        qDebug() << name;
+                        ui->name->setText(name);
+                        return;
+                    }
+                }
+            }
+        }
+    }
+    ui->name->setText("unknown");
 }

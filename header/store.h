@@ -6,12 +6,13 @@
 #include <QFile>
 #include <QDir>
 #include <QMessageBox>
+#include <memory>
 
 class Store {
 public:
-    static Store* getStore();
+    static std::shared_ptr<Store> getStore();
 
-    ~Store() { delete Store::getStore(); }
+    ~Store(){}
     Store(const Store&) = delete;
     Store& operator=(const Store&) = delete;
 
