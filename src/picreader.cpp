@@ -100,11 +100,12 @@ void BasicInfo::parserName(const QString& content) {
     std::string sk = "33df542ec17d417a80d0a56fdcb1118c";
     cmssai::Nlp client(ak, sk);
     std::vector<cmssai::Item> entityParams;
+    
     for (int i = 0; i < content.length(); i += 399) {
         cmssai::Item entityItem;
         entityItem.setTextId("1");
         entityItem.setTitle("简历");
-        entityItem.setContent(content.mid(i, 399).toUtf8().toStdString());
+        entityItem.setContent(content.mid(i, 399).simplified().toUtf8().toStdString());
         entityParams.push_back(entityItem);
         entityParams.push_back(entityItem);
         std::string industry_result = client.entity(entityParams);

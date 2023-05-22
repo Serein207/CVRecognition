@@ -95,7 +95,7 @@ void Store::readStore(const QString& kind, QMap<QString, QString>& map) {
         }
 
         QTextStream in(&file);
-        QString filePath = in.readLine().toUtf8();
+        QString filePath = in.readLine().trimmed().toUtf8();
         QString content = in.readAll().toUtf8();
 
         map.insert(filePath, content);
