@@ -30,7 +30,16 @@ QString DOCXReader::read(const QString& filepath) const {
 
     // 普通文本读取，debug未进行输出，如有需要可以自行定义QString输出
     QAxObject* content = docx->querySubObject("Content");
-    info.append(content->dynamicCall("Text()").toString().replace("/", "") + "\n");
+    info.append(content->dynamicCall("Text()").toString()
+        .replace("/", "") + "\n")
+        .replace("\r\r", "")
+        .replace("\f", "")
+        .replace("\u0007", "")
+        .replace("\u0001\u0015", "")
+        .replace("\u000E", "")
+        .replace("\u000B", "\n")
+        .replace("\u0001", "")
+        .replace("\u0002", "");
 
     const int shapeCount = shapes->dynamicCall("Count()").toInt();
     for (int i = 1; i <= shapeCount; i++) {
@@ -40,8 +49,15 @@ QString DOCXReader::read(const QString& filepath) const {
 
         if(!theType.compare("17")){
             // 文本框：17
-            QAxObject* textFrame = shape->querySubObject("TextFrame");
-            info.append(readTextFrame(textFrame) + "\n");
+            try {
+                QAxObject* textFrame = shape->querySubObject("TextFrame");
+                connect(textFrame, &QAxObject::exception, getInstance(), &DOCXReader::handleException);
+                QString temp = readTextFrame(textFrame);
+                if(!(!temp.compare("\r")||!temp.compare("")||!temp.compare(" ")||!temp.compare("\n")||!temp.compare("\f")||!temp.compare("\u0007"))){
+                    info.append(temp + "\n");
+                }
+            } catch (...) {
+            }
         }
         else if(!theType.compare("6")){
             // 合并框：6
@@ -49,8 +65,16 @@ QString DOCXReader::read(const QString& filepath) const {
         }
         else if(!theType.compare("1")){
             // 文本框：1
-            QAxObject* textFrame = shape->querySubObject("TextFrame");
-            info.append(readTextFrame(textFrame) + "\n");
+            connect(shape, &QAxObject::exception, getInstance(), &DOCXReader::handleException);
+            try {
+                QAxObject* textFrame = shape->querySubObject("TextFrame");
+                connect(textFrame, &QAxObject::exception, getInstance(), &DOCXReader::handleException);
+                QString temp = readTextFrame(textFrame);
+                if(!(!temp.compare("\r")||!temp.compare("")||!temp.compare(" ")||!temp.compare("\n")||!temp.compare("\f")||!temp.compare("\u0007"))){
+                    info.append(temp + "\n");
+                }
+            } catch (...) {
+            }
         }
         else{
             //qDebug()<<"The Type:" << theType;
@@ -63,9 +87,7 @@ QString DOCXReader::read(const QString& filepath) const {
     delete shapes;
     delete docx;
 
-    info.replace("\r\n\r\n", "").replace("\n\n", "\n");
-    //qDebug() << info;
-    return info;
+    return info.replace("\r\n\r\n", "").replace("\n\n", "\n");
 }
 
 void DOCXReader::deleteWord() const {
@@ -74,7 +96,14 @@ void DOCXReader::deleteWord() const {
     delete m_documents;
 }
 
-QString DOCXReader::readCvHelper(QAxObject * shape) {
+void DOCXReader::handleException(int Code, QString Source, QString Description, QString Help)
+{
+    //qDebug()<<"None Text";
+    throw "None Text";
+}
+
+QString DOCXReader::readCvHelper(QAxObject* shape)
+{
     QString info;
     QAxObject* groupItems = shape->querySubObject("GroupItems");
     const int itemCount = groupItems->dynamicCall("Count()").toInt();
@@ -84,12 +113,34 @@ QString DOCXReader::readCvHelper(QAxObject * shape) {
         QString itemType = item->dynamicCall("Type()").toString();
 
         if (!itemType.compare("17")) {
-            // 这是一个文本框对象
-            QAxObject* textFrame = item->querySubObject("TextFrame");
-            info.append(readTextFrame(textFrame) + "\n");
+            // 文本框：17
+            try {
+                QAxObject* textFrame = item->querySubObject("TextFrame");
+                connect(textFrame, &QAxObject::exception, getInstance(), &DOCXReader::handleException);
+                QString temp = readTextFrame(textFrame);
+                if(!(!temp.compare("\r")||!temp.compare("")||!temp.compare(" ")||!temp.compare("\n")||!temp.compare("\f")||!temp.compare("\u0007"))){
+                    info.append(temp + "\n");
+                }
+            } catch (...) {
+            }
         }
-        if(!itemType.compare("6")){
+        else if(!itemType.compare("6")){
             info.append(readCvHelper(item));
+        }
+        else if(!itemType.compare("1")){
+            // 文本框：1
+            try {
+                QAxObject* textFrame = item->querySubObject("TextFrame");
+                connect(textFrame, &QAxObject::exception, getInstance(), &DOCXReader::handleException);
+                QString temp = readTextFrame(textFrame);
+                if(!(!temp.compare("\r")||!temp.compare("")||!temp.compare(" ")||!temp.compare("\n")||!temp.compare("\f")||!temp.compare("\u0007"))){
+                    info.append(temp + "\n");
+                }
+            } catch (...) {
+            }
+        }
+        else{
+            //qDebug()<<"The Type:" << itemType;
         }
 
         // 释放资源
@@ -101,13 +152,23 @@ QString DOCXReader::readCvHelper(QAxObject * shape) {
     return info;
 }
 
-QString DOCXReader::readTextFrame(QAxObject * textFrame) {
-    const QAxObject* textRange = textFrame->querySubObject("TextRange");
-    QString text = textRange->property("Text").toString().replace("\u0007", "");
+QString DOCXReader::readTextFrame(QAxObject * textFrame)
+{
+    QAxObject* textRange = textFrame->querySubObject("TextRange");
+    QString text = textRange->property("Text").toString();
+
+    // 处理文本
+    qDebug() << text;
 
     // 释放资源
     delete textRange;
     delete textFrame;
 
-    return text;
+    return text.replace("\f", "")
+        .replace("\u0007", "")
+        .replace("\u0001\u0015", "")
+        .replace("\u000E", "")
+        .replace("\u000B", "\n")
+        .replace("\u0001", "")
+        .replace("\u0002", "");
 }
