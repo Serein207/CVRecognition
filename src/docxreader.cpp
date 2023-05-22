@@ -160,6 +160,7 @@ QString DOCXReader::readTextFrame(QAxObject* textFrame) {
     const QAxObject* textRange = textFrame->querySubObject("TextRange");
     QString text = textRange->property("Text").toString().replace("\u0007", "");
 
+>>>>>>>>> Temporary merge branch 2
     // 释放资源
     delete textRange;
     delete textFrame;
