@@ -17,6 +17,9 @@ FileManage::FileManage(QWidget *parent) :
 
     connect(ui->cvAllSelect, &QCheckBox::clicked, this, &FileManage::cvAllSelectBox);
     connect(ui->postAllSelect, &QCheckBox::clicked, this, &FileManage::postAllSelectBox);
+
+    ui->cvAllSelect->setChecked(false);
+    ui->postAllSelect->setChecked(false);
 }
 
 FileManage::~FileManage() {
@@ -81,21 +84,19 @@ void FileManage::deletePostFile() {
 }
 
 void FileManage::cvAllSelectBox() {
-    if (ui->cvAllSelect->isChecked()) {
+    if (ui->cvAllSelect->isChecked()) 
         ui->listWidget_Cvs->selectAll();
-    } else {
-        foreach(auto& item, ui->listWidget_Cvs->selectedItems()) {
+    else
+        foreach(auto& item, ui->listWidget_Cvs->selectedItems()) 
             item->setSelected(false);
-        }
-    }
+    ui->cvAllSelect->setChecked(false);
 }
 
 void FileManage::postAllSelectBox() {
-    if (ui->postAllSelect->isChecked()) {
+    if (ui->postAllSelect->isChecked()) 
         ui->listWidget_Post->selectAll();
-    } else {
-       foreach (auto& item, ui->listWidget_Post->selectedItems()) {
+     else 
+       foreach (auto& item, ui->listWidget_Post->selectedItems()) 
            item->setSelected(false);
-       }
-    }
+    ui->postAllSelect->setChecked(false);
 }
