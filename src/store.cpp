@@ -1,9 +1,10 @@
 #include "store.h"
 
-Store* Store::getStore() {
-    static Store* ptr = nullptr;
-    if (!ptr)
-        ptr = new Store();
+std::shared_ptr<Store> Store::getStore() {
+    static std::shared_ptr<Store> ptr= nullptr;
+    if (ptr == nullptr){
+        ptr = std::shared_ptr<Store>(new Store());
+    }
     return ptr;
 }
 

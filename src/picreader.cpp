@@ -6,51 +6,12 @@
 #include <QPdfDocument>
 #include <QMessageBox>
 
-#include "ocr.h"
-#include "nlp.h"
 #include "picreader.h"
+#include "cmssinterface.h"
 
 QString PicReader::read(const QString& filename)
 {
-    auto getImageInfo= [](QImage image,std::string suffix)->QString{
-        QString output;
-        std::string ak = "7b5055c0ecfc4d19b8def6869898fc8b";
-        std::string sk = "33df542ec17d417a80d0a56fdcb1118c";
-        cmssai::Ocr client(ak, sk);
-        QByteArray ba;
-        QBuffer buf(&ba);
-        image.save(&buf, suffix.c_str());
-        std::string imageBase64Str = ba.toBase64().toStdString();
-        buf.close();
-        std::map<std::string, std::string> options;
-        options.emplace(std::make_pair("image", imageBase64Str));
-        //options.emplace("item_names", "errorcode|errormsg|session_id|recognize_list");
-        QString result = QString::fromStdString(client.generic_url("MeaningLessNull",
-            options));
-        //qDebug()<<result;
-        QJsonDocument imageJson = QJsonDocument::fromJson(result.toUtf8());
-        if(imageJson["state"]!=QJsonValue("OK")){
-            QMessageBox msg;
-            msg.setWindowTitle("错误！");
-            msg.setWindowFlag(Qt::Drawer);
-            msg.setText("网络连接失败");
-            msg.exec();
-            return QString{};
-        }
-        QJsonValue wordArrayValue = imageJson["body"]["content"]["prism_wordsInfo"];
-        if (wordArrayValue.type() == QJsonValue::Array) {
-            QJsonArray wordSearchArray = wordArrayValue.toArray();
-            for (int i = 0; i < wordSearchArray.count(); i++) {
-                output += wordSearchArray.at(i)["word"].toString();
-                if(i)
-                    output+="\n";
-            }
-        }
-        return output;
-    };
-
     QString info;
-
     std::string suffix;
     QString filePathDelSuffix = filename;
     if(filename.contains(".png")){
@@ -77,7 +38,7 @@ QString PicReader::read(const QString& filename)
         }
         for(int i = 0;i < pdfdoc.pageCount() ;i++){
             image = pdfdoc.render(i,pdfdoc.pagePointSize(i).toSize());
-            QString singleImageInfo = getImageInfo(image,suffix);
+            QString singleImageInfo = BasicInfo::getImageInfo(image,suffix);
             if(singleImageInfo.isEmpty())return QString{};
             info += singleImageInfo;
         }
@@ -90,12 +51,44 @@ QString PicReader::read(const QString& filename)
             msg.exec();
             return QString{};
         }
-        return getImageInfo(image,suffix);
+        return BasicInfo::getImageInfo(image,suffix);
     }
     return info;
 }
 
+QString BasicInfo::getImageInfo(QImage image,std::string suffix){
+    QString output;
+    QByteArray ba;
+    QBuffer buf(&ba);
+    image.save(&buf, suffix.c_str());
+    std::string imageBase64Str = ba.toBase64().toStdString();
+    buf.close();
+    QString result = CmssInterface::getCmssInterface()->getGenericResultJson(imageBase64Str);
+    //qDebug()<<result;
+    QJsonDocument imageJson = QJsonDocument::fromJson(result.toUtf8());
+    if(imageJson["state"]!=QJsonValue("OK")){
+        QMessageBox msg;
+        msg.setWindowTitle("错误！");
+        msg.setWindowFlag(Qt::Drawer);
+        msg.setText("网络连接失败");
+        msg.exec();
+        return QString{};
+    }
+    QJsonValue wordArrayValue = imageJson["body"]["content"]["prism_wordsInfo"];
+    if (wordArrayValue.type() == QJsonValue::Array) {
+        QJsonArray wordSearchArray = wordArrayValue.toArray();
+        for (int i = 0; i < wordSearchArray.count(); i++) {
+            output += wordSearchArray.at(i)["word"].toString();
+            if(i)
+                output+="\n";
+        }
+    }
+    return output;
+};
+
+
 void BasicInfo::parserName(const QString& content) {
+    /*
     std::string ak = "7b5055c0ecfc4d19b8def6869898fc8b";
     std::string sk = "33df542ec17d417a80d0a56fdcb1118c";
     cmssai::Nlp client(ak, sk);
@@ -110,5 +103,5 @@ void BasicInfo::parserName(const QString& content) {
         std::string industry_result = client.entity(entityParams);
         std::cout << industry_result << std::endl;
     }
-    
+    */
 }
