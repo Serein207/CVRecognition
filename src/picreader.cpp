@@ -51,19 +51,19 @@ QString PicReader::read(const QString& filename)
             msg.exec();
             return QString{};
         }
-        return getImageInfo(image,suffix);
+        return getImageInfo(image, suffix);
     }
     return info;
 }
 
-QString PicReader::getImageInfo(QImage image,std::string suffix){
+QString PicReader::getImageInfo(const QImage& image, const std::string& suffix){
     QString output;
     QByteArray ba;
     QBuffer buf(&ba);
     image.save(&buf, suffix.c_str());
     std::string imageBase64Str = ba.toBase64().toStdString();
     buf.close();
-    QString result = CmssInterface::getCmssInterface()->getGenericResultJson(imageBase64Str);
+    QString result = CmssInterface::getGenericResultJson(imageBase64Str);
     //qDebug()<<result;
     QJsonDocument imageJson = QJsonDocument::fromJson(result.toUtf8());
     if(imageJson["state"]!=QJsonValue("OK")){

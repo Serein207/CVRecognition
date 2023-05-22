@@ -11,7 +11,7 @@ public:
 private:
     PicReader() = default;
 
-    static QString getImageInfo(QImage image, std::string suffix);
+    static QString getImageInfo(const QImage& image, const std::string& suffix);
 };
 
 #endif // PICREADER_H
