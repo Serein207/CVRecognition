@@ -48,6 +48,7 @@ void Store::writeStore(const QString& kind, const QMap<QString, QString>& map) {
         }
 
         file.write(item->first.toUtf8());
+
         QString enter = "\n";
         file.write(enter.toUtf8());
         file.write(item->second.toUtf8());
@@ -95,8 +96,16 @@ void Store::readStore(const QString& kind, QMap<QString, QString>& map) {
         }
 
         QTextStream in(&file);
-        QString filePath = in.readLine().trimmed().toUtf8();
-        QString content = in.readAll().toUtf8();
+        QString filePath = in.readLine().toUtf8().trimmed()
+            .replace("\r", " ")
+            .replace("\n", " ")
+            .replace("\t", " ")
+            .replace("\f", " ");
+        QString content = in.readAll().toUtf8().trimmed()
+            .replace("\r", " ")
+            .replace("\n", " ")
+            .replace("\t", " ")
+            .replace("\f", " ");
 
         map.insert(filePath, content);
         file.close();
