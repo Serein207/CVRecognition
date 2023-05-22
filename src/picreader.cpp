@@ -7,6 +7,7 @@
 #include <QMessageBox>
 
 #include "ocr.h"
+#include "nlp.h"
 #include "picreader.h"
 
 QString PicReader::read(const QString& filename)
@@ -88,9 +89,26 @@ QString PicReader::read(const QString& filename)
             msg.setText("文件打开失败！");
             msg.exec();
             return QString{};
-        }else{
-            return getImageInfo(image,suffix);
         }
+        return getImageInfo(image,suffix);
     }
     return info;
+}
+
+void BasicInfo::parserName(const QString& content) {
+    std::string ak = "7b5055c0ecfc4d19b8def6869898fc8b";
+    std::string sk = "33df542ec17d417a80d0a56fdcb1118c";
+    cmssai::Nlp client(ak, sk);
+    std::vector<cmssai::Item> entityParams;
+    for (int i = 0; i < content.length(); i += 399) {
+        cmssai::Item entityItem;
+        entityItem.setTextId("1");
+        entityItem.setTitle("简历");
+        entityItem.setContent(content.mid(i, 399).toUtf8().toStdString());
+        entityParams.push_back(entityItem);
+        entityParams.push_back(entityItem);
+        std::string industry_result = client.entity(entityParams);
+        std::cout << industry_result << std::endl;
+    }
+    
 }

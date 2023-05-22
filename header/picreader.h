@@ -3,12 +3,15 @@
 
 #include <QString>
 
-class PicReader
-{
+class PicReader {
 public:
     static QString read(const QString& filename);
 private:
     PicReader() = default;
 };
+
+namespace BasicInfo {
+    void parserName(const QString& content);
+}
 
 #endif // PICREADER_H

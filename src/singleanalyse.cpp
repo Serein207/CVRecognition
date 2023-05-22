@@ -1,6 +1,7 @@
 #include "singleanalyse.h"
 #include "ui_singleanalyse.h"
 #include "store.h"
+#include "picreader.h"
 
 SingleAnalyse::SingleAnalyse(QWidget *parent) :
     QDialog(parent, Qt::WindowTitleHint | Qt::CustomizeWindowHint),
@@ -56,4 +57,5 @@ void SingleAnalyse::analyse() {
     qDebug() << path;
     qDebug() << content;
     // TODO: 分析简历并在文本框内显示内容
+    BasicInfo::parserName(content);
 }
