@@ -5,10 +5,11 @@
 #include <QAxObject>
 #include <QThread>
 #include <QFileInfo>
+#include <QObject>
 
-class DOCXReader
+class DOCXReader : public QObject
 {
-
+    Q_OBJECT
 public:
     static DOCXReader * getInstance(){
         static DOCXReader instance;
@@ -18,6 +19,9 @@ public:
     QString readCV(QString);
     // 注意，在程序进程退出时请使用deleteWord进行Word的正常关闭
     void deleteWord();
+
+private slots:
+    void handleException(int, QString, QString, QString);
 
 private:
     QAxWidget *m_word;
@@ -29,6 +33,7 @@ private:
         // 设置不可见
         m_word->setProperty("Visible",false);
         m_documents = m_word->querySubObject("Documents");
+        connect(m_documents, &QAxObject::exception, this, &DOCXReader::handleException);
     };
     DOCXReader(const DOCXReader&) = delete;
     DOCXReader& operator=(const DOCXReader&) = delete;
