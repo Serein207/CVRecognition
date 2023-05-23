@@ -15,10 +15,12 @@ QString CmssInterface::getEntityJson(const QString& content) {
     cmssai::Nlp client(Ak, Sk);
     std::vector<cmssai::Item> entityParams;
 
+    QString contentRemoveSpace = content;
+    contentRemoveSpace.replace(" ", "");
     static int count = 1;
     cmssai::Item entityItem;
     entityItem.setTextId(std::to_string(count++));
-    entityItem.setText(content.simplified().toUtf8().toStdString());
+    entityItem.setText(contentRemoveSpace.toUtf8().toStdString());
     entityParams.push_back(entityItem);
     return QString::fromStdString(client.entity(entityParams));
 }
@@ -27,10 +29,12 @@ QString CmssInterface::getSegmentationJson(const QString& content) {
     cmssai::Nlp client(Ak, Sk);
     std::vector<cmssai::Item> entityParams;
 
+    QString contentRemoveSpace = content;
+    contentRemoveSpace.replace(" ", "");
     static int count = 1;
     cmssai::Item entityItem;
     entityItem.setTextId(std::to_string(count++));
-    entityItem.setText(content.simplified().toUtf8().toStdString());
+    entityItem.setText(contentRemoveSpace.toUtf8().toStdString());
     entityParams.push_back(entityItem);
     return QString::fromStdString(client.segmentation(entityParams));
 }
