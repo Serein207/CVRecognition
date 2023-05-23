@@ -85,8 +85,11 @@ parser::bean_type parser::parserSegmentation(const QString& content) {
         for (int j = 0; j < items.count(); ++j) {
             QJsonArray beanArray = items.at(j)["bean"].toArray();
             for (int k = 0; k < beanArray.count(); ++k) {
+                const QString nature = beanArray.at(k)["nature"].toString();
+                if (nature == "w" || nature == "p" || nature == "uj" ||
+                    nature == "q" || nature == "ul") continue;
                 result.insert(
-                    beanArray.at(k)["nature"].toString(),
+                    nature,
                     beanArray.at(k)["word"].toString()
                 );
             }
