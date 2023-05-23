@@ -13,7 +13,8 @@ public:
     //实体识别返回的json content字符数量不要超过400
     static QString getEntityJson(const QString& content);
 
-    static QString parserName(const QString& content);
+    //智能分词返回的json content字符数量不要超过400
+    static QString getSegmentationJson(const QString& content);
 
     CmssInterface(const CmssInterface&) = delete;
     CmssInterface& operator=(const CmssInterface&) = delete;

@@ -2,7 +2,6 @@
 #define PICREADER_H
 
 #include <QString>
-#include <QImage>
 
 class PicReader {
 public:
@@ -10,8 +9,6 @@ public:
 
 private:
     PicReader() = default;
-
-    static QString getImageInfo(const QImage& image, const std::string& suffix);
 };
 
 #endif // PICREADER_H

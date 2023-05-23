@@ -1,7 +1,6 @@
 #ifndef SINGLEANALYSE_H
 #define SINGLEANALYSE_H
 
-#include <QDialog>
 #include <QMessageBox>
 
 namespace Ui {

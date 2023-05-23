@@ -1,7 +1,7 @@
 #include "singleanalyse.h"
 #include "ui_singleanalyse.h"
 #include "store.h"
-#include "cmssinterface.h"
+#include "parserInfo.h"
 
 SingleAnalyse::SingleAnalyse(QWidget *parent) :
     QDialog(parent, Qt::WindowTitleHint | Qt::CustomizeWindowHint),
@@ -58,5 +58,5 @@ void SingleAnalyse::analyse() {
     qDebug() << content;
 
     // TODO: 分析简历并在文本框内显示内容
-    ui->name->setText(CmssInterface::parserName(content));
+    ui->name->setText(parser::parserName(content));
 }
