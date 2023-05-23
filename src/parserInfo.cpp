@@ -105,125 +105,84 @@ QString handleDate(const QString& date) {
     result.replace("年", ".")
         .replace("/", ".")
         .replace("、", ".");
-    if (result.length() != 7)
+    if (result.length() == 6)
         result.insert(5, "0");
+    if (result.length() == 4)
+        result += ".01";
     return result;
 }
 
-QString parser::parserYears(const QString& content) {
+long long parserWorkYearsHelper(const QString& content, const QRegularExpression& regex) {
+    QSet<QPair<QDate, QDate>> intervals;
+
+    QDate startDate {}, endDate {};
+    int lastIndex = 0;
+    QRegularExpressionMatchIterator intervalIterator = regex.globalMatch(content);
+
+    while (intervalIterator.hasNext()) {
+        QRegularExpressionMatch match = intervalIterator.next();
+        // qDebug() << match;
+        if (content.mid(match.lastCapturedIndex(),
+            match.lastCapturedIndex() - lastIndex).contains("实习") &&
+            lastIndex != 0) {
+            const auto it = intervals.find(qMakePair(startDate, endDate));
+            intervals.erase(it);
+        }
+        startDate = QDate::fromString(handleDate(match.captured(1)),
+            "yyyy.MM");
+        if (match.captured(2) == "至今") {
+            endDate = endDate = QDate::currentDate();
+        } else {
+            endDate = QDate::fromString(handleDate(match.captured(2)),
+                "yyyy.MM");
+        }
+        intervals.insert(qMakePair(startDate, endDate));
+        // qDebug() << startDate << endDate;
+        lastIndex = match.lastCapturedIndex();
+    }
+
+    long long years = 0;
+    foreach(const auto & interval, intervals) {
+        const QDate start = interval.first;
+        const QDate end = interval.second;
+        const auto count = start.daysTo(end) / 365ll;
+        if (count > 0 && count < 40)
+            years += count;
+    }
+
+    return years;
+}
+
+QString parser::parserWorkYears(const QString& content) {
     QString removeSpaceContent = content;
     removeSpaceContent.replace(" ", "");
 
     const QRegularExpression directRegex(
-        R"((\d)(?:年.*?(?!实习)经(验|历)))"
+        R"([^\d](\d){1,2}(?:年.*?(?!实习)经(验|历)))"
     );
     QRegularExpressionMatchIterator intervalIterator = directRegex.globalMatch(removeSpaceContent);
     int sum = 0;
     while (intervalIterator.hasNext()) {
         QRegularExpressionMatch match = intervalIterator.next();
-        //qDebug() << match;
+        // qDebug() << match;
         sum += match.captured(1).toInt();
     }
     if (directRegex.match(removeSpaceContent).hasMatch()) {
         return QString("%1").arg(sum);
     }
 
-    QSet<QPair<QDate, QDate>> intervals;
-
-    QDate startDate {}, endDate {};
-    int lastIndex = 0;
-    const QRegularExpression regex1(
-        R"((\d{4}(?:\.|年|/|、)\d{1,2})(?:-|–)(\d{4}(?:\.|年|/|、)\d{1,2}))"
-    );
-    const QRegularExpression regexToday1(
-        R"((\d{4}(?:\.|年|/|、)\d{1,2})(?:-|–)*至今)"
-    );
-    QRegularExpressionMatchIterator intervalIterator1 = regex1.globalMatch(removeSpaceContent);
-    QRegularExpressionMatchIterator intervalTodayIterator1 = regexToday1.globalMatch(removeSpaceContent);
-    
-    while (intervalIterator1.hasNext()) {
-        QRegularExpressionMatch match = intervalIterator1.next();
-        if (content.mid(match.lastCapturedIndex(),
-            match.lastCapturedIndex() - lastIndex).contains("实习") &&
-            lastIndex != 0) {
-            const auto it = intervals.find(qMakePair(startDate, endDate));
-            intervals.erase(it);
-        }
-        startDate = QDate::fromString(handleDate(match.captured(1)),
-            "yyyy.MM");
-        endDate = QDate::fromString(handleDate(match.captured(2)),
-            "yyyy.MM");
-        
-        intervals.insert(qMakePair(startDate, endDate));
-    }
-
-    while (intervalTodayIterator1.hasNext()) {
-        QRegularExpressionMatch match = intervalTodayIterator1.next();
-        if (content.mid(match.lastCapturedIndex(),
-            match.lastCapturedIndex() - lastIndex).contains("实习") &&
-            lastIndex != 0) {
-            const auto it = intervals.find(qMakePair(startDate, endDate));
-            intervals.erase(it);
-        }
-        startDate = QDate::fromString(handleDate(match.captured(1)),
-            "yyyy.MM");
-        endDate = QDate::currentDate();
-        // qDebug() << startDate << endDate;
-        intervals.insert(qMakePair(startDate, endDate));
-    }
-
-    lastIndex = 0;
-    startDate = {};
-    endDate = {};
-    const QRegularExpression regex2(
-        R"((\d{4})(?:\.|年){0,1}(?:-|–)(\d{4})(?:\.|年){0,1})"
-    );
-    const QRegularExpression regexToday2(
-        R"((\d{4})(?:\.|年|){0,1}(?:-|–)*至今)"
-    );
-    QRegularExpressionMatchIterator intervalIterator2 = regex2.globalMatch(removeSpaceContent);
-    QRegularExpressionMatchIterator intervalTodayIterator2 = regexToday2.globalMatch(removeSpaceContent);
-
-    while (intervalIterator2.hasNext()) {
-        QRegularExpressionMatch match = intervalIterator2.next();
-        if (content.mid(match.lastCapturedIndex(), 
-            match.lastCapturedIndex() - lastIndex).contains("实习") && 
-            lastIndex != 0) {
-            const auto it = intervals.find(qMakePair(startDate, endDate));
-            intervals.erase(it);
-        }
-        lastIndex = match.lastCapturedIndex();
-        startDate = QDate::fromString(match.captured(1),
-            "yyyy");
-        endDate = QDate::fromString(match.captured(2),
-            "yyyy");
-        intervals.insert(qMakePair(startDate, endDate));
-        // qDebug() << startDate << endDate;
-    }
-
-    while (intervalTodayIterator2.hasNext()) {
-        QRegularExpressionMatch match = intervalTodayIterator2.next();
-        if (content.mid(match.lastCapturedIndex(),
-            match.lastCapturedIndex() - lastIndex).contains("实习") &&
-            lastIndex != 0) {
-            const auto it = intervals.find(qMakePair(startDate, endDate));
-            intervals.erase(it);
-        }
-        startDate = QDate::fromString(handleDate(match.captured(1)),
-            "yyyy");
-        endDate = QDate::currentDate();
-        // qDebug() << startDate << endDate;
-        intervals.insert(qMakePair(startDate, endDate));
-    }
-
-    long long years = 0;
-    foreach(const auto& interval, intervals) {
-        const QDate start = interval.first;
-        const QDate end = interval.second;
-        auto count = start.daysTo(end) / 365ll;
-        if (count > 0 && count < 40) 
-            years += count;
-    }
+    const auto years =
+        parserWorkYearsHelper(removeSpaceContent,
+            QRegularExpression(R"((\d{4}(?:.|年|/|、)\d{1,2})(?:-|–|到|至)(\d{4}(?:.|年|/|、)\d{1,2}))"))
+        +
+        parserWorkYearsHelper(removeSpaceContent,
+            QRegularExpression(R"((\d{4}(?:.|年|/|、)\d{1,2})(?:-|–|到|至)?(至今))"))
+        +
+        parserWorkYearsHelper(removeSpaceContent,
+            QRegularExpression(R"((\d{4})(?:.|年)?(?:-|–|到|至)(\d{4})(?:.|年)?)"))
+        +
+        parserWorkYearsHelper(removeSpaceContent,
+            QRegularExpression(R"((\d{4})(?:.|年)?(?:-|–|到|至)?(至今))"));
 
     return QString("%1").arg(years);
 }
@@ -308,9 +267,10 @@ QString parser::parserCollege(const QString& content) {
             for (int j = 0; j < itemsArray.count(); ++j) {
                 QJsonArray nerTokens = itemsArray.at(j)["nerTokens"].toArray();
                 for (int k = 0; k < nerTokens.count(); ++k) {
+                    //qDebug() << nerTokens;
                     if (nerTokens.at(k)["type"].toString().contains("ORG")) {
                         QString org = nerTokens.at(k)["word"].toString();
-                        // qDebug() << org;
+                         //qDebug() << org;
                         if (org.contains("大学") || 
                             org.contains("学院") ||
                             org.contains("学校")) {

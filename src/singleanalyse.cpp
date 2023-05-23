@@ -62,6 +62,6 @@ void SingleAnalyse::analyse() {
     ui->age->setText(parser::parserAge(content));
     ui->education->setText(parser::parserEducation(content));
     ui->college->setText(parser::parserCollege(content));
-    ui->work->setText(parser::parserYears(content));
+    ui->work->setText(parser::parserWorkYears(content));
     //parser::parserSegmentation(content);
 }
