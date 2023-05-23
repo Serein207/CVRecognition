@@ -23,7 +23,7 @@ QString DOCXReader::read(const QString& filepath)
         m_documents->dynamicCall("Open(const QString&, bool)", filepath, false);
     }
     QAxObject* docx = m_word->querySubObject("ActiveDocument");
-    qDebug() << "Open docx file" << docx->dynamicCall("Name").toString() << "success!";
+    // qDebug() << "Open docx file" << docx->dynamicCall("Name").toString() << "success!";
 
     QAxObject* shapes = docx->querySubObject("Shapes");
     QString info;
