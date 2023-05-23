@@ -59,5 +59,7 @@ void SingleAnalyse::analyse() {
 
     // TODO: 分析简历并在文本框内显示内容
     ui->name->setText(parser::parserName(content));
-    qDebug() << parser::parserSegmentation(content);
+    ui->age->setText(parser::parserAge(content));
+    ui->education->setText(parser::parserEducation(content));
+    ui->college->setText(parser::parserCollege(content));
 }
