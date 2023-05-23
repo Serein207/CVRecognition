@@ -4,7 +4,7 @@
 #include <QImage>
 
 namespace parser {
-    using bean_type = QMultiMap<QString, QString>;
+    using bean_type = QMultiHash<QString, QString>;
     QString parserName(const QString& content);
     bean_type parserSegmentation(const QString& content);
     QString parserImage(const QImage& image, const std::string& suffix);
