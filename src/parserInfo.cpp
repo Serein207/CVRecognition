@@ -220,7 +220,6 @@ QString parser::parserAge(const QString& content) {
         return match.captured(0);
 
     return "unknown";
-    
 }
 
 QString parser::parserEducation(const QString& content) {
