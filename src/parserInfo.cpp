@@ -88,12 +88,13 @@ parser::bean_type parser::parserSegmentation(const QString& content) {
             for (int k = 0; k < beanArray.count(); ++k) {
                 const QString nature = beanArray.at(k)["nature"].toString();
                 if (nature == "w" || nature == "p" || nature == "uj" ||
-                    nature == "q" || nature == "ul") continue;
-                result.insert(
-                    nature,
-                    beanArray.at(k)["word"].toString()
-                );
-                // qDebug() << beanArray.at(k)["word"].toString() << " ";
+                    nature == "q" || nature == "ul" || nature == "m" ||
+                    nature == "r" || nature == "c") continue;
+                if (beanArray.at(k)["word"].toString().length() >= 2)
+                    result.emplace_back(
+                        beanArray.at(k)["word"].toString()
+                    );
+                //qDebug() << beanArray.at(k);
             }
         }
     }
