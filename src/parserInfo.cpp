@@ -22,17 +22,16 @@ QString parser::parserName(const QString& content) {
         }
 
         QJsonValue itemsValue = entityJson["body"]["items"];
-        if (itemsValue.type() == QJsonValue::Array) {
-            QJsonArray itemsArray = itemsValue.toArray();
-            for (int j = 0; j < itemsArray.count(); ++j) {
-                QJsonArray nerTokens = itemsArray.at(j)["nerTokens"].toArray();
-                for (int k = 0; k < nerTokens.count(); ++k) {
-                    if (nerTokens.at(k)["type"].toString().contains("PER")) {
-                        return nerTokens.at(k)["word"].toString();
-                    }
+        QJsonArray itemsArray = itemsValue.toArray();
+        for (int j = 0; j < itemsArray.count(); ++j) {
+            QJsonArray nerTokens = itemsArray.at(j)["nerTokens"].toArray();
+            for (int k = 0; k < nerTokens.count(); ++k) {
+                if (nerTokens.at(k)["type"].toString().contains("PER")) {
+                    return nerTokens.at(k)["word"].toString();
                 }
             }
         }
+        
     }
     return "unknown";
 }
@@ -262,20 +261,16 @@ QString parser::parserCollege(const QString& content) {
         }
 
         QJsonValue itemsValue = entityJson["body"]["items"];
-        if (itemsValue.type() == QJsonValue::Array) {
-            QJsonArray itemsArray = itemsValue.toArray();
-            for (int j = 0; j < itemsArray.count(); ++j) {
-                QJsonArray nerTokens = itemsArray.at(j)["nerTokens"].toArray();
-                for (int k = 0; k < nerTokens.count(); ++k) {
-                    //qDebug() << nerTokens;
-                    if (nerTokens.at(k)["type"].toString().contains("ORG")) {
-                        QString org = nerTokens.at(k)["word"].toString();
-                         //qDebug() << org;
-                        if (org.contains("大学") || 
-                            org.contains("学院") ||
-                            org.contains("学校")) {
-                            return org;
-                        }
+        QJsonArray itemsArray = itemsValue.toArray();
+        for (int j = 0; j < itemsArray.count(); ++j) {
+            QJsonArray nerTokens = itemsArray.at(j)["nerTokens"].toArray();
+            for (int k = 0; k < nerTokens.count(); ++k) {
+                if (nerTokens.at(k)["type"].toString().contains("ORG")) {
+                    QString org = nerTokens.at(k)["word"].toString();
+                    if (org.contains("大学") || 
+                        org.contains("学院") ||
+                        org.contains("学校")) {
+                        return org;
                     }
                 }
             }
