@@ -1,6 +1,6 @@
 #include "filemanage.h"
-#include "ui_filemanage.h"
 #include "store.h"
+#include "ui_filemanage.h"
 
 FileManage::FileManage(QWidget *parent) :
     QDialog(parent, Qt::WindowTitleHint | Qt::CustomizeWindowHint),
@@ -89,7 +89,6 @@ void FileManage::cvAllSelectBox() {
     else
         foreach(auto& item, ui->listWidget_Cvs->selectedItems()) 
             item->setSelected(false);
-    ui->cvAllSelect->setChecked(false);
 }
 
 void FileManage::postAllSelectBox() {
@@ -98,5 +97,9 @@ void FileManage::postAllSelectBox() {
      else 
        foreach (auto& item, ui->listWidget_Post->selectedItems()) 
            item->setSelected(false);
+}
+
+void FileManage::clearCheckBoxStatus() {
+    ui->cvAllSelect->setChecked(false);
     ui->postAllSelect->setChecked(false);
 }

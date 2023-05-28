@@ -55,5 +55,6 @@ void MainUI::showAllAnalyseDialog() {
 }
 
 void MainUI::showFileManageDialog() {
+    fileManageDialog->clearCheckBoxStatus();
     fileManageDialog->show();
 }

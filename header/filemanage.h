@@ -8,18 +8,19 @@ namespace Ui {
 class FileManage;
 }
 
-class FileManage : public QDialog
-{
+class FileManage : public QDialog {
     Q_OBJECT
 
 public:
     explicit FileManage(QWidget *parent = nullptr);
     ~FileManage();
+    void clearCheckBoxStatus();
 
 private:
-    Ui::FileManage *ui;
+    Ui::FileManage* ui;
 
     void deleteFile(const QListWidget* listWidget, QMap<QString, QString>& map);
+
 
 signals:
     void showMainWinSig();
