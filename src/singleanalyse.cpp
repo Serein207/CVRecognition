@@ -25,6 +25,7 @@ void SingleAnalyse::showMainWin() {
 
 void SingleAnalyse::loadFiles() const {
     Store::getStore()->readCvStore();
+    Store::getStore()->readPostStore();
     ui->listWidget->clear();
     for (auto item = Store::getStore()->cvs.keyBegin();
         item != Store::getStore()->cvs.keyEnd(); ++item) {
@@ -56,6 +57,8 @@ void SingleAnalyse::analyse() {
 
     qDebug() << path;
     qDebug() << content;
+    //feipiao test,下面的这段代码其中有qdebug 输出调试信息
+    //parser::parserPost(Store::getStore()->post);
 
     const auto texts = parser::parserResult(content);
     ui->name->setText(texts[0]);

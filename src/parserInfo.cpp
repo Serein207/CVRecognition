@@ -293,3 +293,24 @@ QVector<QString> parser::parserResult(const QString& content) {
         parserWorkYears(content)
     };
 }
+
+QVector<QStringList> parser::parserPost(const QMap<QString,QString> post){
+    QVector<QStringList> vecStrList;
+    for(auto it = post.constKeyValueBegin(); it != post.constKeyValueEnd(); it++){
+        QStringList list = it->second.split(QRegularExpression("([0-9]+、)"));
+        QStringList handledlist;
+        for(int i = 1; i < list.size(); i++){
+            if(list[i].contains("岗位职责", Qt::CaseInsensitive)){
+                handledlist.append(list[i]);
+            }else{
+                handledlist[handledlist.size()-1] = handledlist[handledlist.size()-1] + list[i];
+            }
+        }
+        for(int i = 0; i < handledlist.size(); i++){
+            //qDebug()<<handledlist[i];
+            vecStrList.push_back(parserSegmentation(handledlist[i]));
+        }
+    }
+    //qDebug()<<vecStrList;
+    return vecStrList;
+}
