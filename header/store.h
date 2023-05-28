@@ -11,8 +11,6 @@
 class Store {
 public:
     static std::shared_ptr<Store> getStore();
-
-    ~Store(){}
     Store(const Store&) = delete;
     Store& operator=(const Store&) = delete;
 
