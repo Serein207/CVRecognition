@@ -12,6 +12,7 @@ namespace parser {
     QString parserAge(const QString& content);
     QString parserEducation(const QString& content);
     QString parserCollege(const QString& content);
+    QVector<QString> parserResult(const QString& content);
 }
 
 #endif

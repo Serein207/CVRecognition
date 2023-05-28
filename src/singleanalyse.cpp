@@ -57,11 +57,11 @@ void SingleAnalyse::analyse() {
     qDebug() << path;
     qDebug() << content;
 
-    ui->name->setText(parser::parserName(content));
-    ui->age->setText(parser::parserAge(content));
-    ui->education->setText(parser::parserEducation(content));
-    ui->college->setText(parser::parserCollege(content));
-    ui->work->setText(parser::parserWorkYears(content));
+    const auto texts = parser::parserResult(content);
+    ui->name->setText(texts[0]);
+    ui->age->setText(texts[1]);
+    ui->education->setText(texts[2]);
+    ui->college->setText(texts[3]);
+    ui->work->setText(texts[4]);
     ui->recommend->setText("");
-    // parser::parserSegmentation(content);
 }

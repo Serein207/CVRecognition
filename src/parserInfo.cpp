@@ -283,3 +283,13 @@ QString parser::parserCollege(const QString& content) {
     }
     return "unknown";
 }
+
+QVector<QString> parser::parserResult(const QString& content) {
+    return QVector<QString> {
+        parserName(content),
+        parserAge(content),
+        parserEducation(content),
+        parserCollege(content),
+        parserWorkYears(content)
+    };
+}
