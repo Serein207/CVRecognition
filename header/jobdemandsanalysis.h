@@ -1,13 +1,8 @@
 #ifndef JOBDEMANDSANALYSIS_H
 #define JOBDEMANDSANALYSIS_H
 
-#include <map>
-#include <QString>
 #include <regex>
-#include <QStringList>
-
-
-#include "QRegularExpression"
+#include <QRegularExpression>
 
 class JobDemandsAnalysis{
     inline static QString repnamepattern = R"((?:\d+)、(.+)(岗位职责))";
