@@ -173,16 +173,16 @@ QString parser::parserWorkYears(const QString& content) {
 
     const auto years =
         parserWorkYearsHelper(removeSpaceContent,
-            QRegularExpression(R"((\d{4}(?:.|年|/|、)\d{1,2})(?:-|–|到|至)(\d{4}(?:.|年|/|、)\d{1,2}))"))
+            QRegularExpression(R"((\d{4}(?:.|年|/|、)\d{1,2})(?:-|–|－|一|—|到|至)(\d{4}(?:.|年|/|、)\d{1,2}))"))
         +
         parserWorkYearsHelper(removeSpaceContent,
-            QRegularExpression(R"((\d{4}(?:.|年|/|、)\d{1,2})(?:-|–|到|至)?(至今))"))
+            QRegularExpression(R"((\d{4}(?:.|年|/|、)\d{1,2})(?:-|–|－|一|—|到|至)?(至今))"))
         +
         parserWorkYearsHelper(removeSpaceContent,
-            QRegularExpression(R"((\d{4})(?:.|年)?(?:-|–|到|至)(\d{4})(?:.|年)?)"))
+            QRegularExpression(R"((\d{4})(?:.|年)?(?:-|–|－|一|—|到|至)(\d{4})(?:.|年)?)"))
         +
         parserWorkYearsHelper(removeSpaceContent,
-            QRegularExpression(R"((\d{4})(?:.|年)?(?:-|–|到|至)?(至今))"));
+            QRegularExpression(R"((\d{4})(?:.|年)?(?:-|–|－|一|—|到|至)?(至今))"));
 
     return QString("%1").arg(years);
 }
