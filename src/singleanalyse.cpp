@@ -56,8 +56,8 @@ void SingleAnalyse::analyse() {
 
     const auto content = Store::getStore()->cvs[path];
 
-    qDebug() << path;
-    qDebug() << content;
+    //qDebug() << path;
+    //qDebug() << content;
     //feipiao test,下面的这段代码其中有qdebug 输出调试信息
     //parser::parserPost(Store::getStore()->post);
 

@@ -38,7 +38,7 @@ double MatchingRateAnalysis::rateAnalysis(QList<emltdata> CVdata, QList<emltdata
 QString MatchingRateAnalysis::singleCvAnalysis(QMap<QString, QList<QString>> demandList, const QVector<QString> Cvmes, QList<QString> CvList){
     QList<QString> prelist;
     QMap<QString, QList<QString>>::iterator it = demandList.begin();
-    qDebug() << demandList.size();
+    // qDebug() << demandList.size();
     for(;it != demandList.end(); it++){
         QMap<QString, QString> jobinfo = JobDemandsAnalysis::JobAnalysis(it.key());
         int Cveduint = edu2enum(Cvmes[2]);

@@ -291,7 +291,7 @@ QVector<QString> parser::parserResult(const QString& content) {
 
 QMap<QString, QStringList> parser::parserPost(const QMap<QString,QString>& post){
     QMap<QString, QStringList> mapStrList;
-    qDebug() << post;
+    //qDebug() << post;
     for(auto it = post.constKeyValueBegin(); it != post.constKeyValueEnd(); ++it){
         QStringList list = it->second.split(QRegularExpression("([0-9]+、)"));
         QStringList handledList;
