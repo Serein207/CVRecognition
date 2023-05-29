@@ -10,7 +10,7 @@
 #include "QRegularExpression"
 
 class JobDemandsAnalysis{
-    inline static QString repnamepattern = R"((?:\d+)、(.{2,3,4,5,6})岗位职责)";
+    inline static QString repnamepattern = R"((?:\d+)、(.+)(岗位职责))";
     inline static QString edupattern = R"((中专|大专|本科|硕士|研究生|博士|专科|高中))";
     inline static QString jobexppattern = R"((\.|、|，|,)([^(\.|、|，|,)]*)(年).*(经验|阅历))";
 
