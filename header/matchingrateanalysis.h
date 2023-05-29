@@ -1,11 +1,6 @@
 #ifndef MATCHINGRATEANALYSIS_H
 #define MATCHINGRATEANALYSIS_H
 
-#include <QString>
-#include <QList>
-#include <algorithm>
-#include <QDebug>
-
 #include "jobdemandsanalysis.h"
 
 struct emltdata{
@@ -17,7 +12,9 @@ struct emltdata{
     }
 };
 
-class MatchingRateAnalysis {
+
+class MatchingRateAnalysis
+{
     static void tempaddone(QList<emltdata> resource, QString word){
         for(int i = 0; i < resource.length(); i++){
             if(resource.at(i).word == word){
