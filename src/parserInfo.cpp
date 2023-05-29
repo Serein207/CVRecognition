@@ -291,22 +291,23 @@ QVector<QString> parser::parserResult(const QString& content) {
 
 QMap<QString, QStringList> parser::parserPost(const QMap<QString,QString>& post){
     QMap<QString, QStringList> mapStrList;
-    for(auto it = post.constKeyValueBegin(); it != post.constKeyValueEnd(); it++){
+    qDebug() << post;
+    for(auto it = post.constKeyValueBegin(); it != post.constKeyValueEnd(); ++it){
         QStringList list = it->second.split(QRegularExpression("([0-9]+、)"));
         QStringList handledList;
         for(int i = 1; i < list.size(); i++){
             if(list[i].contains("岗位职责")){
                 handledList.push_back(list[i]);
-            } else {
+            } else if (!handledList.isEmpty()) {
                 handledList[handledList.size()-1] += list[i];
             }
         }
         int count = 1;
         for(const auto& postContent : handledList){
-            mapStrList.insert(QString("%1、%2").arg(count).arg(postContent),
+            mapStrList.insert(QString("%1、%2").arg(count++).arg(postContent),
                 parserSegmentation(postContent));
         }
     }
-    qDebug()<<mapStrList;
+    //qDebug()<<mapStrList;
     return mapStrList;
 }

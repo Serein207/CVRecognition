@@ -1,11 +1,6 @@
 #ifndef MATCHINGRATEANALYSIS_H
 #define MATCHINGRATEANALYSIS_H
 
-#include <QString>
-#include <QList>
-#include <algorithm>
-#include <QDebug>
-
 #include "jobdemandsanalysis.h"
 
 struct emltdata{
