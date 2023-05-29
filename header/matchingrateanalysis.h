@@ -1,9 +1,14 @@
 #ifndef MATCHINGRATEANALYSIS_H
 #define MATCHINGRATEANALYSIS_H
 
+#include <QString>
+#include <QList>
+#include <algorithm>
 #include <QDebug>
 
-struct emltdata {
+#include "jobdemandsanalysis.h"
+
+struct emltdata{
     QString word;
     int num;
     emltdata(QString w, int n) {
@@ -23,7 +28,7 @@ class MatchingRateAnalysis {
     }
     static bool checkword(QList<emltdata> resource, QString word){
         bool flag = false;
-        for(auto it : resource){
+        for(const auto &it : resource){
             if(it.word == word){
                 flag = true;
                 break;
@@ -31,26 +36,44 @@ class MatchingRateAnalysis {
         }
         return flag;
     }
+    static int edu2enum(QString origin){
+        if(origin == "高中"){
+            return 0;
+        }
+        if(origin == "中专"){
+            return 1;
+        }
+        if(origin == "大专"){
+            return 2;
+        }
+        if(origin == "本科"){
+            return 3;
+        }
+        if(origin == "硕士"){
+            return 4;
+        }
+        if(origin == "博士"){
+            return 5;
+        }
+        return -1;
+    }
 
 public:
-    //词频统计函数
-    /*
-     *@param nlenth 前n个高词频词语数量
-     *@param resource 原始词库
-    */
     static QList<emltdata> wordFrequencyExtract(int nlenth, QStringList resource);
 
     //词频分析函数
     /*
-     *@param CvData 简历词频数据
-     *@param jobDemandData 岗位需求词频数据
+     *@param CVdata 简历词频数据
+     *@param jobdemanddata 岗位需求词频数据
      *@return double 计算分数值
     */
     //计分函数，如需修改分数评判标准，请更改此处
     /*
      * emltdata 结构体（word 字符数据，num 统计数）
      */
-    static double rateAnalysis(QList<emltdata> CvData, QList<emltdata> jobDemandData);
+    static double rateAnalysis(QList<emltdata> CVdata, QList<emltdata> jobdemanddata);
+
+    static QString singleCvAnalysis(QMap<QString, QList<QString>> demandList, const QVector<QString> Cvmes, QList<QString> CvList);
 };
 
 #endif // MATCHINGRATEANALYSIS_H

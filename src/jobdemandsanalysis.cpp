@@ -1,7 +1,6 @@
 #include "jobdemandsanalysis.h"
 
-QMap<QString, QString> JobDemandsAnalysis::JobAnalysis(QString word)
-{
+QMap<QString, QString> JobDemandsAnalysis::JobAnalysis(QString word){
     QStringList ls = word.replace(" ", "").split("\n");
     QMap<QString, QString> res{{"name", ""}, {"edu", ""}, {"time", ""}};
     QRegularExpressionMatch matchres;
@@ -10,14 +9,21 @@ QMap<QString, QString> JobDemandsAnalysis::JobAnalysis(QString word)
             matchres = QRegularExpression(repnamepattern).match(ls[i]);
             if(matchres.hasMatch()){
                 //qDebug()<<matchres.captured(3);
-                res["name"] = matchres.captured(3);
+                res["name"] = matchres.captured(1);
             }
         }
 
         matchres = QRegularExpression(edupattern).match(ls[i]);
         if(matchres.hasMatch()){
             //qDebug()<<matchres.captured(1);
-            res["edu"] = matchres.captured(1);
+            QString eduorigin = matchres.captured(1);
+            if(eduorigin == "研究生"){
+                eduorigin = "硕士";
+            }
+            if(eduorigin == "大专"){
+                eduorigin = "专科";
+            }
+            res["edu"] = eduorigin;
         }
 
         matchres = QRegularExpression(jobexppattern).match(ls[i]);

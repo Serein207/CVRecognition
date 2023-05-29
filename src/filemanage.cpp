@@ -77,10 +77,12 @@ void FileManage::loadFiles() const {
 
 void FileManage::deleteCvFile() {
     deleteFile(ui->listWidget_Cvs, Store::getStore()->cvs);
+    ui->cvAllSelect->setChecked(false);
 }
 
 void FileManage::deletePostFile() {
     deleteFile(ui->listWidget_Post, Store::getStore()->post);
+    ui->postAllSelect->setChecked(false);
 }
 
 void FileManage::cvAllSelectBox() {

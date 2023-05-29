@@ -2,6 +2,7 @@
 #include "ui_singleanalyse.h"
 #include "store.h"
 #include "parserInfo.h"
+#include "matchingrateanalysis.h"
 
 SingleAnalyse::SingleAnalyse(QWidget *parent) :
     QDialog(parent, Qt::WindowTitleHint | Qt::CustomizeWindowHint),
@@ -66,5 +67,7 @@ void SingleAnalyse::analyse() {
     ui->education->setText(texts[2]);
     ui->college->setText(texts[3]);
     ui->work->setText(texts[4]);
-    ui->recommend->setText("");
+    ui->recommend->setText(
+        MatchingRateAnalysis::singleCvAnalysis(parser::parserPost(Store::getStore()->post),
+            texts, parser::parserSegmentation(content)));
 }

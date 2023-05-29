@@ -13,7 +13,7 @@ namespace parser {
     QString parserEducation(const QString& content);
     QString parserCollege(const QString& content);
     QVector<QString> parserResult(const QString& content);
-    QVector<QStringList> parserPost(const QMap<QString,QString> post);
+    QMap<QString, QStringList> parserPost(const QMap<QString,QString>& post);
 }
 
 #endif
