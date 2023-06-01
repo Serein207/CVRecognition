@@ -16,6 +16,6 @@ QString PDFReader::read(const QString& filepath)
     delete pdfDoc;
     if(info.isEmpty())
         return PicReader::read(filepath);
-    else
-        return info;
+
+	return info;
 }
