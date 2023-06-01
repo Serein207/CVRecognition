@@ -40,7 +40,7 @@ QString MatchingRateAnalysis::singleCvAnalysis(QMap<QString, QList<QString>> dem
     QMap<QString, QList<QString>>::iterator it = demandList.begin();
     // qDebug() << demandList.size();
     for(;it != demandList.end(); it++){
-        QMap<QString, QString> jobinfo = JobDemandsAnalysis::JobAnalysis(it.key());
+        QMap<QString, QString> jobinfo = JobDemandsAnalysis::jobAnalysis(it.key());
         int Cveduint = edu2enum(Cvmes[2]);
         qDebug() << (edu2enum(jobinfo["edu"]) <= Cveduint) << edu2enum(jobinfo["edu"]) << Cveduint;
         if(edu2enum(jobinfo["edu"]) <= Cveduint || jobinfo["edu"].isEmpty()){
