@@ -1,13 +1,13 @@
-﻿#include <QFile>
+﻿#include "excelwriter.h"
+#include <QFile>
 #include <QDir>
 #include <QAxObject>
-#include "excelwriter.h"
+
 
 ExcelWriter::ExcelWriter(const QString& filename, QVector<QVector<QString>>& contents)
     : fileName(filename)
 {
     newExcel();
-    appendSheet("sheet", 1);
     writeData(contents);
     saveExcel();
     freeExcel();

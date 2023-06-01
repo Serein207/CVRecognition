@@ -97,14 +97,12 @@ void DOCXReader::deleteWord() const
     delete m_documents;
 }
 
-void DOCXReader::handleException(int code, QString source, QString description, QString help)
-{
+void DOCXReader::handleException(int code, QString source, QString description, QString help) {
     //qDebug()<<"None Text";
     throw "None Text";
 }
 
-QString DOCXReader::readCvHelper(QAxObject * shape)
-{
+QString DOCXReader::readCvHelper(QAxObject * shape) {
     QString info;
     QAxObject* groupItems = shape->querySubObject("GroupItems");
     const int itemCount = groupItems->dynamicCall("Count()").toInt();

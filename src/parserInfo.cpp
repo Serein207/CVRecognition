@@ -7,6 +7,9 @@
 #include <QBuffer>
 #include <QRegularExpression>
 
+#include "matchingrateanalysis.h"
+#include "store.h"
+
 QString parser::parserName(const QString& content) {
     for (int i = 0; i < content.length(); i += 400) {
         QJsonDocument entityJson = QJsonDocument::fromJson(
@@ -310,4 +313,14 @@ QMap<QString, QStringList> parser::parserPost(const QMap<QString,QString>& post)
     }
     //qDebug()<<mapStrList;
     return mapStrList;
+}
+
+QVector<QString> parser::singleInfo(const QString& content) {
+    auto singleInfoVec = parserResult(content);
+    const auto recommend = MatchingRateAnalysis::singleCvAnalysis(
+        parserPost(Store::getStore()->post),
+        singleInfoVec, parserSegmentation(content)
+    );
+    singleInfoVec.push_back(recommend);
+    return singleInfoVec;
 }

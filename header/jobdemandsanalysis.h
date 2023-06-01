@@ -5,9 +5,9 @@
 #include <QRegularExpression>
 
 class JobDemandsAnalysis{
-    inline static QString repnamepattern = R"((?:\d+)、(.+)(岗位职责))";
-    inline static QString edupattern = R"((中专|大专|本科|硕士|研究生|博士|专科|高中))";
-    inline static QString jobexppattern = R"((\.|、|，|,)([^(\.|、|，|,)]*)(年).*(经验|阅历))";
+    inline static QString repNamePattern = R"((?:\d+)、(.+)(岗位职责))";
+    inline static QString eduPattern = R"((中专|大专|本科|硕士|研究生|博士|专科|高中))";
+    inline static QString jobExpPattern = R"((\.|、|，|,)([^(\.|、|，|,)]*)(年).*(经验|阅历))";
 
     inline const static QMap<QString, int> common_used_numerals_tmp = {
         {"零", 0},
@@ -24,7 +24,7 @@ class JobDemandsAnalysis{
                    {"十", 10}
                    };
 
-    static QString chineseTurn2Int(QString key){
+    static QString chineseTurn2Int(const QString& key){
         if(std::regex_match(key.toStdString(), std::regex(R"(^\d*$)"))){
             return key;
         }
@@ -53,7 +53,7 @@ public:
     *   "time": "" //需要的专业实践经验时间
     *}
     */
-    static QMap<QString, QString> JobAnalysis(QString word);
+    static QMap<QString, QString> jobAnalysis(QString word);
 };
 
 #endif // JOBDEMANDSANALYSIS_H

@@ -23,6 +23,8 @@ signals:
 
 public slots:
     void showMainWin();
+    void anlalyseSlot();
+    void loadFiles() const;
 };
 
 #endif // ALLANALYSE_H

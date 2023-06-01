@@ -27,6 +27,7 @@ MainUI::MainUI(QWidget *parent) :
     connect(ui->button_fileManage, &QPushButton::clicked, this, &MainUI::showFileManageDialog);
 
     connect(ui->button_singleAnalyse, &QPushButton::clicked, singleAnalyseDialog, &SingleAnalyse::loadFiles);
+    connect(ui->button_allAnalyse, &QPushButton::clicked, allAnalyseDialog, &AllAnalyse::loadFiles);
     connect(ui->button_fileManage, &QPushButton::clicked, fileManageDialog, &FileManage::loadFiles);
 }
 

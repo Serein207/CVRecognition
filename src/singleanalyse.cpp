@@ -61,13 +61,11 @@ void SingleAnalyse::analyse() {
     //feipiao test,下面的这段代码其中有qdebug 输出调试信息
     //parser::parserPost(Store::getStore()->post);
 
-    const auto texts = parser::parserResult(content);
+    const auto texts = parser::singleInfo(content);
     ui->name->setText(texts[0]);
     ui->age->setText(texts[1]);
     ui->education->setText(texts[2]);
     ui->college->setText(texts[3]);
     ui->work->setText(texts[4]);
-    ui->recommend->setText(
-        MatchingRateAnalysis::singleCvAnalysis(parser::parserPost(Store::getStore()->post),
-            texts, parser::parserSegmentation(content)));
+    ui->recommend->setText(texts[5]);
 }
