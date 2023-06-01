@@ -19,11 +19,11 @@ public:
     CmssInterface(const CmssInterface&) = delete;
     CmssInterface& operator=(const CmssInterface&) = delete;
 
+    inline static std::string Ak = "7b5055c0ecfc4d19b8def6869898fc8b";
+    inline static std::string Sk = "33df542ec17d417a80d0a56fdcb1118c";
+
 private:
     CmssInterface() = default;
-
-    inline static const std::string Ak = "7b5055c0ecfc4d19b8def6869898fc8b";
-    inline static const std::string Sk = "33df542ec17d417a80d0a56fdcb1118c";
 };
 
 #endif // CMSSINTERFACE_H

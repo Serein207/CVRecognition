@@ -10,6 +10,7 @@ MainUI::MainUI(QWidget *parent) :
     singleAnalyseDialog = new SingleAnalyse(this);
     allAnalyseDialog = new AllAnalyse(this);
     fileManageDialog = new FileManage(this);
+    loginDialog = new Login(this);
 
     ui->setupUi(this);
     this->show();
@@ -19,16 +20,19 @@ MainUI::MainUI(QWidget *parent) :
     connect(singleAnalyseDialog, &SingleAnalyse::showMainWinSig, this, &MainUI::showMe);
     connect(allAnalyseDialog, &AllAnalyse::showMainWinSig, this, &MainUI::showMe);
     connect(fileManageDialog, &FileManage::showMainWinSig, this, &MainUI::showMe);
+    connect(loginDialog, &Login::showMainWinSig, this, &MainUI::showMe);
 
     connect(ui->button_CvEntry, &QPushButton::clicked, this, &MainUI::showCvEntryDialog);
     connect(ui->button_postEntry, &QPushButton::clicked, this, &MainUI::showPostEntryDialog);
     connect(ui->button_singleAnalyse, &QPushButton::clicked, this, &MainUI::showSingleAnalyseDialog);
     connect(ui->button_allAnalyse, &QPushButton::clicked, this, &MainUI::showAllAnalyseDialog);
     connect(ui->button_fileManage, &QPushButton::clicked, this, &MainUI::showFileManageDialog);
+    connect(ui->button_idManage, &QPushButton::clicked, this, &MainUI::showLoginDialog);
 
     connect(ui->button_singleAnalyse, &QPushButton::clicked, singleAnalyseDialog, &SingleAnalyse::loadFiles);
     connect(ui->button_allAnalyse, &QPushButton::clicked, allAnalyseDialog, &AllAnalyse::loadFiles);
     connect(ui->button_fileManage, &QPushButton::clicked, fileManageDialog, &FileManage::loadFiles);
+    connect(ui->button_idManage, &QPushButton::clicked, loginDialog, &Login::loadFile);
 }
 
 MainUI::~MainUI() {
@@ -58,4 +62,8 @@ void MainUI::showAllAnalyseDialog() {
 void MainUI::showFileManageDialog() {
     fileManageDialog->clearCheckBoxStatus();
     fileManageDialog->show();
+}
+
+void MainUI::showLoginDialog() {
+    loginDialog->show();
 }

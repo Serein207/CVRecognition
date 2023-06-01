@@ -7,13 +7,13 @@
 #include "singleanalyse.h"
 #include "allanalyse.h"
 #include "filemanage.h"
+#include "login.h"
 
 namespace Ui {
 class MainUI;
 }
 
-class MainUI : public QMainWindow
-{
+class MainUI : public QMainWindow {
     Q_OBJECT
 
 public:
@@ -27,6 +27,7 @@ private:
     SingleAnalyse* singleAnalyseDialog;
     AllAnalyse* allAnalyseDialog;
     FileManage* fileManageDialog;
+    Login* loginDialog;
 
 public slots:
     void showMe();
@@ -35,6 +36,7 @@ public slots:
     void showSingleAnalyseDialog();
     void showAllAnalyseDialog();
     void showFileManageDialog();
+    void showLoginDialog();
 };
 
 #endif // MAINUI_H

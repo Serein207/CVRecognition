@@ -221,7 +221,7 @@
    <widget class="QPushButton" name="button_fileManage">
     <property name="geometry">
      <rect>
-      <x>500</x>
+      <x>390</x>
       <y>10</y>
       <width>91</width>
       <height>31</height>
@@ -229,6 +229,19 @@
     </property>
     <property name="text">
      <string>文件管理</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="button_idManage">
+    <property name="geometry">
+     <rect>
+      <x>490</x>
+      <y>10</y>
+      <width>91</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>账号管理</string>
     </property>
    </widget>
   </widget>

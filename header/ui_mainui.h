@@ -36,6 +36,7 @@ public:
     QPushButton *button_allAnalyse;
     QPushButton *button_singleAnalyse;
     QPushButton *button_fileManage;
+    QPushButton *button_idManage;
     QStatusBar *statusBar;
 
     void setupUi(QMainWindow *MainUI)
@@ -141,7 +142,10 @@ public:
 
         button_fileManage = new QPushButton(centralwidget);
         button_fileManage->setObjectName("button_fileManage");
-        button_fileManage->setGeometry(QRect(500, 10, 91, 31));
+        button_fileManage->setGeometry(QRect(390, 10, 91, 31));
+        button_idManage = new QPushButton(centralwidget);
+        button_idManage->setObjectName("button_idManage");
+        button_idManage->setGeometry(QRect(490, 10, 91, 31));
         MainUI->setCentralWidget(centralwidget);
         statusBar = new QStatusBar(MainUI);
         statusBar->setObjectName("statusBar");
@@ -162,6 +166,7 @@ public:
         button_allAnalyse->setText(QCoreApplication::translate("MainUI", "\345\205\250\351\203\250\345\210\206\346\236\220", nullptr));
         button_singleAnalyse->setText(QCoreApplication::translate("MainUI", "\345\215\225\347\213\254\345\210\206\346\236\220", nullptr));
         button_fileManage->setText(QCoreApplication::translate("MainUI", "\346\226\207\344\273\266\347\256\241\347\220\206", nullptr));
+        button_idManage->setText(QCoreApplication::translate("MainUI", "\350\264\246\345\217\267\347\256\241\347\220\206", nullptr));
     } // retranslateUi
 
 };
