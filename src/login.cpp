@@ -48,16 +48,16 @@ void Login::writeFile() {
     }
 
     QDir dir(QString(".\\data\\id"));
-    if (dir.exists())
-        dir.removeRecursively();
 
-    if (!QDir().mkdir(QString(".\\data\\id"))) {
-        QMessageBox msg;
-        msg.setWindowFlag(Qt::Drawer);
-        msg.setWindowTitle("错误！");
-        msg.setText(QString("文件夹id创建失败"));
-        msg.exec();
-        return;
+    if (!dir.exists()) {
+        if (!QDir().mkdir(QString(".\\data\\id"))) {
+            QMessageBox msg;
+            msg.setWindowFlag(Qt::Drawer);
+            msg.setWindowTitle("错误！");
+            msg.setText(QString("文件夹id创建失败"));
+            msg.exec();
+            return;
+        }
     }
 
     QFile file(".\\data\\id\\id.txt");
