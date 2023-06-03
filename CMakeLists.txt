@@ -62,6 +62,7 @@ FILE(GLOB_RECURSE FORMS "forms/*.ui")
 FILE(GLOB_RECURSE RESOURCE_FILES "*.qrc")
 FILE(GLOB TS_FILES "*.ts")
 FILE(GLOB MOC_FILES "moc/moc_*.cpp")
+list(APPEND CMAKE_AUTOUIC_SEARCH_PATHS "forms")
 
 include_directories(./header)
 
@@ -76,7 +77,7 @@ qt_wrap_cpp(MOC_FILES ${HEADER_FILES})
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 #将所有文件编译成EXE
-add_executable(${PROJECT_NAME} ${HEADER_FILES} ${SRC_FILES} ${MOC_FILES} ${FORMS_UIC} ${RESOURCE_FILES} ${RES_FILES})
+add_executable(${PROJECT_NAME} ${HEADER_FILES} ${SRC_FILES} ${MOC_FILES} ${FORMS} ${RESOURCE_FILES} ${RES_FILES})
 
 target_link_libraries(${PROJECT_NAME}
 PRIVATE 
