@@ -2,6 +2,8 @@
 #define ALLANALYSE_H
 
 #include <QDialog>
+#include <QChartView>
+#include <QPieSeries>
 
 namespace Ui {
 class AllAnalyse;
@@ -17,6 +19,11 @@ public:
 
 private:
     Ui::AllAnalyse *ui;
+    QChartView* chartView;
+    void createpieSewise(const QVector<QString>& contents);
+    void writeDataToPieChart(QPieSeries* my_pieSeries, const QString& label, const double& size, const int index);
+    QString getRandomColor(int index);
+    QMap<QString, int> handleData(const QVector<QString>& contents);
 
 signals:
     void showMainWinSig();

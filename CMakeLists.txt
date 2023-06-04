@@ -40,7 +40,7 @@ set(QT_VERSION_MINOR 0)
 set(QT_VERSION_PATCH 0)
 
 #查找Qt的包
-find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core Gui Widgets Pdf AxContainer REQUIRED)
+find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core Gui Widgets Pdf AxContainer Charts REQUIRED)
 if(Qt6_FOUND)
   message(STATUS "Qt6 Found!")
   message(STATUS ${QT_PATH})
@@ -76,7 +76,7 @@ qt_wrap_cpp(MOC_FILES ${HEADER_FILES})
 #启用当前头文件目录
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-#将所有文件编译成EXE
+#将所有文件编译成EXES
 add_executable(${PROJECT_NAME} ${HEADER_FILES} ${SRC_FILES} ${MOC_FILES} ${FORMS} ${RESOURCE_FILES} ${RES_FILES})
 
 target_link_libraries(${PROJECT_NAME}
@@ -86,6 +86,7 @@ PRIVATE
     Qt${QT_VERSION_MAJOR}::Widgets 
     Qt${QT_VERSION_MAJOR}::Pdf
     Qt${QT_VERSION_MAJOR}::AxContainer
+    Qt${QT_VERSION_MAJOR}::Charts
     OpenSSL::SSL 
     OpenSSL::Crypto 
     ${CURL_LIBRARIES}
