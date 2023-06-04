@@ -2,6 +2,7 @@
 #include <QMessageBox>
 #include <QDir>
 #include "cmssinterface.h"
+#include "ui_login.h"
 
 Login::Login(QWidget *parent)
     : QDialog(parent, Qt::WindowTitleHint | Qt::CustomizeWindowHint),

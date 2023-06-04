@@ -1,7 +1,11 @@
-#pragma once
+#ifndef LOGIN_H
+#define LOGIN_H
 
 #include <QDialog>
-#include "ui_login.h"
+
+namespace Ui {
+    class Login;
+}
 
 class Login : public QDialog
 {
@@ -23,3 +27,5 @@ public slots:
     void loadFile();
     void login();
 };
+
+#endif
