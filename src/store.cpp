@@ -1,4 +1,6 @@
 #include "store.h"
+#include <QMessageBox>
+#include <QRegularExpression>
 
 std::shared_ptr<Store> Store::getStore() {
     static std::shared_ptr<Store> ptr= nullptr;
@@ -97,18 +99,10 @@ void Store::readStore(const QString& kind, QMap<QString, QString>& map) {
         }
 
         QTextStream in(&file);
-        QString filePath = in.readLine().toUtf8().trimmed()
-            .replace("\r", " ")
-            .replace("\n", " ")
-            .replace("\t", " ")
-            .replace("\f", " ");
-        QString content = in.readAll().toUtf8().trimmed()
-            .replace("\r", " ")
-            .replace("\n", " ")
-            .replace("\t", " ")
-            .replace("\f", " ");
+        const QString path = in.readLine().trimmed().toUtf8();
+        const QString content = simplifiedStr(in.readAll());
+        map.insert(path, content);
 
-        map.insert(filePath, content);
         file.close();
     }
     delete files;
@@ -133,6 +127,19 @@ void Store::deleteStore(const QString& filePath, QMap<QString, QString>& map) {
     }
 
     map.erase(item);
-    Store::getStore()->writeCvStore();
-    Store::getStore()->writePostStore();
+    getStore()->writeCvStore();
+    getStore()->writePostStore();
+}
+
+QString Store::simplifiedStr(const QString& source) {
+    const QRegularExpression re("[\u4E00-\u9FA5_a-zA-Z\\d\\p{P}]+");
+    QRegularExpressionMatchIterator matchIterator = re.globalMatch(source.toUtf8());
+
+    QString result;
+    while (matchIterator.hasNext()) {
+        QRegularExpressionMatch match = matchIterator.next();
+        result += match.captured(0);
+    }
+
+    return result.toUtf8();
 }

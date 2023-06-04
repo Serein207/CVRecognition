@@ -1,12 +1,7 @@
 #ifndef STORE_H
 #define STORE_H
 
-#include <QMap>
-#include <QString>
-#include <QFile>
 #include <QDir>
-#include <QMessageBox>
-#include <memory>
 
 class Store {
 public:
@@ -36,6 +31,8 @@ private:
 
     static void writeStore(const QString& kind, const QMap<QString, QString>& map);
     static void readStore(const QString& kind, QMap<QString, QString>& map);
+
+    static QString simplifiedStr(const QString& source);
 };
 
 #endif // STORE_H

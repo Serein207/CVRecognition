@@ -10,6 +10,7 @@
 #include <QBarSet>
 #include <QBarSeries>
 #include <QBarCategoryAxis>
+#include <QMessageBox>
 #include <QValueAxis>
 
 AllAnalyse::AllAnalyse(QWidget *parent) :
@@ -190,17 +191,28 @@ QVector<QVector<QString>> AllAnalyse::generatedData() {
 
     QVector<QVector<QString>> contents;
     int count = 1;
+
     for (auto it = Store::getStore()->cvs.constKeyValueBegin();
         it != Store::getStore()->cvs.constKeyValueEnd(); ++it) {
         QCoreApplication::processEvents();
         if (progressDialog->wasCanceled()) {
-            contents.clear();
             progressDialog->close();
-            return QVector<QVector<QString>>{};
+            return {};
         }
+
         QVector<QString> singleContent;
         singleContent.push_back(it->first);
-        singleContent.append(parser::singleInfo(it->second));
+        auto singleInfo = parser::singleInfo(it->second);
+        if (singleInfo.contains("NetworkErr")) {
+            QMessageBox msg;
+            msg.setWindowTitle("错误");
+            msg.setWindowFlag(Qt::Drawer);
+            msg.setText("连接超时或未连接");
+            msg.exec();
+            progressDialog->close();
+            return {};
+        }
+        singleContent.append(singleInfo);
         contents.push_back(singleContent);
         progressDialog->setValue(count++);
     }

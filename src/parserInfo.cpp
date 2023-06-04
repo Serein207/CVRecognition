@@ -17,11 +17,7 @@ QString parser::parserName(const QString& content) {
         );
         if (entityJson["state"] != QJsonValue("OK")) {
             QMessageBox msg;
-            msg.setWindowTitle("错误！");
-            msg.setWindowFlag(Qt::Drawer);
-            msg.setText("网络连接失败");
-            msg.exec();
-            return "unknown";
+            return "NetworkErr";
         }
 
         QJsonValue itemsValue = entityJson["body"]["items"];
@@ -51,11 +47,11 @@ QString parser::parserImage(const QImage& image, const std::string& suffix) {
     QJsonDocument imageJson = QJsonDocument::fromJson(result.toUtf8());
     if (imageJson["state"] != QJsonValue("OK")) {
         QMessageBox msg;
-        msg.setWindowTitle("错误！");
+        msg.setWindowTitle("错误");
         msg.setWindowFlag(Qt::Drawer);
-        msg.setText("网络连接失败");
+        msg.setText("连接超时或未连接");
         msg.exec();
-        return QString {};
+        return {};
     }
     QJsonValue wordArrayValue = imageJson["body"]["content"]["prism_wordsInfo"];
     if (wordArrayValue.type() == QJsonValue::Array) {
@@ -76,12 +72,7 @@ parser::bean_type parser::parserSegmentation(const QString& content) {
             CmssInterface::getSegmentationJson(content.mid(i, 400)).toUtf8()
         );
         if (segmentationJson["state"] != QJsonValue("OK")) {
-            QMessageBox msg;
-            msg.setWindowTitle("错误！");
-            msg.setWindowFlag(Qt::Drawer);
-            msg.setText("网络连接失败");
-            msg.exec();
-            return bean_type {};
+            return {};
         }
 
         QJsonArray items = segmentationJson["body"]["items"].toArray();
@@ -255,12 +246,7 @@ QString parser::parserCollege(const QString& content) {
             CmssInterface::getEntityJson(content.mid(i, 400)).toUtf8()
         );
         if (entityJson["state"] != QJsonValue("OK")) {
-            QMessageBox msg;
-            msg.setWindowTitle("错误！");
-            msg.setWindowFlag(Qt::Drawer);
-            msg.setText("网络连接失败");
-            msg.exec();
-            return "unknown";
+            return "NetworkErr";
         }
 
         QJsonValue itemsValue = entityJson["body"]["items"];
@@ -283,11 +269,16 @@ QString parser::parserCollege(const QString& content) {
 }
 
 QVector<QString> parser::parserResult(const QString& content) {
+    const QString name = parserName(content);
+    if (name == "NetworkErr") return { "NetworkErr" };
+
+    const QString college = parserCollege(content);
+    if (college == "NetworkErr") return{ "NetworkErr" };
     return QVector<QString> {
-        parserName(content),
-        parserAge(content),
-        parserEducation(content),
-        parserCollege(content),
+        name,
+            parserAge(content),
+            parserEducation(content),
+        college,
         parserWorkYears(content)
     };
 }
@@ -317,6 +308,7 @@ QMap<QString, QStringList> parser::parserPost(const QMap<QString,QString>& post)
 
 QVector<QString> parser::singleInfo(const QString& content) {
     auto singleInfoVec = parserResult(content);
+    if (singleInfoVec.contains("NetworkErr")) return {"NetworkErr"};
     const auto recommend = MatchingRateAnalysis::singleCvAnalysis(
         parserPost(Store::getStore()->post),
         singleInfoVec, parserSegmentation(content)

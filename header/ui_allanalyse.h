@@ -34,21 +34,24 @@ public:
     QHBoxLayout *horizontalLayout_2;
     QSpacerItem *horizontalSpacer_2;
     QPushButton *button_analyse;
-    QWidget *layoutWidget1;
+    QWidget *widget;
     QGridLayout *gridLayout;
     QChartView *eduChartView;
     QChartView *workChartView;
     QChartView *ageChartView;
-    QVBoxLayout *verticalLayout_2;
+    QHBoxLayout *horizontalLayout_3;
+    QSpacerItem *horizontalSpacer;
+    QVBoxLayout *verticalLayout;
+    QSpacerItem *verticalSpacer_2;
     QLabel *label;
     QLineEdit *lineEdit_sum;
     QLabel *label_3;
     QLineEdit *lineEdit_ok;
-    QSpacerItem *verticalSpacer;
     QLabel *fileInfo;
     QHBoxLayout *horizontalLayout;
     QPushButton *button_openFile;
     QSpacerItem *horizontalSpacer_3;
+    QSpacerItem *horizontalSpacer_4;
 
     void setupUi(QDialog *AllAnalyse)
     {
@@ -108,80 +111,87 @@ public:
 
         verticalLayout_1->addLayout(horizontalLayout_2);
 
-        layoutWidget1 = new QWidget(AllAnalyse);
-        layoutWidget1->setObjectName("layoutWidget1");
-        layoutWidget1->setGeometry(QRect(40, 120, 801, 601));
-        gridLayout = new QGridLayout(layoutWidget1);
+        widget = new QWidget(AllAnalyse);
+        widget->setObjectName("widget");
+        widget->setGeometry(QRect(41, 121, 801, 581));
+        gridLayout = new QGridLayout(widget);
         gridLayout->setObjectName("gridLayout");
         gridLayout->setContentsMargins(0, 0, 0, 0);
-        eduChartView = new QChartView(layoutWidget1);
+        eduChartView = new QChartView(widget);
         eduChartView->setObjectName("eduChartView");
 
         gridLayout->addWidget(eduChartView, 0, 0, 1, 1);
 
-        workChartView = new QChartView(layoutWidget1);
+        workChartView = new QChartView(widget);
         workChartView->setObjectName("workChartView");
 
         gridLayout->addWidget(workChartView, 0, 1, 1, 1);
 
-        ageChartView = new QChartView(layoutWidget1);
+        ageChartView = new QChartView(widget);
         ageChartView->setObjectName("ageChartView");
 
         gridLayout->addWidget(ageChartView, 1, 0, 1, 1);
 
-        verticalLayout_2 = new QVBoxLayout();
-        verticalLayout_2->setObjectName("verticalLayout_2");
-        label = new QLabel(layoutWidget1);
+        horizontalLayout_3 = new QHBoxLayout();
+        horizontalLayout_3->setObjectName("horizontalLayout_3");
+        horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        horizontalLayout_3->addItem(horizontalSpacer);
+
+        verticalLayout = new QVBoxLayout();
+        verticalLayout->setObjectName("verticalLayout");
+        verticalSpacer_2 = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+
+        verticalLayout->addItem(verticalSpacer_2);
+
+        label = new QLabel(widget);
         label->setObjectName("label");
         QFont font2;
         font2.setPointSize(12);
         label->setFont(font2);
         label->setStyleSheet(QString::fromUtf8(""));
 
-        verticalLayout_2->addWidget(label);
+        verticalLayout->addWidget(label);
 
-        lineEdit_sum = new QLineEdit(layoutWidget1);
+        lineEdit_sum = new QLineEdit(widget);
         lineEdit_sum->setObjectName("lineEdit_sum");
-        lineEdit_sum->setMinimumSize(QSize(0, 50));
-        lineEdit_sum->setMaximumSize(QSize(16777215, 50));
+        lineEdit_sum->setMinimumSize(QSize(0, 60));
+        lineEdit_sum->setMaximumSize(QSize(300, 60));
         QFont font3;
-        font3.setPointSize(14);
+        font3.setPointSize(28);
+        font3.setBold(true);
         lineEdit_sum->setFont(font3);
         lineEdit_sum->setReadOnly(true);
 
-        verticalLayout_2->addWidget(lineEdit_sum);
+        verticalLayout->addWidget(lineEdit_sum);
 
-        label_3 = new QLabel(layoutWidget1);
+        label_3 = new QLabel(widget);
         label_3->setObjectName("label_3");
         label_3->setFont(font2);
         label_3->setStyleSheet(QString::fromUtf8(""));
 
-        verticalLayout_2->addWidget(label_3);
+        verticalLayout->addWidget(label_3);
 
-        lineEdit_ok = new QLineEdit(layoutWidget1);
+        lineEdit_ok = new QLineEdit(widget);
         lineEdit_ok->setObjectName("lineEdit_ok");
-        lineEdit_ok->setMinimumSize(QSize(0, 50));
-        lineEdit_ok->setMaximumSize(QSize(16777215, 50));
+        lineEdit_ok->setMinimumSize(QSize(0, 60));
+        lineEdit_ok->setMaximumSize(QSize(300, 60));
         lineEdit_ok->setFont(font3);
         lineEdit_ok->setReadOnly(true);
 
-        verticalLayout_2->addWidget(lineEdit_ok);
+        verticalLayout->addWidget(lineEdit_ok);
 
-        verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
-
-        verticalLayout_2->addItem(verticalSpacer);
-
-        fileInfo = new QLabel(layoutWidget1);
+        fileInfo = new QLabel(widget);
         fileInfo->setObjectName("fileInfo");
         QFont font4;
         font4.setPointSize(11);
         fileInfo->setFont(font4);
 
-        verticalLayout_2->addWidget(fileInfo);
+        verticalLayout->addWidget(fileInfo);
 
         horizontalLayout = new QHBoxLayout();
         horizontalLayout->setObjectName("horizontalLayout");
-        button_openFile = new QPushButton(layoutWidget1);
+        button_openFile = new QPushButton(widget);
         button_openFile->setObjectName("button_openFile");
 
         horizontalLayout->addWidget(button_openFile);
@@ -191,10 +201,17 @@ public:
         horizontalLayout->addItem(horizontalSpacer_3);
 
 
-        verticalLayout_2->addLayout(horizontalLayout);
+        verticalLayout->addLayout(horizontalLayout);
 
 
-        gridLayout->addLayout(verticalLayout_2, 1, 1, 1, 1);
+        horizontalLayout_3->addLayout(verticalLayout);
+
+        horizontalSpacer_4 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        horizontalLayout_3->addItem(horizontalSpacer_4);
+
+
+        gridLayout->addLayout(horizontalLayout_3, 1, 1, 1, 1);
 
 
         retranslateUi(AllAnalyse);

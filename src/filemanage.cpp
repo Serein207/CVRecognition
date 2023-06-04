@@ -1,4 +1,7 @@
 #include "filemanage.h"
+
+#include <QMessageBox>
+
 #include "store.h"
 #include "ui_filemanage.h"
 

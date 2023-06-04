@@ -62,6 +62,14 @@ void SingleAnalyse::analyse() {
     //parser::parserPost(Store::getStore()->post);
 
     const auto texts = parser::singleInfo(content);
+    if (texts.contains("NetworkErr")) {
+        QMessageBox msg;
+        msg.setWindowTitle("错误");
+        msg.setWindowFlag(Qt::Drawer);
+        msg.setText("连接超时或未连接");
+        msg.exec();
+        return;
+    }
     ui->name->setText(texts[0]);
     ui->age->setText(texts[1]);
     ui->education->setText(texts[2]);

@@ -33,8 +33,7 @@ void ExcelWriter::newExcel() {
     pSheet = pSheets->querySubObject("Item(int)", 1);
 }
 
-void ExcelWriter::appendSheet(const QString& sheetName, int cnt)
-{
+void ExcelWriter::appendSheet(const QString& sheetName, int cnt) {
     QAxObject* pLastSheet = pSheets->querySubObject("Item(int)", cnt);
     pSheets->querySubObject("Add(QVariant)", pLastSheet->asVariant());
     pSheet = pSheets->querySubObject("Item(int)", cnt);
