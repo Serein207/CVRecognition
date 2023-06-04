@@ -13,7 +13,12 @@ QList<EmltData> MatchingRateAnalysis::wordFrequencyExtract(const int nLength, co
     std::sort(temp.begin(), temp.end(), 
         [=](const EmltData &a, const EmltData &b){return a.num > b.num;});
     for(int i = 0; i < nLength; i++){
-        res.append(temp[i]);
+        if (i >= temp.length()) {
+            res.append(emltdata(QString::number(0), 0));
+        }
+        else {
+            res.append(temp[i]);
+        }
     }
     return res;
 }
