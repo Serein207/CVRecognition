@@ -7,6 +7,10 @@
 #include <QFileDialog>
 #include <QProgressDialog>
 #include <QDesktopServices>
+#include <QBarSet>
+#include <QBarSeries>
+#include <QBarCategoryAxis>
+#include <QValueAxis>
 
 AllAnalyse::AllAnalyse(QWidget *parent) :
     QDialog(parent, Qt::WindowTitleHint | Qt::CustomizeWindowHint),
@@ -32,6 +36,35 @@ AllAnalyse::~AllAnalyse() {
 void AllAnalyse::showMainWin() {
     emit showMainWinSig();
     this->close();
+}
+
+void AllAnalyse::anlalyseSlot() {
+    auto contents = generatedData();
+    if (contents.isEmpty()) return;
+
+    getExcel(contents);
+
+    QVector<QString> age, edu, workYears;
+    for (const auto& content : contents) {
+        age.push_back(content[2]);
+        edu.push_back(content[3]);
+        workYears.push_back(content[5]);
+    }
+
+    createPieCharts(edu);
+    createAgeBarChars(age);
+    createWorkYearsBarChars(workYears);
+    setLineEdit(contents);
+
+    ui->fileInfo->setText("全部数据已保存到excel文件：\n" + filename);
+    ui->fileInfo->show();
+    ui->button_openFile->show();
+
+    QMessageBox msg(this);
+    msg.setWindowTitle("成功");
+    msg.setWindowFlag(Qt::Drawer);
+    msg.setText("完成分析");
+    msg.exec();
 }
 
 void AllAnalyse::getExcel(const QVector<QVector<QString>>& contents) {
@@ -61,64 +94,13 @@ void AllAnalyse::getExcel(const QVector<QVector<QString>>& contents) {
     ExcelWriter writer(filename, contents);
 }
 
-void AllAnalyse::anlalyseSlot() {
-    const auto progressDialog =
-        new QProgressDialog(tr("正在分析"), tr("取消"), 0, Store::getStore()->cvs.size() + 3ll, this, Qt::CustomizeWindowHint);
-    progressDialog->setWindowModality(Qt::ApplicationModal);
-    progressDialog->setWindowTitle(tr("简历分析中"));
-    progressDialog->show();
-
-    QVector<QVector<QString>> contents;
-    int count = 1;
-    for (auto it = Store::getStore()->cvs.constKeyValueBegin();
-        it != Store::getStore()->cvs.constKeyValueEnd(); ++it) {
-        QCoreApplication::processEvents();
-        if (progressDialog->wasCanceled()) {
-            contents.clear();
-            progressDialog->close();
-            return;
-        }
-        QVector<QString> singleContent;
-        singleContent.push_back(it->first);
-        singleContent.append(parser::singleInfo(it->second));
-        contents.push_back(singleContent);
-        progressDialog->setValue(count++);
-    }
-
-    getExcel(contents);
-    progressDialog->setValue(count++);
-
-    QVector<QString> edu;
-    for(const auto& content : contents)
-    {
-        edu.push_back(content[3]);
-    }
-    createpieSewise(edu);
-    progressDialog->setValue(count++);
-
-    setLineEdit(contents);
-
-    ui->fileInfo->setText("全部数据已保存到excel文件：\n" + filename);
-    ui->fileInfo->show();
-    ui->button_openFile->show();
-
-    progressDialog->setValue(progressDialog->maximum());
-
-    QMessageBox msg(this);
-    msg.setWindowTitle("成功");
-    msg.setWindowFlag(Qt::Drawer);
-    msg.setText("完成分析");
-    msg.exec();
-    
-}
-
 void AllAnalyse::loadFiles() const {
     Store::getStore()->readCvStore();
     Store::getStore()->readPostStore();
 }
 
-void AllAnalyse::createpieSewise(const QVector<QString>& contents) {
-    QPieSeries* pieSeries = new QPieSeries;
+void AllAnalyse::createPieCharts(const QVector<QString>& contents) {
+    const auto pieSeries = new QPieSeries(this);
     //中间圆与大圆的比例
     pieSeries->setHoleSize(0.35);
     //扇形及数据
@@ -127,7 +109,7 @@ void AllAnalyse::createpieSewise(const QVector<QString>& contents) {
         writeDataToPieChart(pieSeries, it->first, it->second, std::distance(data.constKeyValueBegin(), it));
     }
     // 图表视图
-    QChart* chart = new QChart;
+    const auto chart = new QChart;
     chart->setTitle("学历分布");
     chart->setTitleFont(QFont("微软雅黑", 12));
     chart->addSeries(pieSeries);
@@ -138,7 +120,7 @@ void AllAnalyse::createpieSewise(const QVector<QString>& contents) {
     ui->eduChartView->setChart(chart);
 }
 
-QString AllAnalyse::getRandomColor(int index) {
+QString AllAnalyse::getColor(int index) const {
     QString color[] = { "#00CCCC", "#B266FF", "#FFFF99", "#FFCC99", "#99FFCC" };
     index = (index / 5 + index) % 5;
     return color[index];
@@ -156,13 +138,13 @@ QMap<QString, int> AllAnalyse::handleData(const QVector<QString>& contents) {
 }
 
 void AllAnalyse::writeDataToPieChart(QPieSeries* pieSeries, const QString& label, const double& size, const int index) {
-    QPieSlice* pieSlice_running = new QPieSlice();
+    const auto pieSlice_running = new QPieSlice(this);
     pieSlice_running->setValue(size);//扇形占整个圆的百分比
     pieSlice_running->setLabel(label + " " + QString::number(size));//标签
     pieSlice_running->setLabelVisible();
     pieSlice_running->setLabelFont(QFont("微软雅黑", 8));
 
-    pieSlice_running->setColor(QColor(getRandomColor(index)));//颜色调用下面的getRandomColor()函数得到每次的都不一样。
+    pieSlice_running->setColor(QColor(getColor(index)));//颜色调用下面的getRandomColor()函数得到每次的都不一样。
     pieSeries->append(pieSlice_running);//将扇形加入到圆上
 }
 
@@ -198,4 +180,126 @@ void AllAnalyse::setLineEdit(const QVector<QVector<QString>>& contents) {
         }
     }
     ui->lineEdit_ok->setText(QString::number(count));
+}
+
+QVector<QVector<QString>> AllAnalyse::generatedData() {
+    const auto progressDialog =
+        new QProgressDialog(tr("简历分析中"), tr("取消"), 0, Store::getStore()->cvs.size(), this, Qt::CustomizeWindowHint);
+    progressDialog->setWindowModality(Qt::ApplicationModal);
+    progressDialog->show();
+
+    QVector<QVector<QString>> contents;
+    int count = 1;
+    for (auto it = Store::getStore()->cvs.constKeyValueBegin();
+        it != Store::getStore()->cvs.constKeyValueEnd(); ++it) {
+        QCoreApplication::processEvents();
+        if (progressDialog->wasCanceled()) {
+            contents.clear();
+            progressDialog->close();
+            return QVector<QVector<QString>>{};
+        }
+        QVector<QString> singleContent;
+        singleContent.push_back(it->first);
+        singleContent.append(parser::singleInfo(it->second));
+        contents.push_back(singleContent);
+        progressDialog->setValue(count++);
+    }
+    return contents;
+}
+
+void AllAnalyse::createAgeBarChars(const QVector<QString>& contents) {
+    const auto set = new QBarSet("SET", this);
+
+    int group[] = { 0, 0, 0, 0 };
+
+    for (const auto& content : contents) {
+        const int num = content.toInt();
+        if (num <= 26) ++group[0];
+        else if (num <= 35) ++group[1];
+        else if (num <= 45) ++group[2];
+        else ++group[3];
+    }
+
+    *set << group[0] << group[1] << group[2] << group[3];
+    set->setColor(QColor::fromString(getColor(0)));
+
+    qDebug() << group[0] << group[1] << group[2] << group[3];
+
+    const auto series = new QBarSeries(this);
+    series->append(set);
+
+    const QStringList categories = { "18-26", "27-35", "36-45", "46+" };
+
+    const auto chart = new QChart;
+    chart->setTitle("年龄分布");
+    chart->setTitleFont(QFont("微软雅黑", 12));
+    chart->setAnimationOptions(QChart::SeriesAnimations);
+    chart->legend()->setVisible(false);
+    chart->addSeries(series);
+
+    chart->createDefaultAxes();
+
+    const auto axisX = new QBarCategoryAxis(this);
+    axisX->append(categories);
+    series->attachAxis(axisX);
+    chart->setAxisX(axisX, series);
+
+    const int maxNum = *std::max_element(group, group + 4);
+    const auto axisY = new QValueAxis(this);
+    axisY->setRange(0, maxNum);
+    axisY->setTickCount(maxNum + 1);
+    axisY->setLabelFormat("%d");
+    chart->setAxisY(axisY);
+
+    ui->ageChartView->setChart(chart);
+    ui->ageChartView->setRenderHint(QPainter::Antialiasing);
+}
+
+void AllAnalyse::createWorkYearsBarChars(const QVector<QString>& contents){
+    const auto set = new QBarSet("SET", this);
+
+    int group[] = { 0, 0, 0, 0 };
+
+    for (const auto& content : contents) {
+        const int num = content.toInt();
+        if (num <= 3) ++group[0];
+        else if (num <= 6) ++group[1];
+        else if (num <= 10) ++group[2];
+        else ++group[3];
+    }
+
+    *set << group[0] << group[1] << group[2] << group[3];
+    set->setColor(QColor::fromString(getColor(1)));
+
+    qDebug() << group[0] << group[1] << group[2] << group[3];
+
+    const auto series = new QBarSeries;
+    series->append(set);
+
+    QStringList categories;
+    categories << "0-3" << "4-6" << "7-10" << "10+";
+
+    const auto chart = new QChart;
+    chart->setTitle("工作年限分布");
+    chart->setTitleFont(QFont("微软雅黑", 12));
+    chart->setAnimationOptions(QChart::SeriesAnimations);
+    chart->legend()->setVisible(false);
+    chart->addSeries(series);
+
+    chart->createDefaultAxes();
+
+    const auto axisX = new QBarCategoryAxis(this);
+    axisX->append(categories);
+    series->attachAxis(axisX);
+    chart->setAxisX(axisX, series);
+
+    const int maxNum = *std::max_element(group, group + 4);
+    const auto axisY = new QValueAxis(this);
+    axisY->setRange(0, maxNum);
+    axisY->setTickCount(maxNum + 1);
+    axisY->setLabelFormat("%d");
+    chart->setAxisY(axisY);
+
+    ui->workChartView->setChart(chart);
+    ui->workChartView->setRenderHint(QPainter::Antialiasing);
 }

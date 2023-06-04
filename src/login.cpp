@@ -36,30 +36,7 @@ void Login::login() {
 }
 
 void Login::writeFile() {
-    const QDir dataDir(".\\data");
-    if (!dataDir.exists()) {
-        if (!QDir().mkdir(".\\data")) {
-            QMessageBox msg;
-            msg.setWindowFlag(Qt::Drawer);
-            msg.setWindowTitle("错误！");
-            msg.setText("文件夹data创建失败");
-            msg.exec();
-            return;
-        }
-    }
-
-    QDir dir(QString(".\\data\\id"));
-
-    if (!dir.exists()) {
-        if (!QDir().mkdir(QString(".\\data\\id"))) {
-            QMessageBox msg;
-            msg.setWindowFlag(Qt::Drawer);
-            msg.setWindowTitle("错误！");
-            msg.setText(QString("文件夹id创建失败"));
-            msg.exec();
-            return;
-        }
-    }
+    if (!openFolder()) return;
 
     QFile file(".\\data\\id\\id.txt");
     if (!file.open(QFile::ReadWrite | QFile::Text)) {
@@ -83,30 +60,7 @@ void Login::writeFile() {
 }
 
 void Login::loadFile() {
-    const QDir dataDir(".\\data");
-    if (!dataDir.exists()) {
-        if (!QDir().mkdir(".\\data")) {
-            QMessageBox msg;
-            msg.setWindowFlag(Qt::Drawer);
-            msg.setWindowTitle("错误！");
-            msg.setText("文件夹data创建失败");
-            msg.exec();
-            return;
-        }
-    }
-
-    QDir dir(QString(".\\data\\id"));
-
-    if (!dir.exists()) {
-        if (!QDir().mkdir(QString(".\\data\\id"))) {
-            QMessageBox msg;
-            msg.setWindowFlag(Qt::Drawer);
-            msg.setWindowTitle("错误！");
-            msg.setText(QString("文件夹id创建失败"));
-            msg.exec();
-            return;
-        }
-    }
+    if (!openFolder()) return;
 
     QFile file(".\\data\\id\\id.txt");
     if (!file.open(QIODevice::ReadWrite)) {
@@ -136,4 +90,33 @@ void Login::loadFile() {
     CmssInterface::Sk = split[1].toStdString();
 
     file.close();
+}
+
+bool Login::openFolder() {
+    const QDir dataDir(".\\data");
+    if (!dataDir.exists()) {
+        if (!QDir().mkdir(".\\data")) {
+            QMessageBox msg;
+            msg.setWindowFlag(Qt::Drawer);
+            msg.setWindowTitle("错误！");
+            msg.setText("文件夹data创建失败");
+            msg.exec();
+            return false;
+        }
+    }
+
+    QDir dir(QString(".\\data\\id"));
+
+    if (!dir.exists()) {
+        if (!QDir().mkdir(QString(".\\data\\id"))) {
+            QMessageBox msg;
+            msg.setWindowFlag(Qt::Drawer);
+            msg.setWindowTitle("错误！");
+            msg.setText(QString("文件夹id创建失败"));
+            msg.exec();
+            return false;
+        }
+    }
+
+    return true;
 }

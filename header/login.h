@@ -18,6 +18,7 @@ public:
 private:
     Ui::Login* ui;
     void writeFile();
+    bool openFolder();
 
 signals:
     void showMainWinSig();

@@ -2,6 +2,7 @@
 #include <QFile>
 #include <QDir>
 #include <QAxObject>
+#include <QProgressDialog>
 
 
 ExcelWriter::ExcelWriter(const QString& filename, const QVector<QVector<QString>>& contents)
@@ -42,6 +43,12 @@ void ExcelWriter::appendSheet(const QString& sheetName, int cnt)
 }
 
 void ExcelWriter::writeData(const QVector<QVector<QString>>& contents) {
+    const auto progressDialog =
+        new QProgressDialog("结果生成中", nullptr, 0, contents.size(), nullptr, Qt::CustomizeWindowHint);
+    progressDialog->setWindowModality(Qt::ApplicationModal);
+    progressDialog->show();
+
+    int status = 0;
     setCellValue(1, 1, QStringLiteral("简历文件名"));
     setCellValue(1, 2, QStringLiteral("姓名"));
     setCellValue(1, 3, QStringLiteral("年龄"));
@@ -52,6 +59,8 @@ void ExcelWriter::writeData(const QVector<QVector<QString>>& contents) {
     for (int row = 2; row < contents.size() + 2; ++row) {
         for (int col = 1; col < 8; ++col) {
             setCellValue(row, col, contents[row - 2][col - 1]);
+            progressDialog->setValue(status++);
+            progressDialog->setWindowModality(Qt::ApplicationModal);
         }
     }
 }
