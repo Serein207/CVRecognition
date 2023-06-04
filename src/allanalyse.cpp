@@ -6,21 +6,23 @@
 #include <QDir>
 #include <QFileDialog>
 #include <QProgressDialog>
+#include <QDesktopServices>
 
 AllAnalyse::AllAnalyse(QWidget *parent) :
     QDialog(parent, Qt::WindowTitleHint | Qt::CustomizeWindowHint),
-    ui(new Ui::AllAnalyse),
-	chartView(new QChartView(this))
+    ui(new Ui::AllAnalyse)
 {
     ui->setupUi(this);
     this->setModal(true);
     this->setWindowTitle(tr("全部分析"));
-    chartView->setMinimumHeight(400);
-    chartView->setMinimumWidth(400);
-    chartView->hide();
     loadFiles();
+
+    ui->fileInfo->hide();
+    ui->button_openFile->hide();
+
     connect(ui->button_showMainWin, &QPushButton::clicked, this, &AllAnalyse::showMainWin);
     connect(ui->button_analyse, &QPushButton::clicked, this, &AllAnalyse::anlalyseSlot);
+    connect(ui->button_openFile, &QPushButton::clicked, this, &AllAnalyse::openFile);
 }
 
 AllAnalyse::~AllAnalyse() {
@@ -32,11 +34,11 @@ void AllAnalyse::showMainWin() {
     this->close();
 }
 
-void AllAnalyse::anlalyseSlot() {
+void AllAnalyse::getExcel(const QVector<QVector<QString>>& contents) {
     const QString userName = QDir::home().dirName();
     const QString defaultName = QDate::currentDate().toString("yyyyMMdd") + QTime::currentTime().toString("hhmmss");
     const QString defaultPath = QString("C:/Users/%1/Documents").arg(userName) + "/" + defaultName;
-    const QString filename = QFileDialog::getSaveFileName(this, tr("保存到"), defaultPath, "*.xlsx");
+    filename = QFileDialog::getSaveFileName(this, tr("保存到"), defaultPath, "*.xlsx");
     if (filename.isEmpty()) return;
     if (!filename.contains(".xlsx")) {
         QMessageBox msg(this);
@@ -56,8 +58,13 @@ void AllAnalyse::anlalyseSlot() {
         return;
     }
 
+    ExcelWriter writer(filename, contents);
+}
+
+
+void AllAnalyse::anlalyseSlot() {
     const auto progressDialog =
-        new QProgressDialog(tr("正在分析"), tr("取消"), 0, Store::getStore()->cvs.size() + 2, this, Qt::CustomizeWindowHint);
+        new QProgressDialog(tr("正在分析"), tr("取消"), 0, Store::getStore()->cvs.size() + 3ll, this, Qt::CustomizeWindowHint);
     progressDialog->setWindowModality(Qt::ApplicationModal);
     progressDialog->setWindowTitle(tr("简历分析中"));
     progressDialog->show();
@@ -79,7 +86,8 @@ void AllAnalyse::anlalyseSlot() {
         progressDialog->setValue(count++);
     }
 
-    ExcelWriter writer(filename, contents);
+    getExcel(contents);
+    progressDialog->setValue(count++);
 
     QVector<QString> edu;
     for(const auto& content : contents)
@@ -87,14 +95,21 @@ void AllAnalyse::anlalyseSlot() {
         edu.push_back(content[3]);
     }
     createpieSewise(edu);
-    chartView->show();
+    progressDialog->setValue(count++);
+
+    setLineEdit(contents);
 
     progressDialog->setValue(progressDialog->maximum());
+
     QMessageBox msg(this);
     msg.setWindowTitle("成功");
     msg.setWindowFlag(Qt::Drawer);
     msg.setText("完成分析");
     msg.exec();
+
+    ui->fileInfo->setText(ui->fileInfo->text().append("\n" + filename));
+    ui->fileInfo->show();
+    ui->button_openFile->show();
 }
 
 void AllAnalyse::loadFiles() const {
@@ -103,27 +118,27 @@ void AllAnalyse::loadFiles() const {
 }
 
 void AllAnalyse::createpieSewise(const QVector<QString>& contents) {
-    QPieSeries* my_pieSeries = new QPieSeries();
+    QPieSeries* pieSeries = new QPieSeries;
     //中间圆与大圆的比例
-    my_pieSeries->setHoleSize(0.35);
+    pieSeries->setHoleSize(0.35);
     //扇形及数据
     const auto data = handleData(contents);
     for (auto it = data.constKeyValueBegin(); it != data.constKeyValueEnd(); ++it) {
-        writeDataToPieChart(my_pieSeries, it->first, it->second, std::distance(data.constKeyValueBegin(), it));
+        writeDataToPieChart(pieSeries, it->first, it->second, std::distance(data.constKeyValueBegin(), it));
     }
     // 图表视图
-    QChart* chart = new QChart();
+    QChart* chart = new QChart;
     chart->setTitle("学历分布");
     chart->setTitleFont(QFont("微软雅黑", 18));
-    chart->addSeries(my_pieSeries);
+    chart->addSeries(pieSeries);
     chart->setAnimationOptions(QChart::SeriesAnimations);
     chart->legend()->setAlignment(Qt::AlignBottom);
     chart->legend()->setBackgroundVisible(false);
-    chart->legend()->setFont(QFont("微软雅黑", 12)); // 图例字体
+    chart->legend()->setFont(QFont("微软雅黑", 12));
 
-    chartView->setRenderHint(QPainter::Antialiasing);
-    chartView->setRenderHint(QPainter::NonCosmeticBrushPatterns);
-    chartView->setChart(chart);
+    ui->eduChartView->setRenderHint(QPainter::Antialiasing);
+    ui->eduChartView->setRenderHint(QPainter::NonCosmeticBrushPatterns);
+    ui->eduChartView->setChart(chart);
 }
 
 QString AllAnalyse::getRandomColor(int index) {
@@ -143,14 +158,48 @@ QMap<QString, int> AllAnalyse::handleData(const QVector<QString>& contents) {
     return result;
 }
 
-void AllAnalyse::writeDataToPieChart(QPieSeries* my_pieSeries, const QString& label, const double& size, const int index) {
+void AllAnalyse::writeDataToPieChart(QPieSeries* pieSeries, const QString& label, const double& size, const int index) {
     QPieSlice* pieSlice_running = new QPieSlice();
     pieSlice_running->setValue(size);//扇形占整个圆的百分比
     pieSlice_running->setLabel(label);//标签
     pieSlice_running->setLabelVisible();
+    pieSlice_running->setValue(size);
     pieSlice_running->setLabelFont(QFont("微软雅黑", 12));
 
     pieSlice_running->setColor(QColor(getRandomColor(index)));//颜色调用下面的getRandomColor()函数得到每次的都不一样。
-    my_pieSeries->append(pieSlice_running);//将扇形加入到圆上
+    pieSeries->append(pieSlice_running);//将扇形加入到圆上
 }
 
+void AllAnalyse::openFile() {
+    if (filename.isEmpty()) {
+        QMessageBox msg(this);
+        msg.setWindowTitle("错误");
+        msg.setWindowFlag(Qt::Drawer);
+        msg.setText("不存在此文件");
+        msg.exec();
+        return;
+    }
+
+    QFile file(filename);
+    if (!file.exists()) {
+        QMessageBox msg(this);
+        msg.setWindowTitle("错误");
+        msg.setWindowFlag(Qt::Drawer);
+        msg.setText("不存在此文件");
+        msg.exec();
+        return;
+    }
+
+    QDesktopServices::openUrl(QUrl::fromLocalFile(filename));
+}
+
+void AllAnalyse::setLineEdit(const QVector<QVector<QString>>& contents) {
+    ui->lineEdit_sum->setText(QString::number(contents.size()));
+    int count = 0;
+    for (const auto& content : contents) {
+        if (content[6] != "unknown") {
+            ++count;
+        }
+    }
+    ui->lineEdit_ok->setText(QString::number(count));
+}

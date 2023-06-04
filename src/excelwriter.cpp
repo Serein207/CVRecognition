@@ -4,7 +4,7 @@
 #include <QAxObject>
 
 
-ExcelWriter::ExcelWriter(const QString& filename, QVector<QVector<QString>>& contents)
+ExcelWriter::ExcelWriter(const QString& filename, const QVector<QVector<QString>>& contents)
     : fileName(filename)
 {
     newExcel();
@@ -41,7 +41,7 @@ void ExcelWriter::appendSheet(const QString& sheetName, int cnt)
     pSheet->setProperty("Name", sheetName);
 }
 
-void ExcelWriter::writeData(QVector<QVector<QString>>& contents) {
+void ExcelWriter::writeData(const QVector<QVector<QString>>& contents) {
     setCellValue(1, 1, QStringLiteral("简历文件名"));
     setCellValue(1, 2, QStringLiteral("姓名"));
     setCellValue(1, 3, QStringLiteral("年龄"));

@@ -56,15 +56,13 @@ ADD_DEFINITIONS(-DNO_FREETYPE)
 ADD_DEFINITIONS(-DUNICODE -D_UNICODE)
 ADD_DEFINITIONS(-DHCPP_LEGACY_API)
 
+include_directories(header)
+
 FILE(GLOB_RECURSE HEADER_FILES "header/*.h")
 FILE(GLOB_RECURSE SRC_FILES "src/*.cpp")
 FILE(GLOB_RECURSE FORMS "forms/*.ui")
-FILE(GLOB_RECURSE RESOURCE_FILES "*.qrc")
-FILE(GLOB TS_FILES "*.ts")
 FILE(GLOB MOC_FILES "moc/moc_*.cpp")
 list(APPEND CMAKE_AUTOUIC_SEARCH_PATHS "forms")
-
-include_directories(./header)
 
 IF(FORMS)
     qt_wrap_ui(FORMS_UIC ${FORMS})
@@ -73,11 +71,8 @@ ENDIF()
 #将包含Q_OBJECT的头文件编译成moc_*.cpp文件
 qt_wrap_cpp(MOC_FILES ${HEADER_FILES})
 
-#启用当前头文件目录
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
-
 #将所有文件编译成EXES
-add_executable(${PROJECT_NAME} ${HEADER_FILES} ${SRC_FILES} ${MOC_FILES} ${FORMS} ${RESOURCE_FILES} ${RES_FILES})
+add_executable(${PROJECT_NAME} ${HEADER_FILES} ${SRC_FILES} ${MOC_FILES} ${FORMS} ${RESOURCE_FILES})
 
 target_link_libraries(${PROJECT_NAME}
 PRIVATE 

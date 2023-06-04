@@ -5,7 +5,7 @@
 
 class ExcelWriter {
 public:
-	ExcelWriter(const QString& filename, QVector<QVector<QString>>& contents);
+	ExcelWriter(const QString& filename, const QVector<QVector<QString>>& contents);
 
 private:
 	QAxObject* pApplication;
@@ -19,7 +19,7 @@ private:
 	void appendSheet(const QString& sheetName, int cnt);
 	void saveExcel();
 	void freeExcel();
-	void writeData(QVector<QVector<QString>>& contents);
+	void writeData(const QVector<QVector<QString>>& contents);
 };
 
 #endif // EXCELWRITER_H
