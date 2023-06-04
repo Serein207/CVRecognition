@@ -1,7 +1,7 @@
 #include "jobdemandsanalysis.h"
 
 QMap<QString, QString> JobDemandsAnalysis::jobAnalysis(QString word){
-    qDebug() << word;
+    //qDebug() << word;
     word = word.replace(" ", "");
     QMap<QString, QString> res{{"name", ""}, {"edu", ""}, {"time", ""}};
     QRegularExpressionMatch match = QRegularExpression(repNamePattern).match(word);

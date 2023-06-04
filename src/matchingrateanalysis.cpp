@@ -1,53 +1,57 @@
 #include "matchingrateanalysis.h"
 
-QList<emltdata> MatchingRateAnalysis::wordFrequencyExtract(int nlenth, QStringList resource){
-    QList<emltdata> temp, res;
-    for(QList<QString>::iterator it = resource.begin(); it != resource.end(); it++){
-        if(checkword(temp, *it)){
-            tempaddone(temp, *it);
+QList<EmltData> MatchingRateAnalysis::wordFrequencyExtract(const int nLength, const QStringList& resources){
+    QList<EmltData> temp, res;
+    for (const auto& resource : resources){
+        if(checkWord(temp, resource)){
+            tempAddOne(temp, resource);
         }
         else {
-            temp.append(emltdata(*it, 1));
+            temp.append(EmltData(resource, 1));
         }
     }
-    std::sort(temp.begin(), temp.end(), [=](const emltdata &a, const emltdata &b){return a.num > b.num;});
-    for(int i = 0; i < nlenth; i++){
+    std::sort(temp.begin(), temp.end(), 
+        [=](const EmltData &a, const EmltData &b){return a.num > b.num;});
+    for(int i = 0; i < nLength; i++){
         res.append(temp[i]);
     }
     return res;
 }
 
-double MatchingRateAnalysis::rateAnalysis(QList<emltdata> CVdata, QList<emltdata> jobdemanddata){
-    double socre = 0;
-    for(const auto &it : CVdata){
-        if(checkword(jobdemanddata, it.word)){
-            socre++;
-            qDebug()<<it.word;
+double MatchingRateAnalysis::rateAnalysis(const QList<EmltData>& cvData, const QList<EmltData>& postData) {
+    double score = 0;
+    for (const auto& it : cvData) {
+        if (checkWord(postData, it.word)) {
+            if (checkWord(postData, it.word)) {
+                score++;
+                qDebug() << it.word;
+            }
         }
     }
-    qDebug()<<socre;
-    return socre;
+    qDebug() << score;
+    return score;
 }
 
-//输出符合的岗位
-/*
-* @param demandList 各个岗位需求
-* @param Cvmes 个人简历基本信息
-* @param CvList 个人简介经过分词处理的结果
-*/
-QString MatchingRateAnalysis::singleCvAnalysis(QMap<QString, QList<QString>> demandList, const QVector<QString> Cvmes, QList<QString> CvList){
-    QList<QString> prelist;
-    QMap<QString, QList<QString>>::iterator it = demandList.begin();
+    //输出符合的岗位
+    /*
+    * @param demandList 各个岗位需求
+    * @param cvMes 个人简历基本信息
+    * @param cvList 个人简介经过分词处理的结果
+    */
+QString MatchingRateAnalysis::singleCvAnalysis(const QMap<QString, QStringList>&demandList,
+    const QVector<QString>&cvMes,
+    const QStringList & cvList) {
+    QStringList preList;
     // qDebug() << demandList.size();
-    for(;it != demandList.end(); it++){
-        QMap<QString, QString> jobinfo = JobDemandsAnalysis::jobAnalysis(it.key());
-        int Cveduint = edu2enum(Cvmes[2]);
-        qDebug() << (edu2enum(jobinfo["edu"]) <= Cveduint) << edu2enum(jobinfo["edu"]) << Cveduint;
-        if(edu2enum(jobinfo["edu"]) <= Cveduint || jobinfo["edu"].isEmpty()){
-            qDebug() << (jobinfo["time"].toInt() <= Cvmes[4].toInt()) << jobinfo["time"].toInt() << Cvmes[4].toInt();
-            if(jobinfo["time"].toInt() <= Cvmes[4].toInt() || jobinfo["time"].isEmpty()){
-                if(rateAnalysis(wordFrequencyExtract(50, CvList), wordFrequencyExtract(25, it.value())) > 1){
-                    prelist.append(jobinfo["name"]);
+    for (auto it = demandList.begin(); it != demandList.end(); ++it) {
+        QMap<QString, QString> jobInfo = JobDemandsAnalysis::jobAnalysis(it.key());
+        const int cvEduInt = edu2Enum(cvMes[2]);
+        qDebug() << (edu2Enum(jobInfo["edu"]) <= cvEduInt) << edu2Enum(jobInfo["edu"]) << cvEduInt;
+        if (edu2Enum(jobInfo["edu"]) <= cvEduInt || jobInfo["edu"].isEmpty()) {
+            qDebug() << (jobInfo["time"].toInt() <= cvMes[4].toInt()) << jobInfo["time"].toInt() << cvMes[4].toInt();
+            if (jobInfo["time"].toInt() <= cvMes[4].toInt() || jobInfo["time"].isEmpty()) {
+                if (rateAnalysis(wordFrequencyExtract(50, cvList), wordFrequencyExtract(25, it.value())) > 1) {
+                    preList.append(jobInfo["name"]);
                 }
             }
         }
@@ -56,9 +60,9 @@ QString MatchingRateAnalysis::singleCvAnalysis(QMap<QString, QList<QString>> dem
     //结果组合
     QString res = "";
     int i = 0;
-    for(const auto &resit : prelist){
+    for (const auto& resit : preList) {
         res.append(resit);
-        if(i+1 != prelist.length()){
+        if (i + 1 != preList.length()) {
             res.append(",");
         }
         i++;
@@ -66,3 +70,4 @@ QString MatchingRateAnalysis::singleCvAnalysis(QMap<QString, QList<QString>> dem
     if (res.isEmpty()) res = "unknown";
     return res;
 }
+

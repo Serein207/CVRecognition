@@ -22,7 +22,7 @@ class JobDemandsAnalysis{
                  {"八", 8},
                   {"九", 9},
                    {"十", 10}
-                   };
+    };
 
     static QString chineseTurn2Int(const QString& key){
         if(std::regex_match(key.toStdString(), std::regex(R"(^\d*$)"))){

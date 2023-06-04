@@ -3,29 +3,28 @@
 
 #include "jobdemandsanalysis.h"
 
-struct emltdata{
+struct EmltData{
     QString word;
     int num;
-    emltdata(QString w, int n) {
+    EmltData(const QString& w, const int n) {
         word = w;
         num = n;
     }
 };
 
 
-class MatchingRateAnalysis
-{
-    static void tempaddone(QList<emltdata> resource, QString word){
-        for(int i = 0; i < resource.length(); i++){
-            if(resource.at(i).word == word){
-                resource[i].num += 1;
+class MatchingRateAnalysis {
+    static void tempAddOne(QList<EmltData> resources, const QString& word) {
+        for (auto& resource : resources) {
+            if(resource.word == word){
+                ++resource.num;
                 break;
             }
         }
     }
-    static bool checkword(QList<emltdata> resource, QString word){
+    static bool checkWord(const QList<EmltData>& resource, const QString& word) {
         bool flag = false;
-        for(const auto &it : resource){
+        for (const auto& it : resource) {
             if(it.word == word){
                 flag = true;
                 break;
@@ -33,7 +32,7 @@ class MatchingRateAnalysis
         }
         return flag;
     }
-    static int edu2enum(QString origin){
+    static int edu2Enum(const QString& origin) {
         if(origin == "高中"){
             return 0;
         }
@@ -56,21 +55,17 @@ class MatchingRateAnalysis
     }
 
 public:
-    static QList<emltdata> wordFrequencyExtract(int nlenth, QStringList resource);
+    static QList<EmltData> wordFrequencyExtract(const int nLength, const QStringList& resources);
 
     //词频分析函数
     /*
-     *@param CVdata 简历词频数据
-     *@param jobdemanddata 岗位需求词频数据
+     *@param cvData 简历词频数据
+     *@param postData 岗位需求词频数据
      *@return double 计算分数值
     */
-    //计分函数，如需修改分数评判标准，请更改此处
-    /*
-     * emltdata 结构体（word 字符数据，num 统计数）
-     */
-    static double rateAnalysis(QList<emltdata> CVdata, QList<emltdata> jobdemanddata);
+    static double rateAnalysis(const QList<EmltData>& cvData, const QList<EmltData>& postData);
 
-    static QString singleCvAnalysis(QMap<QString, QList<QString>> demandList, const QVector<QString> Cvmes, QList<QString> CvList);
+    static QString singleCvAnalysis(const QMap<QString, QStringList>& demandList, const QVector<QString>& cvMes, const QStringList& cvList);
 };
 
 #endif // MATCHINGRATEANALYSIS_H
