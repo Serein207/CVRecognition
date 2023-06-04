@@ -61,7 +61,6 @@ void AllAnalyse::getExcel(const QVector<QVector<QString>>& contents) {
     ExcelWriter writer(filename, contents);
 }
 
-
 void AllAnalyse::anlalyseSlot() {
     const auto progressDialog =
         new QProgressDialog(tr("正在分析"), tr("取消"), 0, Store::getStore()->cvs.size() + 3ll, this, Qt::CustomizeWindowHint);
@@ -99,6 +98,10 @@ void AllAnalyse::anlalyseSlot() {
 
     setLineEdit(contents);
 
+    ui->fileInfo->setText("全部数据已保存到excel文件：\n" + filename);
+    ui->fileInfo->show();
+    ui->button_openFile->show();
+
     progressDialog->setValue(progressDialog->maximum());
 
     QMessageBox msg(this);
@@ -106,10 +109,7 @@ void AllAnalyse::anlalyseSlot() {
     msg.setWindowFlag(Qt::Drawer);
     msg.setText("完成分析");
     msg.exec();
-
-    ui->fileInfo->setText(ui->fileInfo->text().append("\n" + filename));
-    ui->fileInfo->show();
-    ui->button_openFile->show();
+    
 }
 
 void AllAnalyse::loadFiles() const {
@@ -129,13 +129,10 @@ void AllAnalyse::createpieSewise(const QVector<QString>& contents) {
     // 图表视图
     QChart* chart = new QChart;
     chart->setTitle("学历分布");
-    chart->setTitleFont(QFont("微软雅黑", 18));
+    chart->setTitleFont(QFont("微软雅黑", 12));
     chart->addSeries(pieSeries);
     chart->setAnimationOptions(QChart::SeriesAnimations);
-    chart->legend()->setAlignment(Qt::AlignBottom);
-    chart->legend()->setBackgroundVisible(false);
-    chart->legend()->setFont(QFont("微软雅黑", 12));
-
+    chart->legend()->setVisible(false);
     ui->eduChartView->setRenderHint(QPainter::Antialiasing);
     ui->eduChartView->setRenderHint(QPainter::NonCosmeticBrushPatterns);
     ui->eduChartView->setChart(chart);
@@ -161,10 +158,9 @@ QMap<QString, int> AllAnalyse::handleData(const QVector<QString>& contents) {
 void AllAnalyse::writeDataToPieChart(QPieSeries* pieSeries, const QString& label, const double& size, const int index) {
     QPieSlice* pieSlice_running = new QPieSlice();
     pieSlice_running->setValue(size);//扇形占整个圆的百分比
-    pieSlice_running->setLabel(label);//标签
+    pieSlice_running->setLabel(label + " " + QString::number(size));//标签
     pieSlice_running->setLabelVisible();
-    pieSlice_running->setValue(size);
-    pieSlice_running->setLabelFont(QFont("微软雅黑", 12));
+    pieSlice_running->setLabelFont(QFont("微软雅黑", 8));
 
     pieSlice_running->setColor(QColor(getRandomColor(index)));//颜色调用下面的getRandomColor()函数得到每次的都不一样。
     pieSeries->append(pieSlice_running);//将扇形加入到圆上
