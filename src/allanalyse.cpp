@@ -72,7 +72,16 @@ void AllAnalyse::getExcel(const QVector<QVector<QString>>& contents) {
     const QString userName = QDir::home().dirName();
     const QString defaultName = QDate::currentDate().toString("yyyyMMdd") + QTime::currentTime().toString("hhmmss");
     const QString defaultPath = QString("C:/Users/%1/Documents").arg(userName) + "/" + defaultName;
+
     filename = QFileDialog::getSaveFileName(this, tr("保存到"), defaultPath, "*.xlsx");
+    if (QFileDialog().close()) {
+        QMessageBox msg(this);
+        msg.setWindowTitle("提示！");
+        msg.setWindowFlag(Qt::Drawer);
+        msg.setText("关闭后将不会产生excel文件！");
+        msg.exec();
+        return;
+    }
     if (filename.isEmpty()) return;
     if (!filename.contains(".xlsx")) {
         QMessageBox msg(this);
@@ -286,7 +295,7 @@ void AllAnalyse::createWorkYearsBarChars(const QVector<QString>& contents){
     series->append(set);
 
     QStringList categories;
-    categories << "0-3" << "4-6" << "7-10" << "10+";
+    categories << "0-3" << "4-6" << "7-10" << "11+";
 
     const auto chart = new QChart;
     chart->setTitle("工作年限分布");
