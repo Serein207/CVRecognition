@@ -12,7 +12,6 @@
 #include <QBarCategoryAxis>
 #include <QMessageBox>
 #include <QValueAxis>
-#include <QDialogButtonBox>
 
 AllAnalyse::AllAnalyse(QWidget *parent) :
     QDialog(parent, Qt::WindowTitleHint | Qt::CustomizeWindowHint),
