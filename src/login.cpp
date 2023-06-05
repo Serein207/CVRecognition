@@ -38,7 +38,7 @@ void Login::login() {
 void Login::writeFile() {
     if (!openFolder()) return;
 
-    QFile file(".\\data\\id\\id.txt");
+    QFile file(".\\data\\id\\id.csv");
     if (!file.open(QFile::ReadWrite | QFile::Text)) {
         QMessageBox msg;
         msg.setWindowFlag(Qt::Drawer);
@@ -62,7 +62,7 @@ void Login::writeFile() {
 void Login::loadFile() {
     if (!openFolder()) return;
 
-    QFile file(".\\data\\id\\id.txt");
+    QFile file(".\\data\\id\\id.csv");
     if (!file.open(QIODevice::ReadWrite)) {
         QMessageBox msg;
         msg.setWindowFlag(Qt::Drawer);

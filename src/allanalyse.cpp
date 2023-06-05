@@ -102,14 +102,13 @@ void AllAnalyse::loadFiles() const {
 
 void AllAnalyse::createPieCharts(const QVector<QString>& contents) {
     const auto pieSeries = new QPieSeries(this);
-    //中间圆与大圆的比例
     pieSeries->setHoleSize(0.35);
-    //扇形及数据
+
     const auto data = handleData(contents);
     for (auto it = data.constKeyValueBegin(); it != data.constKeyValueEnd(); ++it) {
         writeDataToPieChart(pieSeries, it->first, it->second, std::distance(data.constKeyValueBegin(), it));
     }
-    // 图表视图
+
     const auto chart = new QChart;
     chart->setTitle("学历分布");
     chart->setTitleFont(QFont("微软雅黑", 12));
@@ -140,13 +139,13 @@ QMap<QString, int> AllAnalyse::handleData(const QVector<QString>& contents) {
 
 void AllAnalyse::writeDataToPieChart(QPieSeries* pieSeries, const QString& label, const double& size, const int index) {
     const auto pieSlice_running = new QPieSlice(this);
-    pieSlice_running->setValue(size);//扇形占整个圆的百分比
-    pieSlice_running->setLabel(label + " " + QString::number(size));//标签
+    pieSlice_running->setValue(size);
+    pieSlice_running->setLabel(label + " " + QString::number(size));
     pieSlice_running->setLabelVisible();
     pieSlice_running->setLabelFont(QFont("微软雅黑", 8));
 
-    pieSlice_running->setColor(QColor(getColor(index)));//颜色调用下面的getRandomColor()函数得到每次的都不一样。
-    pieSeries->append(pieSlice_running);//将扇形加入到圆上
+    pieSlice_running->setColor(QColor(getColor(index)));
+    pieSeries->append(pieSlice_running);
 }
 
 void AllAnalyse::openFile() {
@@ -234,8 +233,6 @@ void AllAnalyse::createAgeBarChars(const QVector<QString>& contents) {
 
     *set << group[0] << group[1] << group[2] << group[3];
     set->setColor(QColor::fromString(getColor(0)));
-
-    qDebug() << group[0] << group[1] << group[2] << group[3];
 
     const auto series = new QBarSeries(this);
     series->append(set);
