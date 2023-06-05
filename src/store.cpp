@@ -132,8 +132,16 @@ void Store::deleteStore(const QString& filePath, QMap<QString, QString>& map) {
 }
 
 QString Store::simplifiedStr(const QString& source) {
-    const QRegularExpression re("[\u4E00-\u9FA5_a-zA-Z\\d\\p{P}]+");
-    QRegularExpressionMatchIterator matchIterator = re.globalMatch(source.toUtf8());
+    const QRegularExpression re("[\u4E00-\u9FA5a-zA-Z\\d\\p{P}]+");
+    QString content = source;
+    content.replace("\n", "")
+        .replace("\r", "")
+        .replace("\t", "")
+        .replace("\"", "")
+        .replace("“", "")
+        .replace("”", "")
+        .replace("\\", "");
+    QRegularExpressionMatchIterator matchIterator = re.globalMatch(content.toUtf8());
 
     QString result;
     while (matchIterator.hasNext()) {
@@ -141,5 +149,5 @@ QString Store::simplifiedStr(const QString& source) {
         result += match.captured(0);
     }
 
-    return result.toUtf8();
+    return result;
 }

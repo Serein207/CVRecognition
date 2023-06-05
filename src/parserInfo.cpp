@@ -15,8 +15,8 @@ QString parser::parserName(const QString& content) {
         QJsonDocument entityJson = QJsonDocument::fromJson(
             CmssInterface::getEntityJson(content.mid(i, 400)).toUtf8()
         );
+        qDebug() << content << entityJson;
         if (entityJson["state"] != QJsonValue("OK")) {
-            QMessageBox msg;
             return "NetworkErr";
         }
 
@@ -245,6 +245,7 @@ QString parser::parserCollege(const QString& content) {
         QJsonDocument entityJson = QJsonDocument::fromJson(
             CmssInterface::getEntityJson(content.mid(i, 400)).toUtf8()
         );
+
         if (entityJson["state"] != QJsonValue("OK")) {
             return "NetworkErr";
         }
