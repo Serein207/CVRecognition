@@ -131,7 +131,8 @@ QString AllAnalyse::getColor(int index) const {
 QMap<QString, int> AllAnalyse::handleData(const QVector<QString>& contents) {
     QMap<QString, int> result;
     for (const auto& content : contents) {
-        result.insert(content, 0);
+        if (content != "unknown")
+            result.insert(content, 0);
     }
     for (const auto& content : contents) {
         result[content]++;
@@ -226,11 +227,13 @@ void AllAnalyse::createAgeBarChars(const QVector<QString>& contents) {
     int group[] = { 0, 0, 0, 0 };
 
     for (const auto& content : contents) {
-        const int num = content.toInt();
-        if (num <= 26) ++group[0];
-        else if (num <= 35) ++group[1];
-        else if (num <= 45) ++group[2];
-        else ++group[3];
+        try {
+            const int num = content.toInt();
+            if (num <= 26) ++group[0];
+            else if (num <= 35) ++group[1];
+            else if (num <= 45) ++group[2];
+            else ++group[3];
+        } catch (...) {}
     }
 
     *set << group[0] << group[1] << group[2] << group[3];
