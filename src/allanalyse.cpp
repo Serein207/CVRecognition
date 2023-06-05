@@ -74,14 +74,7 @@ void AllAnalyse::getExcel(const QVector<QVector<QString>>& contents) {
     const QString defaultPath = QString("C:/Users/%1/Documents").arg(userName) + "/" + defaultName;
 
     filename = QFileDialog::getSaveFileName(this, tr("保存到"), defaultPath, "*.xlsx");
-    if (QFileDialog().close()) {
-        QMessageBox msg(this);
-        msg.setWindowTitle("提示！");
-        msg.setWindowFlag(Qt::Drawer);
-        msg.setText("关闭后将不会产生excel文件！");
-        msg.exec();
-        return;
-    }
+
     if (filename.isEmpty()) return;
     if (!filename.contains(".xlsx")) {
         QMessageBox msg(this);
@@ -265,7 +258,7 @@ void AllAnalyse::createAgeBarChars(const QVector<QString>& contents) {
     const int maxNum = *std::max_element(group, group + 4);
     const auto axisY = new QValueAxis(this);
     axisY->setRange(0, maxNum);
-    axisY->setTickCount(maxNum + 1);
+    axisY->setTickCount(maxNum % 5 ? maxNum % 5 + 2 : 6);
     axisY->setLabelFormat("%d");
     chart->setAxisY(axisY);
 
@@ -314,7 +307,7 @@ void AllAnalyse::createWorkYearsBarChars(const QVector<QString>& contents){
     const int maxNum = *std::max_element(group, group + 4);
     const auto axisY = new QValueAxis(this);
     axisY->setRange(0, maxNum);
-    axisY->setTickCount(maxNum + 1);
+    axisY->setTickCount(maxNum % 5 ? maxNum % 5 + 2 : 6);
     axisY->setLabelFormat("%d");
     chart->setAxisY(axisY);
 

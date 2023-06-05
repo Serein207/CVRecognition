@@ -33,6 +33,7 @@ void Login::login() {
         return;
     }
     writeFile();
+    this->close();
 }
 
 void Login::writeFile() {

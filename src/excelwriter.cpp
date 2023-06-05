@@ -4,14 +4,25 @@
 #include <QAxObject>
 #include <QProgressDialog>
 
-
 ExcelWriter::ExcelWriter(const QString& filename, const QVector<QVector<QString>>& contents)
     : fileName(filename)
 {
+    const auto progressDialog =
+        new QProgressDialog("结果生成中", nullptr, 0, 4, nullptr, Qt::CustomizeWindowHint);
+    progressDialog->show();
+    progressDialog->setWindowModality(Qt::ApplicationModal);
     newExcel();
+    progressDialog->setValue(1);
+    progressDialog->setWindowModality(Qt::ApplicationModal);
     writeData(contents);
+    progressDialog->setValue(2);
+    progressDialog->setWindowModality(Qt::ApplicationModal);
     saveExcel();
+    progressDialog->setValue(3);
+    progressDialog->setWindowModality(Qt::ApplicationModal);
     freeExcel();
+    progressDialog->setValue(4);
+    progressDialog->setWindowModality(Qt::ApplicationModal);
 }
 
 void ExcelWriter::newExcel() {
@@ -42,12 +53,6 @@ void ExcelWriter::appendSheet(const QString& sheetName, int cnt) {
 }
 
 void ExcelWriter::writeData(const QVector<QVector<QString>>& contents) {
-    const auto progressDialog =
-        new QProgressDialog("结果生成中", nullptr, 0, contents.size(), nullptr, Qt::CustomizeWindowHint);
-    progressDialog->setWindowModality(Qt::ApplicationModal);
-    progressDialog->show();
-
-    int status = 0;
     setCellValue(1, 1, QStringLiteral("简历文件名"));
     setCellValue(1, 2, QStringLiteral("姓名"));
     setCellValue(1, 3, QStringLiteral("年龄"));
@@ -58,8 +63,6 @@ void ExcelWriter::writeData(const QVector<QVector<QString>>& contents) {
     for (int row = 2; row < contents.size() + 2; ++row) {
         for (int col = 1; col < 8; ++col) {
             setCellValue(row, col, contents[row - 2][col - 1]);
-            progressDialog->setValue(status++);
-            progressDialog->setWindowModality(Qt::ApplicationModal);
         }
     }
 }

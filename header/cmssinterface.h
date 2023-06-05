@@ -19,8 +19,8 @@ public:
     CmssInterface(const CmssInterface&) = delete;
     CmssInterface& operator=(const CmssInterface&) = delete;
 
-    inline static std::string Ak = "7b5055c0ecfc4d19b8def6869898fc8b";
-    inline static std::string Sk = "33df542ec17d417a80d0a56fdcb1118c";
+    inline static std::string Ak = "";
+    inline static std::string Sk = "";
 
 private:
     CmssInterface() = default;
