@@ -280,7 +280,7 @@ void AllAnalyse::createWorkYearsBarChars(const QVector<QString>& contents){
     *set << group[0] << group[1] << group[2] << group[3];
     set->setColor(QColor::fromString(getColor(1)));
 
-    qDebug() << group[0] << group[1] << group[2] << group[3];
+    // qDebug() << group[0] << group[1] << group[2] << group[3];
 
     const auto series = new QBarSeries;
     series->append(set);
