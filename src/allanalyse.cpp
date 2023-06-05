@@ -211,7 +211,7 @@ QVector<QVector<QString>> AllAnalyse::generatedData() {
             msg.setText("连接超时或未连接");
             msg.exec();
             progressDialog->close();
-            return {};
+            return contents;
         }
         singleContent.append(singleInfo);
         contents.push_back(singleContent);

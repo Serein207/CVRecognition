@@ -54,7 +54,7 @@ void Store::writeStore(const QString& kind, const QMap<QString, QString>& map) {
 
         QString enter = "\n";
         file.write(enter.toUtf8());
-        file.write(item->second.toUtf8());
+        file.write(simplifiedStr(item->second).toUtf8());
         file.close();
     }
 }
