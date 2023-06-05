@@ -29,7 +29,6 @@ QString parser::parserName(const QString& content) {
                 }
             }
         }
-        
     }
     return "unknown";
 }
