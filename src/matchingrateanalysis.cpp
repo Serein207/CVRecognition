@@ -51,9 +51,9 @@ QString MatchingRateAnalysis::singleCvAnalysis(const QMap<QString, QStringList>&
     for (auto it = demandList.begin(); it != demandList.end(); ++it) {
         QMap<QString, QString> jobInfo = JobDemandsAnalysis::jobAnalysis(it.key());
         const int cvEduInt = edu2Enum(cvMes[2]);
-        qDebug() << (edu2Enum(jobInfo["edu"]) <= cvEduInt) << edu2Enum(jobInfo["edu"]) << cvEduInt;
+        //qDebug() << (edu2Enum(jobInfo["edu"]) <= cvEduInt) << edu2Enum(jobInfo["edu"]) << cvEduInt;
         if (edu2Enum(jobInfo["edu"]) <= cvEduInt || jobInfo["edu"].isEmpty()) {
-            qDebug() << (jobInfo["time"].toInt() <= cvMes[4].toInt()) << jobInfo["time"].toInt() << cvMes[4].toInt();
+            //qDebug() << (jobInfo["time"].toInt() <= cvMes[4].toInt()) << jobInfo["time"].toInt() << cvMes[4].toInt();
             if (jobInfo["time"].toInt() <= cvMes[4].toInt() || jobInfo["time"].isEmpty()) {
                 if (rateAnalysis(wordFrequencyExtract(50, cvList), wordFrequencyExtract(25, it.value())) > 1) {
                     preList.append(jobInfo["name"]);
