@@ -72,7 +72,7 @@ ENDIF()
 qt_wrap_cpp(MOC_FILES ${HEADER_FILES})
 
 #将所有文件编译成EXES
-add_executable(${PROJECT_NAME} ${HEADER_FILES} ${SRC_FILES} ${MOC_FILES} ${FORMS} ${RESOURCE_FILES})
+add_executable(${PROJECT_NAME} WIN32 ${HEADER_FILES} ${SRC_FILES} ${MOC_FILES} ${FORMS} ${RESOURCE_FILES})
 
 target_link_libraries(${PROJECT_NAME}
 PRIVATE 
