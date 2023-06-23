@@ -1,17 +1,16 @@
 #ifndef TXTREADER_H
 #define TXTREADER_H
 
-#include <QString>
 #include <QFile>
-#include <QDebug>
 #include <QMessageBox>
+#include <QString>
 
-class TxtReader
-{
-public:
+class TxtReader {
+   public:
     static QString read(const QString& filename);
-private:
+
+   private:
     TxtReader() = default;
 };
 
-#endif // TXTREADER_H
+#endif  // TXTREADER_H
