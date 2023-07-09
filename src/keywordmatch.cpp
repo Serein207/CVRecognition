@@ -62,9 +62,8 @@ double keywordmatch::onesentencejobrez(QJsonArray singleSentenceArr, QJsonArray 
             }
         }
     }
-
     double lastScore = scoreSum / (double)(sucNum + 1);
-    // qDebug() << "Last score: " << lastScore;
+    qDebug() << "Last score: " << lastScore;
     if(lastScore < 0.00000001){
         return 0.0;
     }
@@ -73,9 +72,11 @@ double keywordmatch::onesentencejobrez(QJsonArray singleSentenceArr, QJsonArray 
 
 double keywordmatch::requirementWordMatching(QString reqFile, QJsonArray curriculumVitaesArr)
 {
+    //qDebug()<<reqFile;
     int matchingNum = 0;
     QVector<QString> requirementsList = requirementsExtract(reqFile);
     QString repJsonList = CmssInterface::getKeywordsJson(requirementsList).replace("\n", "").replace(" ", "");
+    //qDebug()<<repJsonList;
     QJsonDocument document = QJsonDocument::fromJson(QString::fromLocal8Bit(repJsonList.toLocal8Bit()).toUtf8());
     if(document.isNull()){
         qDebug()<<"需求文件json解析失败!";
@@ -84,7 +85,7 @@ double keywordmatch::requirementWordMatching(QString reqFile, QJsonArray curricu
     }
     QJsonObject requirementJsonObject = document.object();
     QJsonArray requirementJsonArray = requirementJsonObject.value("body").toObject().value("items").toArray();
-
+    //qDebug()<<requirementJsonArray;
     for(const auto &requirementSingleSentence : requirementJsonArray){
         // qDebug()<<onesentencejobrez(requirementSingleSentence.toObject().value("keywords").toArray(), curriculumVitaesArr) << "matchingNum: "<<matchingNum;
         if(onesentencejobrez(requirementSingleSentence.toObject().value("keywords").toArray(), curriculumVitaesArr)){
@@ -111,7 +112,7 @@ QVector<QString> keywordmatch::curriculumVitaesMatching(QVector<QString> reqStrA
 
     for(auto &a : reqStrArray){
         qDebug()<<jobNameMatching(a);
-        if(requirementWordMatching(a, curriculumVitaesKeywordJsonArray) > 0.6 && jobNameMatching(a).compare("") != 0){
+        if(requirementWordMatching(a, curriculumVitaesKeywordJsonArray) > 0.5 && jobNameMatching(a).compare("") != 0){
             matchingJobNameVector.push_back(jobNameMatching(a));
         }
     }

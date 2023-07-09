@@ -282,9 +282,8 @@ QVector<QString> parser::parserResult(const QString& content) {
     };
 }
 
-QMap<QString, QStringList> parser::parserPost(const QMap<QString,QString>& post){
-    QMap<QString, QStringList> mapStrList;
-    //qDebug() << post;
+QVector<QString> parser::parserPostVec(const QMap<QString,QString>& post){
+    QVector<QString> contentVec;
     for(auto it = post.constKeyValueBegin(); it != post.constKeyValueEnd(); ++it){
         QStringList list = it->second.split(QRegularExpression("([0-9]+、)"));
         QStringList handledList;
@@ -297,20 +296,19 @@ QMap<QString, QStringList> parser::parserPost(const QMap<QString,QString>& post)
         }
         int count = 1;
         for(const auto& postContent : handledList){
-            mapStrList.insert(QString("%1、%2").arg(count++).arg(postContent),
-                parserSegmentation(postContent));
+            contentVec.push_back(QString("%1、%2").arg(count++).arg(postContent));
         }
     }
-    //qDebug()<<mapStrList;
-    return mapStrList;
+    qDebug()<<contentVec;
+    return contentVec;
 }
 
 QVector<QString> parser::singleInfo(const QString& content) {
     auto singleInfoVec = parserResult(content);
     if (singleInfoVec.contains("NetworkErr")) return {"NetworkErr"};
     const auto recommend = MatchingRateAnalysis::singleCvAnalysis(
-        parserPost(Store::getStore()->post),
-        singleInfoVec, parserSegmentation(content)
+        parserPostVec(Store::getStore()->post),
+        singleInfoVec, content
     );
     singleInfoVec.push_back(recommend);
     return singleInfoVec;

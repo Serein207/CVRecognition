@@ -40,7 +40,7 @@ set(QT_VERSION_MINOR 0)
 set(QT_VERSION_PATCH 0)
 
 #查找Qt的包
-find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core Gui Widgets Pdf AxContainer Charts REQUIRED)
+find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core Gui Widgets Pdf AxContainer Charts Core5Compat REQUIRED)
 if(Qt6_FOUND)
   message(STATUS "Qt6 Found!")
   message(STATUS ${QT_PATH})
@@ -82,6 +82,7 @@ PRIVATE
     Qt${QT_VERSION_MAJOR}::Pdf
     Qt${QT_VERSION_MAJOR}::AxContainer
     Qt${QT_VERSION_MAJOR}::Charts
+    Qt${QT_VERSION_MAJOR}::Core5Compat
     OpenSSL::SSL 
     OpenSSL::Crypto 
     ${CURL_LIBRARIES}
