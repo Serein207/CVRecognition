@@ -16,6 +16,8 @@ public:
     //智能分词返回的json content字符数量不要超过400
     static QString getSegmentationJson(const QString& content);
 
+    //关键词提取返回的json content字符数量不要超过400
+    static QString getKeywordsJson(const QVector<QString>& contentVec);
     CmssInterface(const CmssInterface&) = delete;
     CmssInterface& operator=(const CmssInterface&) = delete;
 
