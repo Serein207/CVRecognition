@@ -215,8 +215,8 @@ QString parser::parserAge(const QString& content) {
 }
 
 QString parser::parserEducation(const QString& content) {
-    QStringList educationList = { "博士", "硕士", "本科", "学士", "大专", "专科", "中专", "职业学院", "职业学校" , "职业技术学院", "职业技术学校", "高中"};
-    QString highestEducation = "unknown";
+    QStringList educationList = { "博士", "硕士", "本科", "学士", "大专", "专科", "中专", "职业学院", "职业学校" , "职业技术学院", "职业技术学校", "高中", "大学"};
+    QString highestEducation = "高中";
 
     QString removeSpaceContent = content;
     removeSpaceContent.replace(" ", "");
@@ -226,7 +226,7 @@ QString parser::parserEducation(const QString& content) {
                 education == "职业技术学校" || education == "职业技术学院") {
                 highestEducation = "专科";
             }
-            else if (education == "学士") {
+            else if (education == "学士" || education == "大学") {
                 highestEducation = "本科";
             }
             else {
