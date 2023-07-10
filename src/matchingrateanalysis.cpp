@@ -37,6 +37,5 @@ QString MatchingRateAnalysis::singleCvAnalysis(const QVector<QString>& demandLis
         }
         i++;
     }
-    if (res.isEmpty()) res = "unknown";
     return res;
 }
