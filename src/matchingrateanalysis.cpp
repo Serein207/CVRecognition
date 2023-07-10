@@ -33,10 +33,9 @@ QString MatchingRateAnalysis::singleCvAnalysis(const QVector<QString>& demandLis
     for (const auto& resit : preList) {
         res.append(resit);
         if (i + 1 != preList.length()) {
-            res.append(",");
+            res.append("、");
         }
         i++;
     }
-    if (res.isEmpty()) res = "unknown";
     return res;
 }
