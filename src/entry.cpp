@@ -79,7 +79,7 @@ QMap<QString, QString> Entry::getContents() {
         if (filename.contains(".txt")) {
             content = TxtReader::read(filename);
         }
-        else if (filename.contains(".docx")) {
+        else if (filename.contains(".docx") || filename.contains(".doc")) {
             content = DOCXReader::getInstance()->read(filename);
         }
         else if (filename.contains(".pdf")) {
